@@ -14,14 +14,12 @@
 
     
     <item>
-      <title>Hypermodern Python</title>
+      <title>Test Entry</title>
       <link>https://tostenzel.github.io/posts/hypermodern-python-01-setup/</link>
-      <pubDate>Wed, 01 Jan 2020 08:00:00 +0200</pubDate>
+      <pubDate>Thu, 01 June 2020 08:00:00 +0200</pubDate>
       
       <guid>https://tostenzel.github.io/posts/hypermodern-python-01-setup/</guid>
-      <description>Read this article on Medium
-  New Year 2020 marks the end of more than a decade of coexistence of Python 2 and 3. The Python landscape has changed considerably over this period: a host of new tools and best practices now improve the Python developer experience. Their adoption, however, lags behind due to the constraints of legacy support.
-This article series is a guide to modern Python tooling with a focus on simplicity and minimalism.</description>
+      <description>None</description>
     </item>
 
     
