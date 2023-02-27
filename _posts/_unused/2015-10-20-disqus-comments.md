@@ -7,4 +7,4 @@ categories: sample-posts external-services
 disqus_comments: true
 related_posts: false
 ---
-This post shows how to add DISQUS comments.
+This post shows how to add DISQUS comments.US comments.
