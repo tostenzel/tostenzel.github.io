@@ -20,4 +20,4 @@ Hi, my name is Tobias! I'm writing my Master's Thesis about transformers and vid
 
 I admire accessible and unpretentious explanations of complex things.
 
-Apparently, I could give something back. I set up this site to share with you some of my professional findings and experiences on my <a href='http://tostenzel.github.io/blog/'>blog</a>. About deep learning for the start. 👻
+Perhaps I can give something back. I set up this site to share with you some of my professional findings and experiences on my <a href='http://tostenzel.github.io/blog/'>blog</a>. About deep learning for the start. 👻
