@@ -41,6 +41,7 @@ layout: default
           </div>
 
           <!-- News -->
+          <hr>
           {% if page.news -%}
             <h2><a href="{{ '/news/' | relative_url }}" style="color: inherit;">news</a></h2>
             {%- include news.html %}
@@ -54,6 +55,14 @@ layout: default
 
           <!-- Social -->
           {%- if page.social %}
+
+
+            <hr>
+            <h2>contact</h2>
+
+            <p>
+            Feel free to drop me a line here:
+            </p>
             <div class="social">
               <div class="contact-icons">
                 {% include social.html %}
