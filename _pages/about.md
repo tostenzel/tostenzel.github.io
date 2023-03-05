@@ -16,8 +16,8 @@ news: true  # includes a list of news items
 social: true  # includes social icons at the bottom of the page
 ---
 
-Hi, my name is Tobias! I'm writing my Master's Thesis in Computer Vision about transformers and video data at Mannheim University.
+Hi, my name is Tobias! I'm writing my Master's thesis in Computer Vision about transformers and video data at Mannheim University.
 
 I admire accessible explanations of complex things at the right level of abstraction.
 
-Perhaps I can give something back. I set up this site to share with you some of my learnings on my <a href='http://tostenzel.github.io/blog/'>blog</a>. About deep learning for the start. 👻
+Perhaps I can give something back. I set up this site to share a few learnings on my <a href='http://tostenzel.github.io/blog/'>blog</a>. About deep learning to start with. 👻
