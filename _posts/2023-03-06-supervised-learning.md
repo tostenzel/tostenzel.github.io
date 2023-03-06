@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Part A — Supervised Learning
-date: 2022-03-06
+date: 2023-03-06
 description: an example of a blog post with giscus comments
-categories: sample-posts external-services
+categories: deep-learning-series supervised-learning
 giscus_comments: true
 related_posts: false
 
@@ -17,19 +17,19 @@ toc:
   - name: Loss function
   - name: Regularization
   - name: Model Validation
-  - name: Example Linear regression
-  - name: Example Neural network regression
-  - name: Example Neural network classification
+  - name: Example — Linear regression
+  - name: Example — Neural network regression
+  - name: Example — Neural network classification
   - name: Summary
 
 ---
 # Table of Contents
 1. [Loss function](#Loss function)
-2. [Regularization](##Regularization)
+2. [Regularization](#Regularization)
 3. [Model Validation](#Model Validation)
-4. [Example Linear regression](#Example Linear regression)
-6. [Example Neural network regression](#Example Neural network regression)
-7. [Example Neural network classification](#Example Neural network classification)
+4. [Example — Linear regression](#Example — Linear regression)
+6. [Example — Neural network regression](#Example — Neural network regression)
+7. [Example — Neural network classification](#Example — Neural network classification)
 8. [Summary](#Summary)
 
 
@@ -48,7 +48,7 @@ is usually well-suited. In our example, the requirement would be a
 dataset that consists of a large number of images which are annotated
 with presence or absence of a dog.
 
-## Loss function
+# Loss function
 
 To be concrete, our dataset
 $$\{(x_1,y_1),...(x_n,y_n)\}$$ includes $$n$$ examples. Our theoretical
@@ -74,7 +74,7 @@ $$\begin{align}
 f^* \approx \arg \min_{f \in \mathcal{F}} \frac{1}{n} \sum^n_{i=1} L \big  ( \ f(x_i), y_i \big  ).
 \end{align}$$
 
-### Regularization
+# Regularization
 
 Oftentimes, the i.i.d. assumption is too strong. In
 this case, we usually do not achieve the best result for predicting
@@ -117,7 +117,7 @@ simpler models, stopping the optimization process early, changing or
 disabling some model units during training (dropout), and dataset
 augmentations.
 
-## Model validation
+# Model validation
 
 How do we test whether our model generalizes well
 to unseen data? The usual machine learning approach is as follows: at
@@ -135,7 +135,7 @@ the best model once again on the validation data and report its
 performance. We will briefly discuss hyperparameter selection in the end
 of the optimization section.
 
-## Example Linear regression
+# Example — Linear regression
 
 Assume we have a dataset with 100
 observations $$(n=100)$$ of two features each $$(m=2, X=\mathbb{R}^2)$$ and
@@ -160,7 +160,7 @@ $$\begin{align}
     + \underbrace{\Bigg [ \lambda (w_1^2 + w_2^2) \Bigg ]}_\text{regularization}.
 \end{align}$$
 
-## Example Neural network regression
+# Example — Neural network regression
 
 Perhaps the relationship between
 features $$x_1, x_2$$ and the scalar target $$y$$ is not liner and there are
@@ -184,7 +184,7 @@ $$\begin{align}
     + \underbrace{\Bigg [ \lambda \big (||W_1||^2_2 + ||w_2||_2^2 \big ) \Bigg ]}_\text{regularization}.
 \end{align}$$
 
-## Example Neural network classification
+# Example — Neural network classification
 
 Oftentimes, we do not want
 to predict a real number but we want to predict whether an input
@@ -223,9 +223,9 @@ distribution is degenerate. This means that only the true class has
 probability one. Additional motivation for choosing the cross-entropy
 for classification problems is that minimizing this loss is equivalent
 to maximizing the likelihood of observing model parameters $$\theta$$
-conditional on predicting the true class label.\
+conditional on predicting the true class label.
 
-## Summary
+# Summary
 
 Supervised learning requires a dataset of $$n$$ examples
 $$\{(x_1,y_1)$$, \..., $$(x_n,y_n)\}$$, where $$(x_i,y_i) \in X \times Y$$.
@@ -249,20 +249,3 @@ parameters from the optimization problem
 $$\theta^* = \arg \min_{\theta \in \Theta} C(\theta)$$ with
 $$C(\theta) = \frac{1}{n} \sum^n_{i=1} L \big (f_\theta), y_i \big  ) + R(f_{\theta})$$.
 We call $$C(\theta)$$ the cost function.
-
-<div class="l-page" style="text-align:center;">
-  <img src="https://github.com/tostenzel/tostenzel.github.io/tree/master/assets/img/dl-series/supervised-learning.png" width="100%" style="margin-bottom: 12px; background-color: white;">
-  <p>Computational graph for a general supervised learning
-approach. Examples <span
-class="math inline">{<em>x</em><sub><em>i</em></sub>}<sub><em>i</em> = 1</sub><sup><em>n</em></sup></span>
-and parameters <span class="math inline"><em>θ</em></span> are taken by
-model f to predict the targets by <span
-class="math inline">{<em>ŷ</em><sub><em>i</em></sub>}<sub><em>i</em> = 1</sub><sup><em>n</em></sup></span>.
-Data loss L computes the difference between the predictions and the
-targets <span
-class="math inline">{<em>y</em><sub><em>i</em></sub>}<sub><em>i</em> = 1</sub><sup><em>n</em></sup></span>.
-Regularization loss R penalizes extreme parameters. The sum of both
-penalties is given by cost C. Oftentimes we use predicted class
-probabilities <span class="math inline"><em>p̂</em></span> instead of
-(rounded) predictions.</p>
-</div>
