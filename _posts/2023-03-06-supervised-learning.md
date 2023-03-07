@@ -3,9 +3,10 @@ layout: post
 title: Part A — Supervised Learning
 date: 2023-03-06
 description: an example of a blog post with giscus comments
-categories: deep-learning-series supervised-learning
+categories: deep-learning-series deep-learning supervised-learning
 giscus_comments: true
-related_posts: false
+related_posts: true
+toc: true
 
 # Optionally, you can add a table of contents to your post.
 # NOTES:
@@ -14,26 +15,19 @@ related_posts: false
 #   - we may want to automate TOC generation in the future using
 #     jekyll-toc plugin (https://github.com/toshimaru/jekyll-toc).
 toc:
-  - name: Loss function
-  - name: Regularization
-  - name: Model Validation
-  - name: Example — Linear regression
-  - name: Example — Neural network regression
-  - name: Example — Neural network classification
+  - name: Supervised Learning
+    subsections:
+    - name: Loss function
+    - name: Regularization
+    - name: Model Validation
+    - name: Example — Linear regression
+    - name: Example — Neural network regression
+    - name: Example — Neural network classification
   - name: Summary
 
 ---
-# Table of Contents
-1. [Loss function](#Loss function)
-2. [Regularization](#Regularization)
-3. [Model Validation](#Model Validation)
-4. [Example — Linear regression](#Example — Linear regression)
-6. [Example — Neural network regression](#Example — Neural network regression)
-7. [Example — Neural network classification](#Example — Neural network classification)
-8. [Summary](#Summary)
 
-
-# Supervised Learning {#sec:supervised_learning}
+## Supervised Learning
 
 Prediction rules based on some specific set of information can be
 written as a mapping $$f:X \rightarrow Y$$, where $$X$$ is an input space
@@ -47,7 +41,7 @@ is usually well-suited. In our example, the requirement would be a
 dataset that consists of a large number of images which are annotated
 with presence or absence of a dog.
 
-# Loss function
+### Loss function
 
 To be concrete, our dataset
 $$\{(x_1,y_1),...(x_n,y_n)\}$$ includes $$n$$ examples. Our theoretical
@@ -73,7 +67,7 @@ $$\begin{align}
 f^* \approx \arg \min_{f \in \mathcal{F}} \frac{1}{n} \sum^n_{i=1} L \big  ( \ f(x_i), y_i \big  ).
 \end{align}$$
 
-# Regularization
+### Regularization
 
 Oftentimes, the i.i.d. assumption is too strong. In
 this case, we usually do not achieve the best result for predicting
@@ -116,7 +110,7 @@ simpler models, stopping the optimization process early, changing or
 disabling some model units during training (dropout), and dataset
 augmentations.
 
-# Model validation
+### Model validation
 
 How do we test whether our model generalizes well
 to unseen data? The usual machine learning approach is as follows: at
@@ -134,7 +128,7 @@ the best model once again on the validation data and report its
 performance. We will briefly discuss hyperparameter selection in the end
 of the optimization section.
 
-# Example — Linear regression
+### Example — Linear regression
 
 Assume we have a dataset with 100
 observations $$(n=100)$$ of two features each $$(m=2, X=\mathbb{R}^2)$$ and
@@ -159,7 +153,7 @@ $$\begin{align}
     + \underbrace{\Bigg [ \lambda (w_1^2 + w_2^2) \Bigg ]}_\text{regularization}.
 \end{align}$$
 
-# Example — Neural network regression
+### Example — Neural network regression
 
 Perhaps the relationship between
 features $$x_1, x_2$$ and the scalar target $$y$$ is not liner and there are
@@ -176,14 +170,15 @@ neurons, are outputs of multiplicative interactions between elements
 from previous layers, in this case the two inputs $$x_1$$ and $$x_2$$. tanh
 denotes the hyperbolic tangent that squashes elements from the
 real-valued domain to the interval \[-1,1\]. It is applied element-wise
-and introduces non-linearity to the model. The objective is given by:
+and introduces non-linearity to the model. The objective is given by:  
+
 $$\begin{align}
     \theta^* =  \arg \min_{W_1, b_2, w_1, b_1} \underbrace{
     \Bigg [ \frac{1}{n} \sum^n_{i=1} \big (w_2 \text{ tanh}  ( W_1^T x_i + b_1 ) + b_2 - y_i \big)^2 \Bigg ]}_\text{data fitting}
     + \underbrace{\Bigg [ \lambda \big (||W_1||^2_2 + ||w_2||_2^2 \big ) \Bigg ]}_\text{regularization}.
 \end{align}$$
 
-# Example — Neural network classification
+### Example — Neural network classification
 
 Oftentimes, we do not want
 to predict a real number but we want to predict whether an input
@@ -209,7 +204,7 @@ instance, with $$K=3$$ and $$\hat{p}=[0.1, 0.7, 0.2]$$, our prediction
 $$\hat{y}$$ equals $$[0, 1, 0]$$. The most common loss function for
 classification is the cross-entropy loss. It takes the predicted class
 probabilities $$\hat{p}$$ instead of the predicted class vector $$\hat{y}$$.
-We denote both options by output $$o$$:
+We denote both options by output $$o$$:  
 
 $$\begin{align}
 L(o,y) = L(\hat{p},y) = - \sum_{k=1}^K y_k \log \hat{p}_k = -\log  \hat{p}_{k=k^*}.
@@ -223,8 +218,9 @@ probability one. Additional motivation for choosing the cross-entropy
 for classification problems is that minimizing this loss is equivalent
 to maximizing the likelihood of observing model parameters $$\theta$$
 conditional on predicting the true class label.
+  
 
-# Summary
+## Summary
 
 Supervised learning requires a dataset of $$n$$ examples
 $$\{(x_1,y_1)$$, \..., $$(x_n,y_n)\}$$, where $$(x_i,y_i) \in X \times Y$$.
@@ -248,3 +244,24 @@ parameters from the optimization problem
 $$\theta^* = \arg \min_{\theta \in \Theta} C(\theta)$$ with
 $$C(\theta) = \frac{1}{n} \sum^n_{i=1} L \big (f_\theta), y_i \big  ) + R(f_{\theta})$$.
 We call $$C(\theta)$$ the cost function.
+  
+  
+  
+
+<figure id="fig:supervised-learning">
+{% include figure.html path="assets/img/dl-series/supervised-learning.png" class="img-fluid rounded z-depth-1" %}
+<figcaption><b>Figure 1: Computational graph for a general supervised learning
+approach.</b> Examples <span
+class="math inline">{<em>x</em><sub><em>i</em></sub>}<sub><em>i</em> = 1</sub><sup><em>n</em></sup></span>
+and parameters <span class="math inline"><em>θ</em></span> are taken by
+model f to predict the targets by <span
+class="math inline">{<em>ŷ</em><sub><em>i</em></sub>}<sub><em>i</em> = 1</sub><sup><em>n</em></sup></span>.
+Data loss L computes the difference between the predictions and the
+targets <span
+class="math inline">{<em>y</em><sub><em>i</em></sub>}<sub><em>i</em> = 1</sub><sup><em>n</em></sup></span>.
+Regularization loss R penalizes extreme parameters. The sum of both
+penalties is given by cost C. Oftentimes we use predicted class
+probabilities <span class="math inline"><em>p̂</em></span> instead of
+(rounded) predictions.</figcaption>
+</figure>
+
