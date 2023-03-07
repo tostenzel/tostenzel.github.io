@@ -1,12 +1,17 @@
 ---
-layout: post
-title: Part A — Supervised Learning
+layout: distill
+title: 2. Supervised Learning
 date: 2023-03-06
-description: an example of a blog post with giscus comments
+description: Supervised Learning
 categories: deep-learning-series deep-learning supervised-learning
 giscus_comments: true
 related_posts: true
-toc: true
+
+authors:
+  - name: Tobias Stenzel
+    url: "https://www.tobiasstenzel.com"
+    affiliations:
+      name: #
 
 # Optionally, you can add a table of contents to your post.
 # NOTES:
@@ -246,11 +251,10 @@ $$C(\theta) = \frac{1}{n} \sum^n_{i=1} L \big (f_\theta), y_i \big  ) + R(f_{\th
 We call $$C(\theta)$$ the cost function.
   
   
-  
 
 <figure id="fig:supervised-learning">
-{% include figure.html path="assets/img/dl-series/supervised-learning.png" class="img-fluid rounded z-depth-1" %}
-<figcaption><b>Figure 1: Computational graph for a general supervised learning
+<center>{% include figure.html path="assets/img/dl-series/supervised-learning.png" class="center" %}
+</center><figcaption><b>Figure 1: Computational graph for a general supervised learning
 approach.</b> Examples <span
 class="math inline">{<em>x</em><sub><em>i</em></sub>}<sub><em>i</em> = 1</sub><sup><em>n</em></sup></span>
 and parameters <span class="math inline"><em>θ</em></span> are taken by
