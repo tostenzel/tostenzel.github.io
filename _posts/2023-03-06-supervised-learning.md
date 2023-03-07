@@ -33,7 +33,6 @@ toc:
 8. [Summary](#Summary)
 
 
-
 # Supervised Learning {#sec:supervised_learning}
 
 Prediction rules based on some specific set of information can be
