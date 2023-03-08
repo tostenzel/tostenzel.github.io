@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: 8. Transformer
-date: 2023-03-07
+date: 2023-03-08
 description: Transformer
 categories: deep-learning-series deep-learning transformer
 giscus_comments: true
@@ -57,7 +57,7 @@ decoder states $s$ and the encoder states $h$. Further, it is
 additionally concatenated with $s$ to predict the output layer.
 
 <figure id="fig:attention">
-{% include figure.html path="assets/img/dl-series/2h-attention.png" style="width:50%" class="center" %}
+<center><img src="/assets/img/dl-series/2h-attention.png" style="width:50%"></center>
 <figcaption><b>Figure 6. Encoder-Decoder with attention.</b> In contrast to the
 encoder-decoder RNN, the output layer is a function of the concatenation
 of the hidden states and a time-dependent context vector (black boxes).
@@ -159,8 +159,8 @@ us to learn from different representations of the current information
 simultaneously with high efficiency.
 
 $$\begin{align}\text{MultiHead}(X_q, X_k, X_v)= [ \text{head}_1;...;\text{head}_h ] W^o,\end{align}$$
-where $\text{head}_i=$Attention$(X_q W^q_i, X_k W^k_i, X_v W^v_i)$ and
-$W_i^q  \in \mathbb{R}^{D^{(y)} \times D_v /H}, W_i^k \in \mathbb{R}^{D^{(x)} \times D_k / H}, W_i^v \in \mathbb{R}^{D^{(x)} \times D_v /H}$
+
+where $\text{head}_i=$Attention$(X_q W^q_i, X_k W^k_i, X_v W^v_i)$ and $W_i^q  \in \mathbb{R}^{D^{(y)} \times D_v /H}$, $W_i^k \in \mathbb{R}^{D^{(x)} \times D_k / H}$, $W_i^v \in \mathbb{R}^{D^{(x)} \times D_v /H}$
 are matrices to map input embeddings of chunk size $L \times D$ into
 query, key and value matrices. $W^o \in \mathbb{R}^{D_v \times D}$ is
 the linear transformation in the output dimensions. These four weight
@@ -176,7 +176,8 @@ that allows it to locate particular pieces of information from a large
 context at all positions.
 
 <figure id="fig:transformer-encoder">
-{% include figure.html path="assets/img/dl-series/2i-transformer-encoder.png" style="width:50%" class="center" %}
+<center><img src="/assets/img/dl-series/2i-transformer-encoder.png" style="width:33%"></center>
+
 <figcaption><b>Figure 7. Transformer encoder.</b> In the original form, the encoder is a
 stack of <span class="math inline"><em>N</em> = 6</span> identical
 layers but with different parameters. It consists of two similar
@@ -200,7 +201,7 @@ multi-head *cross*-attention layer (in contrast to the other multi-head
 *self*-attention blocks).
 
 <figure id="fig:transformer-decoder">
-{% include figure.html path="assets/img/dl-series/2j-transformer-decoder.png" style="width:50%" class="center" %}
+<center><img src="/assets/img/dl-series/2j-transformer-decoder.png" style="width:33%"></center>
 <figcaption><b>Figure 8. Transformer decoder. </b> In the original form, the encoder is a
 stack of <span class="math inline"><em>N</em> = 6</span> identical
 layers. It first encodes the output sequence in the masked multi-head
@@ -237,7 +238,7 @@ has the following properties:
     gradients in backpropagation.
 
 <figure id="fig:transformer-complete">
-{% include figure.html path="assets/img/dl-series/2k-transformer-complete.png" style="width:50%" class="center" %}
+<center><img src="/assets/img/dl-series/2k-transformer-complete.png" style="width:66%"></center>
 <figcaption><b>Figure 9. The complete transformer.</b> In the original form, both the
 source and target sequence are passed to embedding layers to produce a
 vector of length <span class="math inline"><em>D</em> = 512</span> for
@@ -264,7 +265,7 @@ beforehand.
 
 
 <figure id="fig:comparison">
-{% include figure.html path="assets/img/dl-series/complexity-comparison.png" style="width:50%" class="center" %}
+<center><img src="/assets/img/dl-series/complexity-comparison.png" style="width:55%"></center>
 <figcaption><b>Table 2. Comparison of computation complexity between models.</b> length refers
 to the number of elements in the input sequence and dim to the
 embedding depth for each element. Entries adapted from

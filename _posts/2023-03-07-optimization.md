@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: 3. Optimization
-date: 2023-03-07
+date: 2023-03-03
 description: Optimization
 categories: deep-learning-series deep-learning optimization
 giscus_comments: true
@@ -66,7 +66,7 @@ better than a small number of exact updates. This algorithm is called
 Stochastic Gradient Descent (SGD). It is summarized in Algorithm 1.
 
 <figure id="fig:supervised-learning">
-{% include figure.html path="assets/img/dl-series/sgd.png" class="img-fluid rounded z-depth-1" width="100%"  class="center" %}
+<center><img src="/assets/img/dl-series/sgd.png" style="width:90%"></center>
 </figure>
 
 A crucial parameter for gradient descent algorithms is the learning
