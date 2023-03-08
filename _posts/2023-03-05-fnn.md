@@ -12,7 +12,7 @@ authors:
   - name: Tobias Stenzel
     url: "https://www.tobiasstenzel.com"
     affiliations:
-      name: #
+      name: N/A
 
 # Optionally, you can add a table of contents to your post.
 # NOTES:
