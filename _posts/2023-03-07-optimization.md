@@ -2,8 +2,8 @@
 layout: distill
 title: 3. Optimization
 date: 2023-03-03
-description: Optimization
-categories: deep-learning-series deep-learning optimization
+description: 
+categories: optimization first-order-methods
 giscus_comments: true
 related_posts: true
 bibliography: references.bib

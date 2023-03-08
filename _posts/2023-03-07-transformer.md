@@ -2,8 +2,8 @@
 layout: distill
 title: 8. Transformer
 date: 2023-03-08
-description: Transformer
-categories: deep-learning-series deep-learning transformer
+description: 
+categories: neural-net-archetype attention
 giscus_comments: true
 related_posts: true
 bibliography: references.bib
@@ -45,20 +45,20 @@ attention.
 ### Attention
 
 Let us introduce this concept with an example. Figure
-[6](#fig:attention) shows an encoder-decoder network with attention similar to the previous
+[7](#fig:attention) shows an encoder-decoder network with attention similar to the previous
 encoder-decoder RNN (Figure
-[5](#fig:encoder-decoder-rnn)). The core idea of attention is
+[6](#https://www.tobiasstenzel.com/blog/2023/rnn/#fig:encoder-decoder-rnn)). The core idea of attention is
 defining the hidden state of the decoder-RNN as a function of every
 hidden state from the encoder-RNN for every time period without
 recursion. The result of the attention function is the context vector.
 We will use this vector for every output element. In the specific
-network in Figure [6](#fig:attention), the context vector is a function of both the
+network in Figure [7](#fig:attention), the context vector is a function of both the
 decoder states $s$ and the encoder states $h$. Further, it is
 additionally concatenated with $s$ to predict the output layer.
 
 <figure id="fig:attention">
 <center><img src="/assets/img/dl-series/2h-attention.png" style="width:50%"></center>
-<figcaption><b>Figure 6. Encoder-Decoder with attention.</b> In contrast to the
+<figcaption><b>Figure 7. Encoder-Decoder with attention.</b> In contrast to the
 encoder-decoder RNN, the output layer is a function of the concatenation
 of the hidden states and a time-dependent context vector (black boxes).
 The main idea is that the context vector <span
@@ -170,7 +170,7 @@ source self-attention calculates outputs in $\mathbb{R}^{L \times D}$.
 
 ### Transformer encoder
 
-Figure [7](#fig:transformer-encoder) depicts the encoder network. It
+Figure [8](#fig:transformer-encoder) depicts the encoder network. It
 computes an input representation based on the self-attention mechanism
 that allows it to locate particular pieces of information from a large
 context at all positions.
@@ -178,7 +178,7 @@ context at all positions.
 <figure id="fig:transformer-encoder">
 <center><img src="/assets/img/dl-series/2i-transformer-encoder.png" style="width:33%"></center>
 
-<figcaption><b>Figure 7. Transformer encoder.</b> In the original form, the encoder is a
+<figcaption><b>Figure 8. Transformer encoder.</b> In the original form, the encoder is a
 stack of <span class="math inline"><em>N</em> = 6</span> identical
 layers but with different parameters. It consists of two similar
 components. The first sub-layer starts with a multi-head
@@ -193,7 +193,7 @@ also functions of the input embeddings. Adapted from <d-cite key="vaswani_attent
 
 ### Transformer decoder
 
-Figure [8](#fig:transformer-decoder) shows the decoder network. It is
+Figure [9](#fig:transformer-decoder) shows the decoder network. It is
 able to retrieve relevant information from the encoded source
 representation to compute feature representations for generating the new
 target sequence in autoregressive fashion. The key component is the
@@ -202,7 +202,7 @@ multi-head *cross*-attention layer (in contrast to the other multi-head
 
 <figure id="fig:transformer-decoder">
 <center><img src="/assets/img/dl-series/2j-transformer-decoder.png" style="width:33%"></center>
-<figcaption><b>Figure 8. Transformer decoder. </b> In the original form, the encoder is a
+<figcaption><b>Figure 9. Transformer decoder. </b> In the original form, the encoder is a
 stack of <span class="math inline"><em>N</em> = 6</span> identical
 layers. It first encodes the output sequence in the masked multi-head
 <em>self</em>-attention layer (orange). The masked elements are the
@@ -216,7 +216,7 @@ transformed by a normalized residual layer (yellow). Adapted from <d-cite key="v
 
 ### The complete transformer architecture
 
-Figure [9](#fig:transformer-complete) shows the complete architecture. It
+Figure [10](#fig:transformer-complete) shows the complete architecture. It
 has the following properties:
 
 -   **Inductive bias for self-similarity:** The self-attention layers
@@ -239,7 +239,7 @@ has the following properties:
 
 <figure id="fig:transformer-complete">
 <center><img src="/assets/img/dl-series/2k-transformer-complete.png" style="width:66%"></center>
-<figcaption><b>Figure 9. The complete transformer.</b> In the original form, both the
+<figcaption><b>Figure 10. The complete transformer.</b> In the original form, both the
 source and target sequence are passed to embedding layers to produce a
 vector of length <span class="math inline"><em>D</em> = 512</span> for
 every element. To preserve the ordering information of the inputs, we

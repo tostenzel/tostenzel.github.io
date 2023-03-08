@@ -2,8 +2,8 @@
 layout: distill
 title: 2. Supervised Learning
 date: 2023-03-02
-description: Supervised Learning
-categories: deep-learning-series deep-learning supervised-learning
+description: 
+categories: supervised-learning
 giscus_comments: true
 related_posts: true
 
