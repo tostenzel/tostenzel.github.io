@@ -2,7 +2,7 @@
 layout: distill
 title: 8. Transformer
 date: 2023-03-08
-description: 
+description: ⏮️ <b><i>I recommend reading the RNN post first for the encoder-decoder architecture.</i></b>
 categories: neural-net-archetype attention
 giscus_comments: true
 related_posts: true
