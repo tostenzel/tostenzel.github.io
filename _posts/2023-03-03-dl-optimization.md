@@ -55,7 +55,7 @@ Therefore, we can use the negative gradient as search direction for
 selecting the next proposal $$\theta_{i+1}$$ from current candidate
 $$\theta_i$$. This is the basic idea of the gradient descent algorithm.
 The method alternates between two steps: 1.) Compute the gradient
-$$\nabla_\theta J(\theta)$$. 2.) Update $$\theta$$ by subtracting a small
+$$\nabla_\theta C(\theta)$$. 2.) Update $$\theta$$ by subtracting a small
 multiple of the gradient. Many applications use very large datasets. For
 instance, the number of training images in ImageNet is about 1 million.
 Therefore, it is handy to approximate the loss gradient from a small
@@ -92,7 +92,7 @@ notion of momentum. The current update direction is not determined by
 the current gradient but also by the previous gradients. The impact of
 the previous gradients, however, decays exponentially for every previous
 iteration. Let $$\alpha$$ be the decay parameter and
-$$g := \nabla_{\theta}J(\theta)$$. We then replace Step 3 by two steps:
+$$g := \nabla_{\theta}C(\theta)$$. We then replace Step 3 by two steps:
 First, we compute the \"velocity\" $$v= \alpha v + g$$ (initialized at
 zero), and second, we compute the parameter update with
 $$\Delta \theta = -\eta v$$. **Adagrad** introduces element-wise learning
