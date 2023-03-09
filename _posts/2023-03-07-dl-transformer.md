@@ -47,7 +47,7 @@ attention.
 Let us introduce this concept with an example. Figure
 [7](#fig:attention) shows an encoder-decoder network with attention similar to the previous
 encoder-decoder RNN (Figure
-[6](#https://www.tobiasstenzel.com/blog/2023/rnn/#fig:encoder-decoder-rnn)). The core idea of attention is
+[6](https://www.tobiasstenzel.com/blog/2023/dl-rnn/#fig:encoder-decoder-rnn)). The core idea of attention is
 defining the hidden state of the decoder-RNN as a function of every
 hidden state from the encoder-RNN for every time period without
 recursion. The result of the attention function is the context vector.
@@ -271,3 +271,15 @@ to the number of elements in the input sequence and dim to the
 embedding depth for each element. Entries adapted from
 <d-cite key="vaswani_transformers_2021"></d-cite>.</figcaption>
 </figure>
+
+
+## Citation
+
+In case you like this series, cite it with:
+<pre tabindex="0"><code  class="language-latex">@misc{stenzel2023deeplearning,
+  title   = &quot;Deep Learning Series&quot;,
+  author  = &quot;Stenzel, Tobias&quot;,
+  year    = &quot;2023&quot;,
+  url     = &quot;https://www.tobiasstenzel.com/blog/2023/dl-overview/
+}
+</code></pre>

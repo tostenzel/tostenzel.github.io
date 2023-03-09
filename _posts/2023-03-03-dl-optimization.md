@@ -132,3 +132,15 @@ consider the uncertain trade-off between exploring new values and
 exploiting good values that have already been found. I recommend the
 textbook chapter by <d-cite key="feurer_hyperparameter_nodate"></d-cite> for more explanations
 and concrete examples.
+
+
+## Citation
+
+In case you like this series, cite it with:
+<pre tabindex="0"><code  class="language-latex">@misc{stenzel2023deeplearning,
+  title   = &quot;Deep Learning Series&quot;,
+  author  = &quot;Stenzel, Tobias&quot;,
+  year    = &quot;2023&quot;,
+  url     = &quot;https://www.tobiasstenzel.com/blog/2023/dl-overview/
+}
+</code></pre>

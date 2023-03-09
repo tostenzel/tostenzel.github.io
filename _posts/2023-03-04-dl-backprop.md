@@ -219,8 +219,20 @@ from its parent nodes with its own local Jacobian. The Graph sends the
 resulting product to the Nodes' children and the process repeats until
 the recursion ends at the last computation which includes the data and
 the current parameter values. At last, the optimizer updates the
-parameter vector based on the final gradient (Step 3 in Algorithm [1](https://www.tobiasstenzel.com/blog/2023/optimization/#first-order-methods). Note
+parameter vector based on the final gradient (Step 3 in Algorithm [1](https://www.tobiasstenzel.com/blog/2023/dl-optimization/#first-order-methods). Note
 that the implemented compute graph for Figure
 [1](#fig:toy_graph) would in practice be larger and rudimentary because we can decompose
 many operations, like divide or subtract in tanh, into more basic
 operations.
+
+
+## Citation
+
+In case you like this series, cite it with:
+<pre tabindex="0"><code  class="language-latex">@misc{stenzel2023deeplearning,
+  title   = &quot;Deep Learning Series&quot;,
+  author  = &quot;Stenzel, Tobias&quot;,
+  year    = &quot;2023&quot;,
+  url     = &quot;https://www.tobiasstenzel.com/blog/2023/dl-overview/
+}
+</code></pre>

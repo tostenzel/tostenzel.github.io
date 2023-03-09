@@ -35,25 +35,25 @@ how to best introduce some concepts like backpropagation or the transformer. The
 this content about the fundamentals of deep learning with you.
 
 This is the structure:
-1. [Overview](https://www.tobiasstenzel.com/blog/2023/overview/)
-2. [Supervised Learning](https://www.tobiasstenzel.com/blog/2023/supervised-learning/)
-3. [Optimization](https://www.tobiasstenzel.com/blog/2023/optimization/)
-4. [Backpropgation](https://www.tobiasstenzel.com/blog/2023/backprop/)
-5. [Feedforward Neural Networks](https://www.tobiasstenzel.com/blog/2023/fnn/)
-6. [Convolutional Neural Networks](https://www.tobiasstenzel.com/blog/2023/cnn/)
-7. [Recurrent Neural Networks](https://www.tobiasstenzel.com/blog/2023/rnn/)
-8. [Transformer](https://www.tobiasstenzel.com/blog/2023/transformer/)
+1. [Overview](https://www.tobiasstenzel.com/blog/2023/dl-overview/)
+2. [Supervised Learning](https://www.tobiasstenzel.com/blog/2023/dl-supervised-learning/)
+3. [Optimization](https://www.tobiasstenzel.com/blog/2023/dl-optimization/)
+4. [Backpropgation](https://www.tobiasstenzel.com/blog/2023/dl-backprop/)
+5. [Feedforward Neural Networks](https://www.tobiasstenzel.com/blog/2023/dl-fnn/)
+6. [Convolutional Neural Networks](https://www.tobiasstenzel.com/blog/2023/dl-cnn/)
+7. [Recurrent Neural Networks](https://www.tobiasstenzel.com/blog/2023/dl-rnn/)
+8. [Transformer](https://www.tobiasstenzel.com/blog/2023/dl-transformer/)
 
 ## Highlights
 
 Some highlights are:
 
-1. Preparing the introduction of the transformer carefully via self-made, detailed figures of [vanilla RNN](https://www.tobiasstenzel.com/blog/2023/rnn/#fig:vanilla-rnn), [encoder-decoder RNN](https://www.tobiasstenzel.com/blog/2023/rnn/#fig:encoder-decoder-rnn) and [encoder-decoder RNN with attention](https://www.tobiasstenzel.com/blog/2023/transformer/#fig:attention/) ✨
-2. Explicitly spelling out [what makes the transformer great](https://www.tobiasstenzel.com/blog/2023/transformer/#the-complete-transformer-architecture) ✨
-3. Explaining convolution (or rather cross-correlation) with the [right figure and equation](https://www.tobiasstenzel.com/blog/2023/cnn/#cross-correlation) ⚖
-4. Explaining backpropagation with a very simple [toy example](https://www.tobiasstenzel.com/blog/2023/backprop/#toy-example) 🪀
-5. An explanation of [why we do not "frontpropagate"](https://www.tobiasstenzel.com/blog/2023/backprop/#reverse-accumulation) although the multiplication in the chain rule is commutative 🤯
-6. Showing backward passes of important layers. Did you know that the [backward pass of a convolution](https://www.tobiasstenzel.com/blog/2023/cnn/#fig:gradient-cross-correlation) is also a convolution? 🤯
+1. Preparing the introduction of the transformer carefully via self-made, detailed figures of [vanilla RNN](https://www.tobiasstenzel.com/blog/2023/dl-rnn/#fig:vanilla-rnn), [encoder-decoder RNN](https://www.tobiasstenzel.com/blog/2023/dl-rnn/#fig:encoder-decoder-rnn) and [encoder-decoder RNN with attention](https://www.tobiasstenzel.com/blog/2023/dl-transformer/#fig:attention/) ✨
+2. Explicitly spelling out [what makes the transformer great](https://www.tobiasstenzel.com/blog/2023/dl-transformer/#the-complete-transformer-architecture) ✨
+3. Explaining convolution (or rather cross-correlation) with the [right figure and equation](https://www.tobiasstenzel.com/blog/2023/dl-cnn/#cross-correlation) ⚖
+4. Explaining backpropagation with a very simple [toy example](https://www.tobiasstenzel.com/blog/2023/dl-backprop/#toy-example) 🪀
+5. An explanation of [why we do not "frontpropagate"](https://www.tobiasstenzel.com/blog/2023/dl-backprop/#reverse-accumulation) although the multiplication in the chain rule is commutative 🤯
+6. Showing backward passes of important layers. Did you know that the [backward pass of a convolution](https://www.tobiasstenzel.com/blog/2023/dl-cnn/#fig:gradient-cross-correlation) is also a convolution? 🤯
 
 In my view, many deep learning concepts are usually introduced way too quickly or there is not enough reflection about the properties of some architectures. An example of the first observation is showing the pictures of the architecture from the original transformer paper without clarifying the encoder-decoder
 beforehand in greater detail. Examples for the second observation are that it is frequently not stated what makes
@@ -76,4 +76,15 @@ These are my main references: I recommend the Deep Learning book by Goodfellow <
 , these blogposts about convolutional neural nets <d-cite key="kafunah_backpropagation_2016"></d-cite>, recursive neural nets <d-cite key="arat_backpropagation_2019"></d-cite>, and these posts about transformers <d-cite key="weng_attention_2018"></d-cite>, <d-cite key="karpathy_transformer_2022"></d-cite>, <d-cite key="vaswani_transformers_2021"></d-cite>.
 
 I also want to thank Prof. Rainer Gemulla for his excellent lectures, especially his Deep Learning class, at Mannheim University.
+
+## Citation
+
+In case you like this series, cite it with:
+<pre tabindex="0"><code  class="language-latex">@misc{stenzel2023deeplearning,
+  title   = &quot;Deep Learning Series&quot;,
+  author  = &quot;Stenzel, Tobias&quot;,
+  year    = &quot;2023&quot;,
+  url     = &quot;https://www.tobiasstenzel.com/blog/2023/dl-overview/
+}
+</code></pre>
 

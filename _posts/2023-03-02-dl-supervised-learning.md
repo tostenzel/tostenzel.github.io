@@ -269,3 +269,13 @@ probabilities <span class="math inline"><em>p̂</em></span> instead of
 (rounded) predictions.</figcaption>
 </figure>
 
+## Citation
+
+In case you like this series, cite it with:
+<pre tabindex="0"><code  class="language-latex">@misc{stenzel2023deeplearning,
+  title   = &quot;Deep Learning Series&quot;,
+  author  = &quot;Stenzel, Tobias&quot;,
+  year    = &quot;2023&quot;,
+  url     = &quot;https://www.tobiasstenzel.com/blog/2023/dl-overview/
+}
+</code></pre>
