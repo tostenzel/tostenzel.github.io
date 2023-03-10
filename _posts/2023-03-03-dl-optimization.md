@@ -3,7 +3,7 @@ layout: distill
 title: 3. Optimization
 date: 2023-03-03
 description:
-categories: deep-learning
+#categories: deep-learning
 tags: optimization first-order-methods
 giscus_comments: true
 related_posts: true

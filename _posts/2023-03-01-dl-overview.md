@@ -3,7 +3,7 @@ layout: distill
 title: 1. Overview
 date: 2023-03-01
 description: 🎬 <b><i>Read this post before any other post.</i></b>
-categories: deep-learning
+#categories: deep-learning
 tags: highlights motivation target-group credits
 giscus_comments: true
 related_posts: true
