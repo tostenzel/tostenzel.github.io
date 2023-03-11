@@ -60,7 +60,8 @@ additionally concatenated with $s$ to predict the output layer.
 
 <figure id="fig:attention">
 <center><img src="/assets/img/dl-series/2h-attention.png" style="width:50%"></center>
-<figcaption><b>Figure 7. Encoder-Decoder with attention.</b> In contrast to the
+</figure>
+<b>Figure 7. Encoder-Decoder with attention.</b> In contrast to the
 encoder-decoder RNN, the output layer is a function of the concatenation
 of the hidden states and a time-dependent context vector (black boxes).
 The main idea is that the context vector <span
@@ -75,8 +76,8 @@ class="math inline"><em>c</em><sub>1</sub></span> is initialized with
 <span class="math inline"><em>h</em><sub>4</sub></span>, <span
 class="math inline"><em>s</em><sub>1</sub></span> with arbitrary values,
 and <span class="math inline"><em>o</em><sub>1</sub></span> is
-discarded.</figcaption>
-</figure>
+discarded.  
+<br>
 
 The attention function that returns the context vector for output $y_t$
 wit attention scores for each input is given by the following
@@ -179,8 +180,8 @@ context at all positions.
 
 <figure id="fig:transformer-encoder">
 <center><img src="/assets/img/dl-series/2i-transformer-encoder.png" style="width:33%"></center>
-
-<figcaption><b>Figure 8. Transformer encoder.</b> In the original form, the encoder is a
+</figure>
+<b>Figure 8. Transformer encoder.</b> In the original form, the encoder is a
 stack of <span class="math inline"><em>N</em> = 6</span> identical
 layers but with different parameters. It consists of two similar
 components. The first sub-layer starts with a multi-head
@@ -190,8 +191,7 @@ Point-wise means that the same weights are applied to each input
 element. Afterwards, the respective previous input vector is added to
 both outputs and the results are normalized by the normalized residual
 layers (yellow). Crucially, in the self-attention layer, the queries are
-also functions of the input embeddings. Adapted from <d-cite key="vaswani_attention_2017"></d-cite>.</figcaption>
-</figure>
+also functions of the input embeddings. Adapted from <d-cite key="vaswani_attention_2017"></d-cite>.
 
 ### Transformer decoder
 
@@ -204,7 +204,8 @@ multi-head *cross*-attention layer (in contrast to the other multi-head
 
 <figure id="fig:transformer-decoder">
 <center><img src="/assets/img/dl-series/2j-transformer-decoder.png" style="width:33%"></center>
-<figcaption><b>Figure 9. Transformer decoder. </b> In the original form, the encoder is a
+</figure>
+<b>Figure 9. Transformer decoder. </b> In the original form, the encoder is a
 stack of <span class="math inline"><em>N</em> = 6</span> identical
 layers. It first encodes the output sequence in the masked multi-head
 <em>self</em>-attention layer (orange). The masked elements are the
@@ -213,8 +214,7 @@ these target representations as queries to the multi-head attention
 layer (orange) together with the output input representations as keys
 and values. Finally, the results pass through a fully-connected feed
 forward network (blue). Each of these three layers is subsequently
-transformed by a normalized residual layer (yellow). Adapted from <d-cite key="vaswani_attention_2017"></d-cite>.</figcaption>
-</figure>
+transformed by a normalized residual layer (yellow). Adapted from <d-cite key="vaswani_attention_2017"></d-cite>.
 
 ### The complete transformer architecture
 
@@ -241,16 +241,15 @@ has the following properties:
 
 <figure id="fig:transformer-complete">
 <center><img src="/assets/img/dl-series/2k-transformer-complete.png" style="width:66%"></center>
-<figcaption><b>Figure 10. The complete transformer.</b> In the original form, both the
+</figure>
+<b>Figure 10. The complete transformer.</b> In the original form, both the
 source and target sequence are passed to embedding layers to produce a
 vector of length <span class="math inline"><em>D</em> = 512</span> for
 every element. To preserve the ordering information of the inputs, we
 add a respective sinusoidal positional encoding vector to every
 embedding. To compute the probabilities for each element in the output
 space at every position, we pass the decoder output through a linear and
-a softmax layer. Adapted from <d-cite key="vaswani_attention_2017"></d-cite>.</figcaption>
-</figure>
-
+a softmax layer. Adapted from <d-cite key="vaswani_attention_2017"></d-cite>.
 ### Complexity comparison
 
 Let us conclude this chapter by comparing the complexities of the three main architectures in deep learning. Table

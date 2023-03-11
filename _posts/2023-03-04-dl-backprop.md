@@ -82,7 +82,8 @@ $$\begin{align}
 
 <figure id="fig:toy_graph">
 <center><img src="/assets/img/dl-series/compute-graph.png" style="width:75%"></center>
-<figcaption><b>Figure 1. Computational graph for a toy example of a neural network’s
+</figure>
+<b>Figure 1. Computational graph for a toy example of a neural network’s
 forward pass without vector-valued intermediate functions, data,
 regularization and loss.</b> The function given by the graph is <span
 class="math inline"><em>C</em>(<em>θ</em><sub>1</sub>,<em>θ</em><sub>2</sub>) = <em>θ</em><sub>1</sub><em>θ</em><sub>2</sub> + tanh (<em>θ</em><sub>1</sub>)</span>.
@@ -98,8 +99,7 @@ with <span
 class="math inline"><em>i</em>, <em>j</em> ∈ {1, ..., 6}</span>. We can
 view two edges leaving one node as a a shortcut depiction for applying
 the <span class="math inline"><code>duplicate</code></span> or fork
-operation along both edges.</figcaption>
-</figure>
+operation along both edges.
 
 ### Vector-valued intermediate functions
 The toy example deviates from
@@ -166,12 +166,11 @@ much smaller than the number of input values.
 
 <figure id="tab:reverse">
 <center><img src="/assets/img/dl-series/table-backprop.png" style="width:80%"></center>
-<figcaption><b>Table 1. Gradient computations in reverse accumulation mode for toy
-example <span
-class="math inline"><em>C</em>(<em>θ</em><sub>1</sub>,<em>θ</em><sub>2</sub>) = <em>θ</em><sub>1</sub><em>θ</em><sub>2</sub> + tanh <em>θ</em><sub>1</sub></span>.</b>
-</figcaption>
 </figure>
 
+<b>Table 1. Gradient computations in reverse accumulation mode for toy
+example <span
+class="math inline"><em>C</em>(<em>θ</em><sub>1</sub>,<em>θ</em><sub>2</sub>) = <em>θ</em><sub>1</sub><em>θ</em><sub>2</sub> + tanh <em>θ</em><sub>1</sub></span>.</b>
 The left column shows the evaluation and the right column depicts the
 derivation steps. <span class="math inline"><em>z̄</em></span> denotes
 the derivative of the cost function with respect to an intermediate

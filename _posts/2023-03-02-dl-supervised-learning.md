@@ -255,7 +255,8 @@ We call $$C(\theta)$$ the cost function.
 
 <figure id="fig:supervised-learning">
     <center><img src="/assets/img/dl-series/supervised-learning.png" style="width:100%"></center>
-<figcaption><b>Figure 1: Computational graph for a general supervised learning
+</figure>
+<b>Figure 1: Computational graph for a general supervised learning
 approach.</b> Examples <span
 class="math inline">{<em>x</em><sub><em>i</em></sub>}<sub><em>i</em> = 1</sub><sup><em>n</em></sup></span>
 and parameters <span class="math inline"><em>θ</em></span> are taken by
@@ -267,8 +268,8 @@ class="math inline">{<em>y</em><sub><em>i</em></sub>}<sub><em>i</em> = 1</su
 Regularization loss R penalizes extreme parameters. The sum of both
 penalties is given by cost C. Oftentimes we use predicted class
 probabilities <span class="math inline"><em>p̂</em></span> instead of
-(rounded) predictions.</figcaption>
-</figure>
+(rounded) predictions.
+
 
 ## Citation
 
