@@ -267,12 +267,11 @@ beforehand.
 
 <figure id="fig:comparison">
 <center><img src="/assets/img/dl-series/complexity-comparison.png" style="width:55%"></center>
-<figcaption><b>Table 2. Comparison of computation complexity between models.</b> length refers
+</figure>
+<b>Table 2. Comparison of computation complexity between models.</b> length refers
 to the number of elements in the input sequence and dim to the
 embedding depth for each element. Entries adapted from
-<d-cite key="vaswani_transformers_2021"></d-cite>.</figcaption>
-</figure>
-
+<d-cite key="vaswani_transformers_2021"></d-cite>.
 
 ## Citation
 
