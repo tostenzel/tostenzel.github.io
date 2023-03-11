@@ -2,11 +2,12 @@
 layout: distill
 title: 4. Backpropagation
 date: 2023-03-04
-description: 💡 <b><i>Includes a nice detail about why we don't "frontpropagate". ;-) </i></b>
+description: 💡 <b><i> Includes a nice detail about why we don't 'frontpropagate'. ;-) </i></b>
 #categories: deep-learning
 tags: backprop reverse-accumulation compute-graph
 giscus_comments: true
 related_posts: true
+bibliography: references.bib
 
 authors:
   - name: Tobias Stenzel
@@ -168,6 +169,9 @@ much smaller than the number of input values.
 <figcaption><b>Table 1. Gradient computations in reverse accumulation mode for toy
 example <span
 class="math inline"><em>C</em>(<em>θ</em><sub>1</sub>,<em>θ</em><sub>2</sub>) = <em>θ</em><sub>1</sub><em>θ</em><sub>2</sub> + tanh <em>θ</em><sub>1</sub></span>.</b>
+</figcaption>
+</figure>
+
 The left column shows the evaluation and the right column depicts the
 derivation steps. <span class="math inline"><em>z̄</em></span> denotes
 the derivative of the cost function with respect to an intermediate
@@ -193,8 +197,7 @@ equals <span class="math inline">$$\frac{\partial z_3}{\partial z_{1}} +
 class="math inline"><em>z</em><sub>1, 3</sub></span> and <span
 class="math inline"><em>z</em><sub>1, 4</sub></span> denote abbreviated
 nodes from the implicit duplication operation in the third and fourth
-evaluation step.</figcaption>
-</figure>
+evaluation step.
 
 ### Implementation
 In our toy example, we have already discovered that
