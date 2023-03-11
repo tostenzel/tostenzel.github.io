@@ -270,8 +270,7 @@ beforehand.
 </figure>
 <b>Table 2. Comparison of computation complexity between models.</b> length refers
 to the number of elements in the input sequence and dim to the
-embedding depth for each element. Entries adapted from
-<d-cite key="vaswani_transformers_2021"></d-cite>.
+embedding depth for each element. Entries adapted from <d-cite key="vaswani_transformers_2021"></d-cite>.
 
 ## Citation
 
