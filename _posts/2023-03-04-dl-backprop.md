@@ -187,12 +187,12 @@ upstream gradient multiplied with the <em>other</em> input back. I.e.,
 <span class="math inline">$$\frac{\partial (z_3 + z_4)}{\partial z_{4}} =
 1, \frac{\partial (z_1 * z_2)}{\partial z_{2}} = z_1$$</span>, and the
 backward function of <span
-class="math inline">(<em>z</em><sub>1, 1</sub>,<em>z</em><sub>1, 3</sub>) = <code>duplicate</code>(<em>z</em><sub>1</sub>)</span>
+class="math inline">(<em>z</em><sub>1, 3</sub>,<em>z</em><sub>1, 4</sub>) = <code>duplicate</code>(<em>z</em><sub>1</sub>)</span>
 equals <span class="math inline">$$\frac{\partial z_3}{\partial z_{1}} +
 \frac{\partial z_4}{\partial z_{1}}$$</span>, where <span
-class="math inline"><em>z</em><sub>1, 1</sub></span> and <span
-class="math inline"><em>z</em><sub>1, 3</sub></span> denote abbreviated
-nodes from the implicit duplication operation in the first and third
+class="math inline"><em>z</em><sub>1, 3</sub></span> and <span
+class="math inline"><em>z</em><sub>1, 4</sub></span> denote abbreviated
+nodes from the implicit duplication operation in the third and fourth
 evaluation step.</figcaption>
 </figure>
 
