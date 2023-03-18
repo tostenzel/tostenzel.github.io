@@ -239,11 +239,11 @@ jekyll-archives:
   layouts:
     year: archive-year
     tag: archive-tag
-    category: archive-category
+    #category: archive-category
   permalinks:
     year: '/blog/:year/'
     tag: '/blog/tag/:name/'
-    category: '/blog/category/:name/'
+    #category: '/blog/category/:name/'
 
 display_tags: ['neural-net-archetype', "backprop"] # this tags will be dispalyed on the front page of your blog
 display_categories: []#['deep-learning']
