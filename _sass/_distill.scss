@@ -132,6 +132,29 @@ d-appendix {
   }
 }
 
+.PageNavigation {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.PageNavigation a {
+  width: 50%;
+  float: left;
+  padding-right: 0em;
+  padding-left: 0em;
+
+
+}
+
+.PageNavigation .next {
+  float: right;
+  text-align: right;
+  padding-right: 0em;
+  padding-left: 0em;
+
+
+}
+
 @media (max-width: 1024px) {
   d-article {
     d-contents {
