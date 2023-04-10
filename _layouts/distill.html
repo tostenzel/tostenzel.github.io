@@ -69,6 +69,15 @@
     <div class="post distill">
 
       <d-title>
+          <p class="PageNavigation">
+          {% if page.previous.url %}
+            <a class="prev" href="{{page.previous.url}}">	&#9198; {{page.previous.title}}</a>
+          {% endif %}
+          {% if page.next.url %}
+            <a class="next" href="{{page.next.url}}">{{page.next.title}} &#9197;</a>
+          {% endif %}
+        </p>
+        <br><br>
         <h1>{{ page.title }}</h1>
         <p>{{ page.description }}</p>
         <p class="post-tags">
@@ -95,15 +104,6 @@
       <d-byline></d-byline>
 
       <d-article>
-          <div class="PageNavigation">
-          {% if page.previous.url %}
-            <a class="prev" href="{{page.previous.url}}">	&#9198; {{page.previous.title}}</a>
-          {% endif %}
-          {% if page.next.url %}
-            <a class="next" href="{{page.next.url}}">{{page.next.title}} &#9197;</a>
-          {% endif %}
-        </div>
-        <br><br><br><br>
 
         {% if page.toc -%}
         <d-contents>
