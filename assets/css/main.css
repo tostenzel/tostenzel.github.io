@@ -904,6 +904,7 @@ d-appendix a:hover, d-appendix a.footnote-backlink:hover {
 .PageNavigation {
   font-size: 18px;
   font-weight: bold;
+  color: var(--global-text-color);
 }
 
 .PageNavigation a {
