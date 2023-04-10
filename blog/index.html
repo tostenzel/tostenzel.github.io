@@ -20,21 +20,8 @@ pagination:
     <h2>{{ site.blog_description }}</h2>
   </div>
 
-  {% if site.display_categories %}
-  <div class="tag-list">
-    <ul class="p-0 m-0">
-      {% for category in site.display_categories %}
-        <li>
-          <i class="fas fa-tag fa-sm"></i> <a href="{{ category | slugify | prepend: '/blog/category/' | relative_url }}">{{ category }}</a>
-        </li>
-        {% unless forloop.last %}
-          <p>&bull;</p>
-        {% endunless %}
-      {% endfor %}
-    </ul>
-  {% endif %}
-
   {% if site.display_tags %}
+  <div class="tag-list">
     <ul class="p-0 m-0">
       {% for tag in site.display_tags %}
         <li>
@@ -49,7 +36,7 @@ pagination:
   {% endif %}
 
   <ul class="post-list">
-    {% for post in site.posts %}
+    {% for post in paginator.posts %}
 
     {% if post.external_source == blank %}
       {% assign read_time = post.content | number_of_words | divided_by: 180 | plus: 1 %}

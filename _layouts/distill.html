@@ -64,47 +64,12 @@
 
       <d-title>
         <h1>{{ page.title }}</h1>
-
-
-
-
         <p>{{ page.description }}</p>
-                <p class="post-tags">
-      <a href="{{ year | prepend: '/blog/' | prepend: site.baseurl}}"> <i class="fas fa-calendar fa-sm"></i> {{ year }} </a>
-      {%- if tags != "" %}
-      &nbsp; &middot; &nbsp;
-        {% for tag in page.tags -%}
-        <a href="{{ tag | slugify | prepend: '/blog/tag/' | prepend: site.baseurl}}">
-          <i class="fas fa-hashtag fa-sm"></i> {{ tag }}</a> &nbsp;
-          {% endfor -%}
-      {% endif %}
-
-      {%- if categories != "" %}
-      &nbsp; &middot; &nbsp;
-        {% for category in page.categories -%}
-        <a href="{{ category | slugify | prepend: '/blog/category/' | prepend: site.baseurl}}">
-          <i class="fas fa-tag fa-sm"></i> {{ category }}</a> &nbsp;
-          {% endfor -%}
-      {% endif %}
-      </p>
-
-
       </d-title>
-
-
-
 
       <d-byline></d-byline>
 
       <d-article>
-              <div class="PageNavigation">
-        {% if page.previous.url %}
-          <a class="prev" href="{{page.previous.url}}">	&#9198; {{page.previous.title}}</a>
-        {% endif %}
-        {% if page.next.url %}
-          <a class="next" href="{{page.next.url}}">{{page.next.title}} &#9197;</a>
-        {% endif %}
-      </div>
         {% if page.toc -%}
         <d-contents>
           <nav class="l-text figcaption">
@@ -124,25 +89,14 @@
         {%- endif %}
 
         {{ content }}
-      <div class="PageNavigation">
-        {% if page.previous.url %}
-          <a class="prev" href="{{page.previous.url}}">	&#9198; {{page.previous.title}}</a>
-        {% endif %}
-        {% if page.next.url %}
-          <a class="next" href="{{page.next.url}}">{{page.next.title}} &#9197;</a>
-        {% endif %}
-      </div>
       </d-article>
 
       <d-appendix>
         <d-footnote-list></d-footnote-list>
         <d-citation-list></d-citation-list>
-
       </d-appendix>
 
       <d-bibliography src="{{ page.bibliography | prepend: '/assets/bibliography/' | relative_url }}"></d-bibliography>
-
-
 
       {%- if site.disqus_shortname and page.disqus_comments -%}
         {% include disqus.html %}
@@ -152,10 +106,6 @@
       {%- endif -%}
 
     </div>
-
-
-
-
 
     <!-- Footer -->
     {%- include footer.html %}

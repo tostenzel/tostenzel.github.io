@@ -36,22 +36,6 @@ layout: default
           {% endfor -%}
       {% endif %}
 
-
-      {% if page.toc -%}
-        <nav class="l-text figcaption">
-        <h3>Contents</h3>
-          {% for section in page.toc -%}
-          <div><a href="#{{ section.name | slugify }}">{{ section.name }}</a></div>
-          {% if section.subsections -%}
-          <ul>
-            {% for subsection in section.subsections -%}
-            <li><a href="#{{ subsection.name | slugify }}">{{ subsection.name }}</a></li>
-            {% endfor %}
-          </ul>
-          {%- endif -%}
-          {%- endfor %}
-        </nav>
-      {%- endif %}
     </p>
   </header>
 
@@ -71,7 +55,5 @@ layout: default
   {%- if site.giscus.repo and page.giscus_comments -%}
     {% include giscus.html %}
   {%- endif -%}
-
-
 
 </div>
