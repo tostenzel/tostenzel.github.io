@@ -142,7 +142,7 @@ d-appendix {
   float: left;
   padding-right: 0em;
   padding-left: 0em;
-
+  border: 0px solid var(--global-divider-color);
 
 }
 
@@ -165,7 +165,7 @@ d-appendix {
       margin-bottom: 1em;
       padding-top: 0.5em;
       width: 100%;
-      border: 1px solid var(--global-divider-color);
+      border: 0px solid var(--global-divider-color);
       nav {
         grid-column: none;
       }
