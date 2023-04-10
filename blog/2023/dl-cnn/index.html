@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<!-- _layouts/distill.html --><html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">    <!-- Metadata, OpenGraph and Schema.org -->
+    
+
+    <!-- Standard metadata -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>6. Convolutional Neural Networks | Tobias  Stenzel</title>
+    <meta name="author" content="Tobias  Stenzel">
+    <meta name="description" content="🔑️ &lt;b&gt;&lt;i&gt;Key sections about parameter sharing, inductive biases, skip connections, and cross-correlation.&lt;/i&gt;&lt;/b&gt;">
+
+
+    <!-- Bootstrap & MDB -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous">
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700%7CRoboto+Slab:100,300,400,500,700%7CMaterial+Icons">
+
+    <!-- Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light">
+
+    <!-- Styles -->
+    
+    <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%93%9D&lt;/text&gt;&lt;/svg&gt;">
+    
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="canonical" href="https://www.tobiasstenzel.com/blog/2023/dl-cnn/">
+    
+    <!-- Dark Mode -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark">
+
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/dark_mode.js"></script>
+    
+
+
+    <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- MathJax -->
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        tags: 'ams'
+      }
+    };
+  </script>
+  <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+  <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+    <!-- Distill js -->
+    <script src="/assets/js/distillpub/template.v2.js"></script>
+    <script src="/assets/js/distillpub/transforms.v2.js"></script>
+    <script src="/assets/js/distillpub/overrides.js"></script>
+
+    <!-- _layouts/post.html -->
+  </head>
+
+  <body>
+<d-front-matter>
+    <script async type="text/json">{
+      "title": "6. Convolutional Neural Networks",
+      "description": "🔑️ <b><i>Key sections about parameter sharing, inductive biases, skip connections, and cross-correlation.</i></b>",
+      "published": "March 6, 2023",
+      "authors": [
+        {
+          "author": "Tobias Stenzel",
+          "authorURL": "https://www.tobiasstenzel.com",
+          "affiliations": [
+            {
+              "name": "N/A",
+              "url": ""
+            }
+          ]
+        }
+        
+      ],
+      "katex": {
+        "delimiters": [
+          {
+            "left": "$",
+            "right": "$",
+            "display": false
+          },
+          {
+            "left": "$$",
+            "right": "$$",
+            "display": true
+          }
+        ]
+      }
+    }</script>
+  </d-front-matter>
+
+  
+
+    <!-- Header -->
+    <header>
+
+      <!-- Nav Bar -->
+      <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+        <div class="container">
+          <a class="navbar-brand title font-weight-lighter" href="/"><span class="font-weight-bold">Tobias </span>Stenzel</a>
+          <!-- Navbar Toggle -->
+          <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar top-bar"></span>
+            <span class="icon-bar middle-bar"></span>
+            <span class="icon-bar bottom-bar"></span>
+          </button>
+
+          <div class="collapse navbar-collapse text-right" id="navbarNav">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+
+              <!-- About -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/">about</a>
+              </li>
+              
+              <!-- Blog -->
+              <li class="nav-item active">
+                <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a>
+              </li>
+
+              <!-- Other pages -->
+
+              <!-- Toogle theme mode -->
+              <li class="toggle-container">
+                <button id="light-toggle" title="Change theme">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Scrolling Progress Bar -->
+      <progress id="progress" value="0">
+        <div class="progress-container">
+          <span class="progress-bar"></span>
+        </div>
+      </progress>
+    </header>
+
+
+    <!-- Content -->
+    <div class="post distill">
+
+      <d-title>
+        <h1>6. Convolutional Neural Networks</h1>
+        <p>🔑️ <b><i>Key sections about parameter sharing, inductive biases, skip connections, and cross-correlation.</i></b></p>
+        <p class="post-tags">
+          <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
+            ·  
+            <a href="/blog/tag/neural-net-archetype">
+              <i class="fas fa-hashtag fa-sm"></i> neural-net-archetype</a>  
+              <a href="/blog/tag/backprop">
+              <i class="fas fa-hashtag fa-sm"></i> backprop</a>  
+              <a href="/blog/tag/cross-correlation">
+              <i class="fas fa-hashtag fa-sm"></i> cross-correlation</a>  
+              <a href="/blog/tag/inductive-bias">
+              <i class="fas fa-hashtag fa-sm"></i> inductive-bias</a>  
+              <a href="/blog/tag/receptive-field">
+              <i class="fas fa-hashtag fa-sm"></i> receptive-field</a>  
+              <a href="/blog/tag/compute-graph">
+              <i class="fas fa-hashtag fa-sm"></i> compute-graph</a>  
+              
+
+        </p>
+      </d-title>
+
+      <d-byline></d-byline>
+
+      <d-article>
+        <d-contents>
+          <nav class="l-text figcaption">
+          <h3>Contents</h3>
+            <div><a href="#convolutional-neural-networks">Convolutional Neural Networks</a></div>
+            <ul>
+              <li><a href="#cross-correlation">Cross-correlation</a></li>
+              <li><a href="#concrete-example">Concrete example</a></li>
+              <li><a href="#general-definition">General definition</a></li>
+              <li><a href="#parameter-sharing">Parameter sharing</a></li>
+              <li><a href="#pooling-layers">Pooling layers</a></li>
+              <li><a href="#backward-pass">Backward pass</a></li>
+              <li><a href="#cnn-architectures">CNN architectures</a></li>
+              <li><a href="#lengthy-network-paths">Lengthy network paths</a></li>
+              <li><a href="#skip-connections">Skip connections</a></li>
+              <li><a href="#inductive-bias">Inductive bias</a></li>
+              
+            </ul>
+          </nav>
+        </d-contents>
+
+        <h2 id="sec:cnn">Convolutional Neural Networks</h2>
+
+<p>A Convolutional Neural Networks (CNN) <d-cite key="lecun_gradient-based_1998"></d-cite> is
+type of neural network architecture that is specifically designed for
+input data where the tabular arrangement includes a spatial meaning.
+Moreover, the features of one example are not stored in a vector of
+different property values but $x$ is a multi-dimensional array (i.e. a
+<em>tensor</em>). For instance, the data for a color image could have
+dimensions $32 \times 32 \times 3$. The first two dimensions represent
+the height and the width of the pixels and the third dimension stands
+for three color channels red, green and blue. We can find these spatial
+relationships in many data, not only in images. Further examples are
+sound spectrogram or sentence data. The main motivation for CNNs is to
+reduce the complexity with parameter sharing by focusing on relations
+between spatially close data points.</p>
+
+<h3 id="cross-correlation">Cross-correlation</h3>
+<p>The core building block of a CNN is the
+<em>Convolutional Layer</em> (or CONV layer). The main operation in this layer
+is the cross-product between tensors. We denote the cross-product
+between two tensors $I$ and $W$ as $I \star W = O$. $I$ is the input and
+$W$ is the kernel or the filter. If the two matrices are three
+dimensional tensors, then the third dimension of both tensors must have
+equal length. Let $i_1, i_2$ and $f_1, f_2$ be the width and the height
+of the input and the filter, respectively. The output, activation map O,
+has dimension $(i_1 - f_1 + 1)  \times (i_2 - f_2 + 1)$. Accordingly,
+the cross-product for one output element is given by the following
+formula :</p>
+
+\[\begin{align}O_{i,j} = (I \star W)_{i,j} = \sum_{m=1}^{k_1} \sum_{n=1}^{k_2}
+W_{m,n} \cdot I_{i+m-1,j+n-1} + b.
+\label{eq:cross-correlation}\end{align}\]
+
+<p>Figure <a href="#fig:cross-correlation">3</a> illustrates Equation
+<a href="#eq:cross-correlation">1</a> without adding the filter-specific
+bias $b$. We fill the activation map row-wise starting from the first
+element in the top-left corner. To compute this element, we place the
+filter on top of the input so that the feature and the top-left element
+of the filter overlap. Then, we calculate the dot product between the
+elements at the same position, i.e. we obtain $O_{1,1}$ by
+$5 \cdot 1+6 \cdot 2+3 \cdot 8+4 \cdot 9=94$. The cross-correlation
+operation is equivalent to the convolution operation with horizontally
+and vertically flipped filter.</p>
+
+<figure id="fig:cross-correlation">
+<center><img src="/assets/img/dl-series/cross-correlation.png" style="width:80%"></center>
+</figure>
+<p><b>Figure 3. Cross-correlation between two matrices.</b> Input matrix <span class="math inline"><em>I</em></span> has shape 4 <span class="math inline">×</span> 4 and kernel matrix W has 3 <span class="math inline">×</span> 3. The colored areas in I show the
+receptive field for each output in <span class="math inline"><em>O</em></span>. The matrix elements are numbered
+by their matrix indices.</p>
+
+<h3 id="concrete-example">Concrete example</h3>
+<p>Let us continue with another example in three
+dimensions. Our input I is a $32 \times 32 \times 3$ tensor that
+represents an image with red, green and blue channels. Our filter W is a
+$5 \times 5 \times 3$ tensor. We have one filter channel for each color
+channel. Now we <em>convolve</em> this filter by sliding it across the whole
+image. With that, we interact the color channels dimensions because we
+compute the dot product over three dimensions. The result is an
+<em>activation map</em> with dimensions $28 \times 28$ because we can only
+place a $5 \times 5$ filter only 28 times over a $32 \times 32$ tensor.
+It is common to pad the input with a frame of zeros to control the first
+two dimension lengths of the output. For instance, a frame of zeros with
+thickness 2 maintains the first two dimension lengths of the input.
+Another option is to slide the filter with some stride to reduce the
+impact of the relations between close pixels on the filter weights. For
+instance, convolving the $5 \times 5 \times 3$ filter over the
+$32 \times 32 \times 3$ image with no padding and stride 2 results in an
+activation map of size $16 \times 16 \times 3$ instead. Lastly, the CONV
+layer does not only use a single filter but a set of filters. E.g., with
+a set of seven filter, we obtain the same number of $16 \times 16$
+activation maps. We stack these activation maps along the third
+dimension of the resulting output tensor. Thus, we have transformed a
+$32 \times 32 \times 3$ into a $16 \times 16 \times 7$ stack of
+activation maps. Intuitively, each single filter has the capacity to
+detect specific local features in the input tensor that may be of
+importance to later layers. The weights in this filter tensor are
+parameters that we train with backpropagation.</p>
+
+<h3 id="general-definition">General definition</h3>
+<p>A convolutional layer for images that are
+represented by a three dimensional input tensor is given by the
+following five components:</p>
+
+<ul>
+  <li>
+    <p><strong>Input:</strong> a tensor $I$ of size $W_1 \times H_1 \times D_1$</p>
+  </li>
+  <li>
+    <p><strong>Hyperparameters:</strong> the number of filters $K$, the filter’s width
+or height $F$ (assuming both are equal), the stride $S$ , and the
+amount of zero padding, $P$.</p>
+  </li>
+  <li>
+    <p><strong>Output:</strong> $D_2$ different activation maps stored in a volume of
+size $W_2 \times H_2 \times D_2$, where $W_2= (W_1 - F+2P)/S+1$,
+$H_2=(H_1-F+2P)S+1$, and $D_2=K$.</p>
+  </li>
+  <li>
+    <p><strong>Complexity:</strong> the number of parameters in each filter is
+$F \times F \times D_1$. This gives a total of
+$K \times (F \times F \times D_1) + K$ parameters for the whole
+layer. Note that the filter depth always equals the input depth.
+Moreover, the last $K$ represents the bias terms that we add to the
+respective filter after each dot product computation with the data.</p>
+  </li>
+  <li>
+    <p><strong>Operation:</strong> Each d-th slice of the output tensor (of size
+$W_2 \times H2$) is the result of computing the cross-correlation
+between the d-th filter over the input tensor with a stride of S and
+offsetting the result by d-th bias afterwards.</p>
+  </li>
+</ul>
+
+<h3 id="parameter-sharing">Parameter sharing</h3>
+<p>Cross-correlation slides each filter over the
+input with the same weights at every position. As a consequence, the
+size of the receptive field, i.e. the set of inputs that impact one
+output, is much smaller compared to fully-connected layers (cf. Figure
+<a href="https://www.tobiasstenzel.com/blog/2023/dl-fnn/#fig:vanilla_neural_net">2</a>. In particular, a convolutional
+layer is a special case of a fully connected layer, where many neurons
+have the same (re-arranged) set of weights and where most weights are
+set to zero except of a small neighborhood. Hence, the convolutional
+layer has much less parameters and is less prone to overfitting. To
+illustrate this point, let us consider the example of a
+$128 \times 128 \times 3$ input image that is taken by a convolutional
+layer with 32 $5 \times 5 \times 3$ filters, padding of 2 and a stride
+of 1. The output is a $128 \times 128 \times 32$ volume consisting of
+$524,288$ elements. We compute this volume with only
+\(32*5*5*3+32=2,432\) total parameters. In contrast, if this was a fully
+connect layer that computes every output element based on its own
+specific weights, we would use
+$524,288 * (128 \times 128 \times 3) = 25,769,803,776$ parameters. This
+number is not only gigantic but it would also be difficult not to
+overfit the data even if we could store the parameters and compute the
+result.</p>
+
+<h3 id="pooling-layers">Pooling layers</h3>
+<p>Another building block of CNNs are pooling layers.
+These layers are used to further reduce overfitting by downsampling the
+convolutions output with a fixed scheme and without any parameters.
+Specifically, these pooling operations are applied to each activation
+map separately and preserve the depth of the output volumes but not
+their height and width. As with cross-correlation, we slide the pooling
+filter over its input. However, we have to do this for each input
+channel separately because the pooling operation has no depth. A common
+setting is a $2 \times 2$ filter with stride 2 where the filter
+represents a max operation over four numbers. This filter gives us an
+output tensor that is downsampled by $2 \times 2$ along the first two
+dimensions.</p>
+
+<h3 id="backward-pass">Backward pass</h3>
+<p>The Jacobian of a convolution layer $O = I \star W$
+is given by $I \star J^O$, where $J^O$ is the Jacobian that contains the
+upstream gradients $\delta^o$ with respect to the activation map
+parameters. This is illustrated by Figure <a href="#fig:gradient-cross-correlation">4</a>. In comparison to the
+Jacobian for a fully-connected linear layer, the smaller, shared
+downstream gradient is only multiplied with the activations of its
+adjacent elements from the previous layer. The first derivatives of the
+pooling operations average and max are simple. The derivative of the
+average with respect to one element is 1 divided by the number of
+elements. The derivative of the max is the indicator function of maximum
+element’s index.</p>
+
+<figure id="fig:gradient-cross-correlation">
+<center><img src="/assets/img/dl-series/gradient-cross-correlation.png" style="width:80%"></center>
+</figure>
+<p><b>Figure 4. Backward pass through cross-correlation.</b> The Jacobian <span class="math inline"><em>J</em><sup><em>W</em></sup></span> for the
+weight parameters of the cross-correlation <span class="math inline"><em>O</em> = <em>I</em> ⋆ <em>W</em></span> is given
+by the cross correlation between the Jacobian <span class="math inline"><em>J</em><sup><em>O</em></sup></span> that contains
+the downstream gradients <span class="math inline"><em>δ</em><sup><em>o</em></sup></span> with respect
+to the activation map parameters. The shaded area in <span class="math inline"><em>I</em></span> shows the elements that are used
+in the dot product with <span class="math inline"><em>J</em><sup><em>O</em></sup></span> to compute
+the shaded element in <span class="math inline"><em>J</em><sup><em>W</em></sup></span>.</p>
+
+<h3 id="cnn-architectures">CNN architectures</h3>
+<p>We build complete CNNs by stacking convolutional
+and pooling layers. A classical architecture is LeNet-5 for digit
+classification from black &amp; white images of hand-written digits <d-cite key="lecun_gradient-based_1998"></d-cite>. A slightly simplified version has the form
+INPUT, [[CONV, POOL] $\times$ 2], CONV, FC, FC, SOFTMAX. In this
+notation, INPUT stands for a tensor of a batch of images
+($[100 \times 32 \times 32 \times 1]$ for a batch of 100 32 $\times$ 32
+black &amp; white images), CONV denotes six, sixteen, and 120 $5 \times 5$
+filters with stride 1 and tanh activation, POOL denotes an average
+pooling layer with a 2 $\times$ 2 filter and a stride of 2, and FC
+represents fully-connected layers. The first layer has tanh activations
+and the last layer calculates the softmax probabilities for ten
+different digits. The FC layers are used to extract features not only
+locally but globally and because this type of layer is cheaper after
+multiple rounds of downsampling. A receptive field of a (hidden) feature
+is the set if inputs that influence this feature. In a fully connected
+layer, the receptive field of every hidden feature is always the
+complete input vector or tensor. By stacking multiple convolutional
+layers, we can achieve the same receptive field with much less
+parameters. The outputs from higher layers have larger receptive fields
+and thus represent higher-level features. One example for these type of
+features could be far-reaching edges.</p>
+
+<h3 id="lengthy-network-paths">Lengthy network paths</h3>
+<p>In the last paragraph, we learned that
+classic CNN architectures are essentially a stack of functions. In
+Chapter <a href="https://www.tobiasstenzel.com/blog/2023/dl-backprop/#backpropagation">4</a>, however, we saw that a sequence of function
+applications results in a long and linear backpropagation graph given by
+a multiplication sequence of partial derivatives. If a number of these
+partial derivatives are either very small or very large, their
+multiplicative effect can cause either too small or too large gradient
+updates during optimization. Especially layers with sigmoid activations
+(e.g. logistic, tanh) with derivatives that are flat or extremely steep
+for large parts of the domain are problematic. If parameters have once
+reached these parts, learning oftentimes stops for larger chunks of the
+network for two reasons. First, for these parameters, it requires a
+number of unusually large steps to leave these extreme areas. And
+second, other parameters with gradients that include multiplications
+with the extreme gradients are set to zero or infinity, too.</p>
+
+<h3 id="skip-connections">Skip connections</h3>
+<p>We can alleviate the problem by connecting earlier
+(or bottom) layers, $h^{(i)}$, with later (or top) layers, $h^{(i+k)}$,
+via the duplication operation followed by the "+" operator. With that,
+we open up a new path past the majority of the stacked functions. We
+call this type of link a <em>skip connection</em>. The effect is that, in the
+backward pass, $l^{(i)}$ receives another downstream Jacobian
+$J^{(i+k)}\cdot … \cdot J^{(o)}$ that we add to the more complex
+Jacobian
+$J^{(i+1)} \cdot J^{(i+2)} \cdot … \cdot J^{(i+k)} \cdot… \cdot J^{(o)}$.
+Intuitively, the updates from the more complex Jacobian are used to
+learn the difference between the bottom layer and the top layer. As a
+result, we can learn a simple representation of the model without
+exposing the gradient to further multiplicative transformations and, in
+addition, we can learn another representation for more complex relations
+between the input features. An illustrative toy model similar to Figure
+<a href="https://www.tobiasstenzel.com/blog/2023/dl-backprop/#toy-example">1</a> is $C(\theta)= \tanh (\theta)^n$ where
+$n \in \mathbb{N}^+$ represents the number of subsequent tanh
+operations. The model with skip connection is
+$C_{res}(\theta)= C(\theta) + \theta$. We can observe the described
+technical aspects by comparing $\partial C / \partial \theta$ with
+$\partial C_{res} / \partial \theta$ and the respective computational
+graphs. An early implementation of this idea is Microsoft’s ResNet <d-cite key="he_deep_2016"></d-cite>. This architecture uses skip connections that only skip
+one layer at a time. We will return to the problem of vanishing and
+exploding gradients from lenthy network parths in our discussion of
+recurrent neural networks.</p>
+
+<h3 id="inductive-bias">Inductive bias</h3>
+<p>In the previous paragraph, we have seen how we can
+design neural network architectures to form sensible predictions on a
+domain-specific type of input data. We have also learned how to exploit
+the peculiar spatial relations in this data in order to save parameters
+and training time compared to fully-connected FNNs. The assumptions that
+we pose on the relations in the data in our architecture design is
+called the <em>inductive bias</em>. In summary, there are three inductive
+biases in the convolution layers of CNNs:</p>
+
+<ul>
+  <li>
+    <p><strong>Translation invariance:</strong> the convolution operation is translation
+invariant, i.e. $f(x) = f(T(x))$ with $x, a \in \mathbb{R}^n$ and
+$T:\mathbb{R}:x \rightarrow \mathbb{R}^n$, where $f$ denotes the
+convolution and $T$ a transformation of the input. For images,
+$n=2$. The motivation is that we want to identify an object
+independent of changes to its position. For other transformations,
+such as rotations and change in color, however, we need to train on
+additional augmented images.</p>
+  </li>
+  <li>
+    <p><strong>Locality of features:</strong> the filter sizes are much smaller than the
+image because we assume that local relations between the pixels are
+more important than global relations.</p>
+  </li>
+  <li>
+    <p><strong>Universality of feature extractors:</strong> we can reuse the same filter
+for all regions of the input because we assume that the hidden
+features which we extract are similarly important at each position.</p>
+  </li>
+</ul>
+
+<p>In order to improve our results, we soften the inductive bias regarding
+the locality of features with two additional layers: at the beginning of
+the network, we include cheap pooling layers and towards the end we add
+fully connected layers.</p>
+
+<h2 id="citation">Citation</h2>
+
+<p>In case you like this series, cite it with:</p>
+<pre tabindex="0"><code class="language-latex">@misc{stenzel2023deeplearning,
+  title   = "Deep Learning Series",
+  author  = "Stenzel, Tobias",
+  year    = "2023",
+  url     = "https://www.tobiasstenzel.com/blog/2023/dl-overview/
+}
+</code></pre>
+
+      </d-article>
+
+      <d-appendix>
+        <d-footnote-list></d-footnote-list>
+        <d-citation-list></d-citation-list>
+      </d-appendix>
+
+      <d-bibliography src="/assets/bibliography/references.bib"></d-bibliography><div id="giscus_thread" style="max-width: 800px; margin: 0 auto;">
+  <script>
+    let giscusTheme = localStorage.getItem("theme");
+    let giscusAttributes = {
+        "src": "https://giscus.app/client.js",
+        "data-repo": "tostenzel/tostenzel.github.io",
+        "data-repo-id": "MDEwOlJlcG9zaXRvcnk2MDAyNDM2NQ==",
+        "data-category": "Comments",
+        "data-category-id": "DIC_kwDOA5PmLc4CTBt6",
+        "data-mapping": "title",
+        "data-strict": "1",
+        "data-reactions-enabled": "1",
+        "data-emit-metadata": "0",
+        "data-input-position": "bottom",
+        "data-theme": giscusTheme,
+        "data-lang": "en",
+        "crossorigin": "anonymous",
+        "async": "",
+    };
+
+
+    let giscusScript = document.createElement("script");
+    Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value));
+    document.getElementById("giscus_thread").appendChild(giscusScript);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://giscus.app/?ref_noscript" rel="external nofollow noopener" target="_blank">comments powered by giscus.</a>
+</noscript>
+</div>
+</div>
+
+    <!-- Footer -->
+
+    <!-- Bootsrap & MDB scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fgLAgv7fyCGopR/gBNq2iW3ZKIdqIcyshnUULC4vex8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script>
+
+    
+    
+
+<!-- Scrolling Progress Bar -->
+<script type="text/javascript">
+  /*
+   * This JavaScript code has been adapted from the article 
+   * https://css-tricks.com/reading-position-indicator/ authored by Pankaj Parashar, 
+   * published on the website https://css-tricks.com on the 7th of May, 2014.
+   * Couple of changes were made to the original code to make it compatible 
+   * with the `al-foio` theme.
+   */
+  const progressBar = $("#progress");
+  /*
+   * We set up the bar after all elements are done loading.
+   * In some cases, if the images in the page are larger than the intended
+   * size they'll have on the page, they'll be resized via CSS to accomodate
+   * the desired size. This mistake, however, breaks the computations as the
+   * scroll size is computed as soon as the elements finish loading.
+   * To account for this, a minimal delay was introduced before computing the
+   * values.
+   */
+  window.onload = function () {
+    setTimeout(progressBarSetup, 50);
+  };
+  /*
+   * We set up the bar according to the browser.
+   * If the browser supports the progress element we use that.
+   * Otherwise, we resize the bar thru CSS styling
+   */
+  function progressBarSetup() {
+    if ("max" in document.createElement("progress")) {
+      initializeProgressElement();
+      $(document).on("scroll", function() {
+        progressBar.attr({ value: getCurrentScrollPosition() });
+      });
+      $(window).on("resize", initializeProgressElement);
+    } else {
+      resizeProgressBar();
+      $(document).on("scroll", resizeProgressBar);
+      $(window).on("resize", resizeProgressBar);
+    }
+  }
+  /*
+   * The vertical scroll position is the same as the number of pixels that
+   * are hidden from view above the scrollable area. Thus, a value > 0 is
+   * how much the user has scrolled from the top
+   */
+  function getCurrentScrollPosition() {
+    return $(window).scrollTop();
+  }
+
+  function initializeProgressElement() {
+    let navbarHeight = $("#navbar").outerHeight(true);
+    $("body").css({ "padding-top": navbarHeight });
+    $("progress-container").css({ "padding-top": navbarHeight });
+    progressBar.css({ top: navbarHeight });
+    progressBar.attr({
+      max: getDistanceToScroll(),
+      value: getCurrentScrollPosition(),
+    });
+  }
+  /*
+   * The offset between the html document height and the browser viewport
+   * height will be greater than zero if vertical scroll is possible.
+   * This is the distance the user can scroll
+   */
+  function getDistanceToScroll() {
+    return $(document).height() - $(window).height();
+  }
+
+  function resizeProgressBar() {
+    progressBar.css({ width: getWidthPercentage() + "%" });
+  }
+  // The scroll ratio equals the percentage to resize the bar
+  function getWidthPercentage() {
+    return (getCurrentScrollPosition() / getDistanceToScroll()) * 100;
+  }
+</script>
+
+  
+</body>
+</html>
