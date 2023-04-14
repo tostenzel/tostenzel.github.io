@@ -55,8 +55,8 @@ hidden state from the encoder-RNN for every time period without
 recursion. The result of the attention function is the context vector.
 We will use this vector for every output element. In the specific
 network in Figure [7](#fig:attention), the context vector is a function of both the
-decoder states $s$ and the encoder states $h$. Further, it is
-additionally concatenated with $s$ to predict the output layer.
+decoder states $$s$$ and the encoder states $$h$$. Further, it is
+additionally concatenated with $$s$$ to predict the output layer.
 
 <figure id="fig:attention">
 <center><img src="/assets/img/dl-series/2h-attention.png" style="width:50%"></center>
@@ -79,21 +79,21 @@ and <span class="math inline"><em>o</em><sub>1</sub></span> is
 discarded.  
 <br>
 
-The attention function that returns the context vector for output $y_t$
+The attention function that returns the context vector for output $$y_t$$
 wit attention scores for each input is given by the following
 expression:
 
 $$\begin{align}c_t = \sum_{i=1}^n \alpha_{t,i} h_i\end{align}$$
 
-$\alpha_{t,i}$ is a softmax function of another function *score* that
-measure how well output $y_t$ and input $x_i$ are aligned through the
-encoder state $h_i$:
+$$\alpha_{t,i}$$ is a softmax function of another function *score* that
+measure how well output $$y_t$$ and input $$x_i$$ are aligned through the
+encoder state $$h_i$$:
 
 $$\begin{align}\alpha_{t,i} = \text{align}(y_t,x_i) = \frac{\exp \text{score}(s_{t-1}, h_i)}{\sum_{j=1}^n\exp\text{score} (s_{t-1}, h_j)}.\end{align}$$
 
 There are many different scoring functions <d-cite key="weng_attention_2018"></d-cite>. A
 common choice is the scaled dot-product score
-$(s_t, h_i)=\frac{s_t^T h_i}{\sqrt{d}}$, where $d$ is the hidden state
+$$(s_t, h_i)=\frac{s_t^T h_i}{\sqrt{d}}$$, where $$d$$ is the hidden state
 dimension of both encoder and decoder states. Here, the alignment score
 for one sequence element is given by a relative score of the dot-product
 between the respective encoder hidden state and the current decoder
@@ -105,7 +105,7 @@ the output-specific alignment scores for each input as rows.
 
 Another option for an encoder-decoder with attention is using a
 self-attention mechanism to compute the context vector, for example,
-with score $(h_j, h_i)=\frac{h_j^T h_i}{\sqrt{d}}$. We can use the
+with score $$(h_j, h_i)=\frac{h_j^T h_i}{\sqrt{d}}$$. We can use the
 scores, for instance, in machine translation, to model how important the
 previous words are for translating the current word in a sentence. Note
 that we can execute many of these operations in parallel for the whole
@@ -121,20 +121,20 @@ recurrence.
 
 As we do not use recurrence of single sequence
 elements anymore, let us denote the whole sequence of input embeddings
-by $X \in \mathbb{R}^{L \times D^{(x)}}$. $L$ can either be the complete
-input length $T_x$ or later only a fraction of it. $D^{(x)}$ is the
+by $$X \in \mathbb{R}^{L \times D^{(x)}}$$. $$L$$ can either be the complete
+input length $$T_x$$ or later only a fraction of it. $$D^{(x)}$$ is the
 input embedding's length. Let us denoted the sequence of output
-embeddings by $Y \in \mathbb{R}^{M \times D^{(y)}}$. The transformer
+embeddings by $$Y \in \mathbb{R}^{M \times D^{(y)}}$$. The transformer
 uses an extension of the attention mechanism, the multi-head attention,
 as its core building block. The first step is that, instead of using the
-softmax of the scaled dot-product between encoder states $h$ and decoder
-states $s$ directly as in the last section, it uses the scaled
+softmax of the scaled dot-product between encoder states $$h$$ and decoder
+states $$s$$ directly as in the last section, it uses the scaled
 dot-product with two different input encodings,
-$K=XW^k \in \mathbb{R}^{L \times D_k}$ and
-$V=XW^v \in \mathbb{R}^{L \times D_v}$, and an output encoding
-$Q=YW^q \in \mathbb{R}^{M \times D_k}$, with
-$W^k \in \mathbb{R}^{D^{(x)} \times D_k}, W^q \in \mathbb{R}^{D^{(y)} \times D_k}$
-and $W^v \in \mathbb{R}^{D^{(x)} \times D_v}$. Note that source and
+$$K=XW^k \in \mathbb{R}^{L \times D_k}$$ and
+$$V=XW^v \in \mathbb{R}^{L \times D_v}$$, and an output encoding
+$$Q=YW^q \in \mathbb{R}^{M \times D_k}$$, with
+$$W^k \in \mathbb{R}^{D^{(x)} \times D_k}, W^q \in \mathbb{R}^{D^{(y)} \times D_k}$$
+and $$W^v \in \mathbb{R}^{D^{(x)} \times D_v}$$. Note that source and
 target embeddings are projected linearly into the same space. We compute
 attention with
 
@@ -143,7 +143,7 @@ $$\begin{align}c(Q,K,V)=\text{Softmax}\big(\frac{QK^T}{\sqrt{n}}\big)V.\end{alig
 We call (K,V) key-value pairs and Q the query. Using the interpretation
 of the dot product as a similarity measure, the context matrix shows the
 (self-)similarity between the input and a representation of the input
-that is weighted by its similarity to the output (so far). $c(Q,K,V)$ is
+that is weighted by its similarity to the output (so far). $$c(Q,K,V)$$ is
 a matrix because we now compute the attention scores for every target
 (query) dimension at once. However, we mask embeddings for unseen target
 elements in every period. In the transformer encoder, there is an
@@ -163,13 +163,13 @@ simultaneously with high efficiency.
 
 $$\begin{align}\text{MultiHead}(X_q, X_k, X_v)= [ \text{head}_1;...;\text{head}_h ] W^o,\end{align}$$
 
-where $\text{head}_i=$Attention$(X_q W^q_i, X_k W^k_i, X_v W^v_i)$ and $W_i^q  \in \mathbb{R}^{D^{(y)} \times D_v /H}$, $W_i^k \in \mathbb{R}^{D^{(x)} \times D_k / H}$, $W_i^v \in \mathbb{R}^{D^{(x)} \times D_v /H}$
-are matrices to map input embeddings of chunk size $L \times D$ into
-query, key and value matrices. $W^o \in \mathbb{R}^{D_v \times D}$ is
+where $$\text{head}_i=$$Attention$$(X_q W^q_i, X_k W^k_i, X_v W^v_i)$$ and $$W_i^q  \in \mathbb{R}^{D^{(y)} \times D_v /H}$$, $$W_i^k \in \mathbb{R}^{D^{(x)} \times D_k / H}$$, $$W_i^v \in \mathbb{R}^{D^{(x)} \times D_v /H}$$
+are matrices to map input embeddings of chunk size $$L \times D$$ into
+query, key and value matrices. $$W^o \in \mathbb{R}^{D_v \times D}$$ is
 the linear transformation in the output dimensions. These four weight
 matrices are learned during training. Target self-attention and cross
-attention layers compute outputs in $\mathbb{R}^{M \times D}$, and
-source self-attention calculates outputs in $\mathbb{R}^{L \times D}$.
+attention layers compute outputs in $$\mathbb{R}^{M \times D}$$, and
+source self-attention calculates outputs in $$\mathbb{R}^{L \times D}$$.
 
 ### Transformer encoder
 
@@ -259,7 +259,7 @@ so far. We observe that attention scales better than the other units if
 the length of the input sequence is much smaller than the depth of each
 elements embeddings. This applies to tasks like machine translation in <d-cite key="vaswani_attention_2017"></d-cite> or question-answering. However, for direct
 applications to image data, this property does not hold. For instance,
-the length from a CIFAR image equals $32 \cdot 32 \cdot 3 = 3072$.
+the length from a CIFAR image equals $$32 \cdot 32 \cdot 3 = 3072$$.
 Therefore, applying a transformer to image data in order to profit from
 its advantages requires architectures that reduce the input length
 beforehand.
