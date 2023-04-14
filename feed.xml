@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://www.tobiasstenzel.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.tobiasstenzel.com/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-04-10T20:00:36+00:00</updated><id>https://www.tobiasstenzel.com/feed.xml</id><title type="html">blank</title><subtitle>Tobias&apos; homepage.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://www.tobiasstenzel.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.tobiasstenzel.com/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-04-14T09:44:06+00:00</updated><id>https://www.tobiasstenzel.com/feed.xml</id><title type="html">blank</title><subtitle>Tobias&apos; homepage.
 </subtitle><entry><title type="html">8. Transformer</title><link href="https://www.tobiasstenzel.com/blog/2023/dl-transformer/" rel="alternate" type="text/html" title="8. Transformer" /><published>2023-03-08T00:00:00+00:00</published><updated>2023-03-08T00:00:00+00:00</updated><id>https://www.tobiasstenzel.com/blog/2023/dl-transformer</id><content type="html" xml:base="https://www.tobiasstenzel.com/blog/2023/dl-transformer/"><![CDATA[<h2 id="transformer">Transformer</h2>
 
 <p>In the last section we learned that RNNs have problems with learning
@@ -19,8 +19,8 @@ hidden state from the encoder-RNN for every time period without
 recursion. The result of the attention function is the context vector.
 We will use this vector for every output element. In the specific
 network in Figure <a href="#fig:attention">7</a>, the context vector is a function of both the
-decoder states $s$ and the encoder states $h$. Further, it is
-additionally concatenated with $s$ to predict the output layer.</p>
+decoder states \(s\) and the encoder states \(h\). Further, it is
+additionally concatenated with \(s\) to predict the output layer.</p>
 
 <figure id="fig:attention">
 <center><img src="/assets/img/dl-series/2h-attention.png" style="width:50%" /></center>
@@ -38,21 +38,21 @@ and <span class="math inline"><em>o</em><sub>1</sub></span> is
 discarded.<br />
 <br /></p>
 
-<p>The attention function that returns the context vector for output $y_t$
+<p>The attention function that returns the context vector for output \(y_t\)
 wit attention scores for each input is given by the following
 expression:</p>
 
 \[\begin{align}c_t = \sum_{i=1}^n \alpha_{t,i} h_i\end{align}\]
 
-<p>$\alpha_{t,i}$ is a softmax function of another function <em>score</em> that
-measure how well output $y_t$ and input $x_i$ are aligned through the
-encoder state $h_i$:</p>
+<p>\(\alpha_{t,i}\) is a softmax function of another function <em>score</em> that
+measure how well output \(y_t\) and input \(x_i\) are aligned through the
+encoder state \(h_i\):</p>
 
 \[\begin{align}\alpha_{t,i} = \text{align}(y_t,x_i) = \frac{\exp \text{score}(s_{t-1}, h_i)}{\sum_{j=1}^n\exp\text{score} (s_{t-1}, h_j)}.\end{align}\]
 
 <p>There are many different scoring functions <d-cite key="weng_attention_2018"></d-cite>. A
 common choice is the scaled dot-product score
-$(s_t, h_i)=\frac{s_t^T h_i}{\sqrt{d}}$, where $d$ is the hidden state
+\((s_t, h_i)=\frac{s_t^T h_i}{\sqrt{d}}\), where \(d\) is the hidden state
 dimension of both encoder and decoder states. Here, the alignment score
 for one sequence element is given by a relative score of the dot-product
 between the respective encoder hidden state and the current decoder
@@ -64,7 +64,7 @@ the output-specific alignment scores for each input as rows.</p>
 
 <p>Another option for an encoder-decoder with attention is using a
 self-attention mechanism to compute the context vector, for example,
-with score $(h_j, h_i)=\frac{h_j^T h_i}{\sqrt{d}}$. We can use the
+with score \((h_j, h_i)=\frac{h_j^T h_i}{\sqrt{d}}\). We can use the
 scores, for instance, in machine translation, to model how important the
 previous words are for translating the current word in a sentence. Note
 that we can execute many of these operations in parallel for the whole
@@ -80,20 +80,20 @@ recurrence.</p>
 
 <p>As we do not use recurrence of single sequence
 elements anymore, let us denote the whole sequence of input embeddings
-by $X \in \mathbb{R}^{L \times D^{(x)}}$. $L$ can either be the complete
-input length $T_x$ or later only a fraction of it. $D^{(x)}$ is the
+by \(X \in \mathbb{R}^{L \times D^{(x)}}\). \(L\) can either be the complete
+input length \(T_x\) or later only a fraction of it. \(D^{(x)}\) is the
 input embedding’s length. Let us denoted the sequence of output
-embeddings by $Y \in \mathbb{R}^{M \times D^{(y)}}$. The transformer
+embeddings by \(Y \in \mathbb{R}^{M \times D^{(y)}}\). The transformer
 uses an extension of the attention mechanism, the multi-head attention,
 as its core building block. The first step is that, instead of using the
-softmax of the scaled dot-product between encoder states $h$ and decoder
-states $s$ directly as in the last section, it uses the scaled
+softmax of the scaled dot-product between encoder states \(h\) and decoder
+states \(s\) directly as in the last section, it uses the scaled
 dot-product with two different input encodings,
-$K=XW^k \in \mathbb{R}^{L \times D_k}$ and
-$V=XW^v \in \mathbb{R}^{L \times D_v}$, and an output encoding
-$Q=YW^q \in \mathbb{R}^{M \times D_k}$, with
-$W^k \in \mathbb{R}^{D^{(x)} \times D_k}, W^q \in \mathbb{R}^{D^{(y)} \times D_k}$
-and $W^v \in \mathbb{R}^{D^{(x)} \times D_v}$. Note that source and
+\(K=XW^k \in \mathbb{R}^{L \times D_k}\) and
+\(V=XW^v \in \mathbb{R}^{L \times D_v}\), and an output encoding
+\(Q=YW^q \in \mathbb{R}^{M \times D_k}\), with
+\(W^k \in \mathbb{R}^{D^{(x)} \times D_k}, W^q \in \mathbb{R}^{D^{(y)} \times D_k}\)
+and \(W^v \in \mathbb{R}^{D^{(x)} \times D_v}\). Note that source and
 target embeddings are projected linearly into the same space. We compute
 attention with</p>
 
@@ -102,7 +102,7 @@ attention with</p>
 <p>We call (K,V) key-value pairs and Q the query. Using the interpretation
 of the dot product as a similarity measure, the context matrix shows the
 (self-)similarity between the input and a representation of the input
-that is weighted by its similarity to the output (so far). $c(Q,K,V)$ is
+that is weighted by its similarity to the output (so far). \(c(Q,K,V)\) is
 a matrix because we now compute the attention scores for every target
 (query) dimension at once. However, we mask embeddings for unseen target
 elements in every period. In the transformer encoder, there is an
@@ -122,13 +122,13 @@ simultaneously with high efficiency.</p>
 
 \[\begin{align}\text{MultiHead}(X_q, X_k, X_v)= [ \text{head}_1;...;\text{head}_h ] W^o,\end{align}\]
 
-<p>where $\text{head}_i=$Attention$(X_q W^q_i, X_k W^k_i, X_v W^v_i)$ and $W_i^q  \in \mathbb{R}^{D^{(y)} \times D_v /H}$, $W_i^k \in \mathbb{R}^{D^{(x)} \times D_k / H}$, $W_i^v \in \mathbb{R}^{D^{(x)} \times D_v /H}$
-are matrices to map input embeddings of chunk size $L \times D$ into
-query, key and value matrices. $W^o \in \mathbb{R}^{D_v \times D}$ is
+<p>where \(\text{head}_i=\)Attention\((X_q W^q_i, X_k W^k_i, X_v W^v_i)\) and \(W_i^q  \in \mathbb{R}^{D^{(y)} \times D_v /H}\), \(W_i^k \in \mathbb{R}^{D^{(x)} \times D_k / H}\), \(W_i^v \in \mathbb{R}^{D^{(x)} \times D_v /H}\)
+are matrices to map input embeddings of chunk size \(L \times D\) into
+query, key and value matrices. \(W^o \in \mathbb{R}^{D_v \times D}\) is
 the linear transformation in the output dimensions. These four weight
 matrices are learned during training. Target self-attention and cross
-attention layers compute outputs in $\mathbb{R}^{M \times D}$, and
-source self-attention calculates outputs in $\mathbb{R}^{L \times D}$.</p>
+attention layers compute outputs in \(\mathbb{R}^{M \times D}\), and
+source self-attention calculates outputs in \(\mathbb{R}^{L \times D}\).</p>
 
 <h3 id="transformer-encoder">Transformer encoder</h3>
 
@@ -224,7 +224,7 @@ so far. We observe that attention scales better than the other units if
 the length of the input sequence is much smaller than the depth of each
 elements embeddings. This applies to tasks like machine translation in <d-cite key="vaswani_attention_2017"></d-cite> or question-answering. However, for direct
 applications to image data, this property does not hold. For instance,
-the length from a CIFAR image equals $32 \cdot 32 \cdot 3 = 3072$.
+the length from a CIFAR image equals \(32 \cdot 32 \cdot 3 = 3072\).
 Therefore, applying a transformer to image data in order to profit from
 its advantages requires architectures that reduce the input length
 beforehand.</p>
@@ -252,20 +252,20 @@ instance, in translation programs we oftentimes encode words as
 sequences of one-hot vectors. These vectors are index vectors with a one
 at the position of an integer that maps to a word in a fixed vocabulary.
 A simple recurrent neural network (RNN) processes a sequence of vectors
-${x_1, …, x_T}$ with a recurrence formula
-$h_t = f_\theta(h_{t-1},x_t)$. The function $f$ that we will describe in
-more detail below takes the same parameters $\theta$ at every time step
+\(\{x_1, ..., x_T\}\) with a recurrence formula
+\(h_t = f_\theta(h_{t-1},x_t)\). The function \(f\) that we will describe in
+more detail below takes the same parameters \(\theta\) at every time step
 to process an arbitrary number of vectors (cf. parameter sharing and
-inductive bias). An interpretation of the hidden vector $h$ is that of a
-summary of all previous $x$ vectors. A common initialization is
-$h_0=\vec{0}$. We can define $f$ according to three criteria. The first
-criterion is the input and output space. We would model $f$ differently
+inductive bias). An interpretation of the hidden vector \(h\) is that of a
+summary of all previous \(x\) vectors. A common initialization is
+\(h_0=\vec{0}\). We can define \(f\) according to three criteria. The first
+criterion is the input and output space. We would model \(f\) differently
 for spaces from one to many, many to one or many to many vectors. The
 second criterion is the order in which we process input vectors and
 predict output vectors. This depends on the nature of the data. For
-example, we may either want to predict $y_t$ directly after processing
-$x_t$, or predict the complete output sequence ${y_1, …, y_T}$ after
-we have processed the complete input sequence ${x_i}_{i=1}^T$. Another
+example, we may either want to predict \(y_t\) directly after processing
+\(x_t\), or predict the complete output sequence \(\{y_1, ..., y_T\}\) after
+we have processed the complete input sequence \(\{x_i\}_{i=1}^T\). Another
 option is to not only compute a summary of the past but also a summary
 of the future and use both vectors in our predictions. The third
 criterion is how we want to improve upon drawbacks of the model
@@ -276,31 +276,31 @@ this section. To illustrate how RNNs work, we will look at two examples.</p>
 
 <p>Vanilla Recurrent Neural Networks use a recurrence defined by</p>
 
-\[\begin{align}
+<p>\(\)\begin{align}
 h_t &amp;= \phi \big ( W\begin{bmatrix}
-       x_{t} \\
+       x_{t} <br />
        h_{t-1} 
      \end{bmatrix}
      \big ).
 \label{eq:vanilla-rnn}
-\end{align}\]
+\end{align}\(\)</p>
 
 <p>Here, we concatenate the current input and the previous hidden states,
 transform both linearly and pass it to a non-linear activation function.
 This vector notation is equivalent to
-$h_t = \phi (W_{xh}x_t + W_{hh}h_{t-1})$. The two matrices $W_{xh}$ and
-$W_{hh}$ are concatenated horizontally to $W$. If the input vectors
-$x_t$ have dimension $1 \times D$ and the hidden vectors dimension
-$1 \times H$, then $W_{xh} \in \mathbb{R}^{H \times D}$,
-$W_{hh} \in \mathbb{R}^{H \times H}$, and weight matrix $W$ is a matrix
-with dimensions $[H \times (D+H)]$. Vanilla RNN models the current
-hidden states $h_t$ at each time step as a linear function of the
-elements in the previous hidden states $h_{t-1}$ and the current input
-$x_t$, transformed by a non-linearity. In a classification task, e.g.
+\(h_t = \phi (W_{xh}x_t + W_{hh}h_{t-1})\). The two matrices \(W_{xh}\) and
+\(W_{hh}\) are concatenated horizontally to \(W\). If the input vectors
+\(x_t\) have dimension \(1 \times D\) and the hidden vectors dimension
+\(1 \times H\), then \(W_{xh} \in \mathbb{R}^{H \times D}\),
+\(W_{hh} \in \mathbb{R}^{H \times H}\), and weight matrix \(W\) is a matrix
+with dimensions \([H \times (D+H)]\). Vanilla RNN models the current
+hidden states \(h_t\) at each time step as a linear function of the
+elements in the previous hidden states \(h_{t-1}\) and the current input
+\(x_t\), transformed by a non-linearity. In a classification task, e.g.
 where we want to predict the next written letter in a prompt by the
 previously types letters, we would apply the Softmax function to a
 linear transformation of the hidden state at each time step,
-$o_t = W_{ho} h_t$, in order to predict the next character’s one-hot
+\(o_t = W_{ho} h_t\), in order to predict the next character’s one-hot
 encoding. This is illustrated by Figure
 <a href="#fig:vanilla-rnn">5</a>.</p>
 
@@ -324,9 +324,9 @@ step.</p>
 <h3 id="encoder-decoder-rnns">Encoder-Decoder RNNs</h3>
 
 <p>Encoder-Decoder RNNs use the complete input history
-${x_i}_1^{T_x}$ to predict the first output $y_1$. Then, it
+\(\{x_i\}_1^{T_x}\) to predict the first output \(y_1\). Then, it
 additionally uses the complete prediction history
-${\hat{y}_i}_1^{t-1}$ to predict the next $y_t$ for $t=2,…,T_y$. The
+\(\{\hat{y}_i\}_1^{t-1}\) to predict the next \(y_t\) for \(t=2,...,T_y\). The
 model is able to generate sequences of arbitrary length that can be
 unequal to the length of the input sequence. An examplary task is
 translating sentences from English to German. Here, we work with one-hot
@@ -334,24 +334,24 @@ encodings of words from a fixed vocabulary instead of letters from an
 alphabet. To build this RNN, we use the same recursion from the previous
 example as an encoder RNN. However, do not classify the output at each
 timestep directly. Instead, we use the last hidden state from the
-encoder $h_T$ as a context vector $c_0$. Intuitively, the context vector
+encoder \(h_T\) as a context vector \(c_0\). Intuitively, the context vector
 is an abstract representation of the entire input sentence. Then, we use
 another RNN, the decoder RNN to process the information from the context
 and the output from the previous period to generate the hidden states
-$s_t$ for the current period:</p>
+\(s_t\) for the current period:</p>
 
-\[\begin{align}
+<p>\(\)\begin{align}
 s_t = \phi (W_{os}o_{t-1} + W_{ss}s_{t-1})
-\end{align}\]
+\end{align}\(\)</p>
 
-<p>with $s_0 = c_0$ and, for instance $y_0 = \vec{0}$. We then predict the
+<p>with \(s_0 = c_0\) and, for instance \(y_0 = \vec{0}\). We then predict the
 next word’s one-hot encoding from the hidden states like in the last
-example with the softmax of $o_t=W_{so}s_t$. To model the fact that
+example with the softmax of \(o_t=W_{so}s_t\). To model the fact that
 input and output sequences can have different length, we require special
-start of sentence, $&lt;$sos$&gt;$, and end of sentence, $&lt;$eos$&gt;$, tokens.</p>
+start of sentence, \(&lt;\)sos\(&gt;\), and end of sentence, \(&lt;\)eos\(&gt;\), tokens.</p>
 
-<p>The encoder uses the $&lt;$eos$&gt;$ as $x_{1}$. The decoder takes $&lt;$sos$&gt;$
-as $y_1$ and stops the recursion when it returns $&lt;$eos$&gt;$.</p>
+<p>The encoder uses the \(&lt;\)eos\(&gt;\) as \(x_{1}\). The decoder takes \(&lt;\)sos\(&gt;\)
+as \(y_1\) and stops the recursion when it returns \(&lt;\)eos\(&gt;\).</p>
 
 <figure id="fig:encoder-decoder-rnn">
 <center><img src="/assets/img/dl-series/2g-encoder-decoder-rnn.png" style="width:95%" /></center>
@@ -384,29 +384,29 @@ problem more formally. The vanilla RNN’s loss with respect to the weight
 matrix in Equation
 <a href="#eq:vanilla-rnn">1</a> is given by:</p>
 
-<p>\(\begin{align}\frac{\partial L}{\partial W} = \sum_{t=1}^T \sum_{k=1}^{t+1} \frac{\partial L_{t+1}}{\partial o_{t+1}} \frac{\partial o_{t+1}}{\partial h_{t+1}} \frac{\partial h_{t+1}}{\partial h_{k}} \frac{\partial h_{k}}{\partial W}.
-\label{eq:rnn-derivative}\end{align}\) The crucial part is the derivative of the
-hidden layer in the next period with respect to some past layer $k$. It
-is given by the recursive product \(\begin{align}\label{eq:rnn-derivative-recursion}
-\frac{\partial h_{t+1}}{\partial h_k} = \prod_{j=k}^t\frac{\partial h_{t+1}}{\partial h_{k}} = \frac{\partial h_{t+1}}{\partial h_{t}} \frac{\partial h_{t}}{\partial h_{t-1}} ... \frac{\partial h_{k+1}}{\partial h_{k}} = \prod_{j=k}^t \text{diag} \big(W_{hh}\phi' (W  [x_{j+1};h_j])\big).\end{align}\)
+<p>\(\)\begin{align}\frac{\partial L}{\partial W} = \sum_{t=1}^T \sum_{k=1}^{t+1} \frac{\partial L_{t+1}}{\partial o_{t+1}} \frac{\partial o_{t+1}}{\partial h_{t+1}} \frac{\partial h_{t+1}}{\partial h_{k}} \frac{\partial h_{k}}{\partial W}.
+\label{eq:rnn-derivative}\end{align}\(\) The crucial part is the derivative of the
+hidden layer in the next period with respect to some past layer \(k\). It
+is given by the recursive product \(\)\begin{align}\label{eq:rnn-derivative-recursion}
+\frac{\partial h_{t+1}}{\partial h_k} = \prod_{j=k}^t\frac{\partial h_{t+1}}{\partial h_{k}} = \frac{\partial h_{t+1}}{\partial h_{t}} \frac{\partial h_{t}}{\partial h_{t-1}} … \frac{\partial h_{k+1}}{\partial h_{k}} = \prod_{j=k}^t \text{diag} \big(W_{hh}\phi’ (W  [x_{j+1};h_j])\big).\end{align}\(\)
 Equation
 <a href="#eq:rnn-derivative-recursion">4</a> shows that, in order to compute
-the gradients for $W_{xh}$ and $W_{hh}$, we have to multiply a large
+the gradients for \(W_{xh}\) and \(W_{hh}\), we have to multiply a large
 number of Jacobians depending on the size of the input sequences. The
-reason is that the derivative of a hidden layer $h_{t+1}$ with respect
-to some previous layer $h_k$ equals the product of the derivatives from
-$t+1$ to $k+1$ with respect to their previous layers. For simplicity,
+reason is that the derivative of a hidden layer \(h_{t+1}\) with respect
+to some previous layer \(h_k\) equals the product of the derivatives from
+\(t+1\) to \(k+1\) with respect to their previous layers. For simplicity,
 let us assume that these derivatives are constant. Further, let us
 compute the eigendecomposition of the fixed Jacobian matrix
-$\frac{\partial h_{t+1}}{\partial h_t}$ to analyze the problem more
+\(\frac{\partial h_{t+1}}{\partial h_t}\) to analyze the problem more
 formally. We obtain the eigenvalues
-$\lambda_1, \lambda_2,…,\lambda_n$, with
-$|\lambda_1|&gt; |\lambda_2|&gt;…&gt;|\lambda_n|$, and the respective
-eigenvectors, $v_1, v_2, …, v_n$. With these components, we can write
+\(\lambda_1, \lambda_2,...,\lambda_n\), with
+\(|\lambda_1|&gt; |\lambda_2|&gt;...&gt;|\lambda_n|\), and the respective
+eigenvectors, \(v_1, v_2, ..., v_n\). With these components, we can write
 the constant update of the hidden state in the direction of an
-eigenvector $v_i$ as $\lambda_i \Delta$. During the backward pass from
-$t+1$ to $k$, this change becomes $\lambda_i^{t-k} \Delta h$. As a
-result, if the largest eigenvalue $\lambda_1$ is smaller than one, the
+eigenvector \(v_i\) as \(\lambda_i \Delta\). During the backward pass from
+\(t+1\) to \(k\), this change becomes \(\lambda_i^{t-k} \Delta h\). As a
+result, if the largest eigenvalue \(\lambda_1\) is smaller than one, the
 gradient will vanish, and if it is larger than one, the gradient
 explodes. In practice, the gradients oftentimes rather vanishes due the
 contribution of the activation derivative which cannot exceed one. In
@@ -440,9 +440,9 @@ vanilla RNNs.</p>
 type of neural network architecture that is specifically designed for
 input data where the tabular arrangement includes a spatial meaning.
 Moreover, the features of one example are not stored in a vector of
-different property values but $x$ is a multi-dimensional array (i.e. a
+different property values but \(x\) is a multi-dimensional array (i.e. a
 <em>tensor</em>). For instance, the data for a color image could have
-dimensions $32 \times 32 \times 3$. The first two dimensions represent
+dimensions \(32 \times 32 \times 3\). The first two dimensions represent
 the height and the width of the pixels and the third dimension stands
 for three color channels red, green and blue. We can find these spatial
 relationships in many data, not only in images. Further examples are
@@ -454,27 +454,27 @@ between spatially close data points.</p>
 <p>The core building block of a CNN is the
 <em>Convolutional Layer</em> (or CONV layer). The main operation in this layer
 is the cross-product between tensors. We denote the cross-product
-between two tensors $I$ and $W$ as $I \star W = O$. $I$ is the input and
-$W$ is the kernel or the filter. If the two matrices are three
+between two tensors \(I\) and \(W\) as \(I \star W = O\). \(I\) is the input and
+\(W\) is the kernel or the filter. If the two matrices are three
 dimensional tensors, then the third dimension of both tensors must have
-equal length. Let $i_1, i_2$ and $f_1, f_2$ be the width and the height
+equal length. Let \(i_1, i_2\) and \(f_1, f_2\) be the width and the height
 of the input and the filter, respectively. The output, activation map O,
-has dimension $(i_1 - f_1 + 1)  \times (i_2 - f_2 + 1)$. Accordingly,
+has dimension \((i_1 - f_1 + 1)  \times (i_2 - f_2 + 1)\). Accordingly,
 the cross-product for one output element is given by the following
 formula :</p>
 
-\[\begin{align}O_{i,j} = (I \star W)_{i,j} = \sum_{m=1}^{k_1} \sum_{n=1}^{k_2}
+<p>\(\)\begin{align}O_{i,j} = (I \star W)<em>{i,j} = \sum</em>{m=1}^{k_1} \sum_{n=1}^{k_2}
 W_{m,n} \cdot I_{i+m-1,j+n-1} + b.
-\label{eq:cross-correlation}\end{align}\]
+\label{eq:cross-correlation}\end{align}\(\)</p>
 
 <p>Figure <a href="#fig:cross-correlation">3</a> illustrates Equation
 <a href="#eq:cross-correlation">1</a> without adding the filter-specific
-bias $b$. We fill the activation map row-wise starting from the first
+bias \(b\). We fill the activation map row-wise starting from the first
 element in the top-left corner. To compute this element, we place the
 filter on top of the input so that the feature and the top-left element
 of the filter overlap. Then, we calculate the dot product between the
-elements at the same position, i.e. we obtain $O_{1,1}$ by
-$5 \cdot 1+6 \cdot 2+3 \cdot 8+4 \cdot 9=94$. The cross-correlation
+elements at the same position, i.e. we obtain \(O_{1,1}\) by
+\(5 \cdot 1+6 \cdot 2+3 \cdot 8+4 \cdot 9=94\). The cross-correlation
 operation is equivalent to the convolution operation with horizontally
 and vertically flipped filter.</p>
 
@@ -487,27 +487,27 @@ by their matrix indices.</p>
 
 <h3 id="concrete-example">Concrete example</h3>
 <p>Let us continue with another example in three
-dimensions. Our input I is a $32 \times 32 \times 3$ tensor that
+dimensions. Our input I is a \(32 \times 32 \times 3\) tensor that
 represents an image with red, green and blue channels. Our filter W is a
-$5 \times 5 \times 3$ tensor. We have one filter channel for each color
+\(5 \times 5 \times 3\) tensor. We have one filter channel for each color
 channel. Now we <em>convolve</em> this filter by sliding it across the whole
 image. With that, we interact the color channels dimensions because we
 compute the dot product over three dimensions. The result is an
-<em>activation map</em> with dimensions $28 \times 28$ because we can only
-place a $5 \times 5$ filter only 28 times over a $32 \times 32$ tensor.
+<em>activation map</em> with dimensions \(28 \times 28\) because we can only
+place a \(5 \times 5\) filter only 28 times over a \(32 \times 32\) tensor.
 It is common to pad the input with a frame of zeros to control the first
 two dimension lengths of the output. For instance, a frame of zeros with
 thickness 2 maintains the first two dimension lengths of the input.
 Another option is to slide the filter with some stride to reduce the
 impact of the relations between close pixels on the filter weights. For
-instance, convolving the $5 \times 5 \times 3$ filter over the
-$32 \times 32 \times 3$ image with no padding and stride 2 results in an
-activation map of size $16 \times 16 \times 3$ instead. Lastly, the CONV
+instance, convolving the \(5 \times 5 \times 3\) filter over the
+\(32 \times 32 \times 3\) image with no padding and stride 2 results in an
+activation map of size \(16 \times 16 \times 3\) instead. Lastly, the CONV
 layer does not only use a single filter but a set of filters. E.g., with
-a set of seven filter, we obtain the same number of $16 \times 16$
+a set of seven filter, we obtain the same number of \(16 \times 16\)
 activation maps. We stack these activation maps along the third
 dimension of the resulting output tensor. Thus, we have transformed a
-$32 \times 32 \times 3$ into a $16 \times 16 \times 7$ stack of
+\(32 \times 32 \times 3\) into a \(16 \times 16 \times 7\) stack of
 activation maps. Intuitively, each single filter has the capacity to
 detect specific local features in the input tensor that may be of
 importance to later layers. The weights in this filter tensor are
@@ -520,29 +520,29 @@ following five components:</p>
 
 <ul>
   <li>
-    <p><strong>Input:</strong> a tensor $I$ of size $W_1 \times H_1 \times D_1$</p>
+    <p><strong>Input:</strong> a tensor \(I\) of size \(W_1 \times H_1 \times D_1\)</p>
   </li>
   <li>
-    <p><strong>Hyperparameters:</strong> the number of filters $K$, the filter’s width
-or height $F$ (assuming both are equal), the stride $S$ , and the
-amount of zero padding, $P$.</p>
+    <p><strong>Hyperparameters:</strong> the number of filters \(K\), the filter’s width
+or height \(F\) (assuming both are equal), the stride \(S\) , and the
+amount of zero padding, \(P\).</p>
   </li>
   <li>
-    <p><strong>Output:</strong> $D_2$ different activation maps stored in a volume of
-size $W_2 \times H_2 \times D_2$, where $W_2= (W_1 - F+2P)/S+1$,
-$H_2=(H_1-F+2P)S+1$, and $D_2=K$.</p>
+    <p><strong>Output:</strong> \(D_2\) different activation maps stored in a volume of
+size \(W_2 \times H_2 \times D_2\), where \(W_2= (W_1 - F+2P)/S+1\),
+\(H_2=(H_1-F+2P)S+1\), and \(D_2=K\).</p>
   </li>
   <li>
     <p><strong>Complexity:</strong> the number of parameters in each filter is
-$F \times F \times D_1$. This gives a total of
-$K \times (F \times F \times D_1) + K$ parameters for the whole
+\(F \times F \times D_1\). This gives a total of
+\(K \times (F \times F \times D_1) + K\) parameters for the whole
 layer. Note that the filter depth always equals the input depth.
-Moreover, the last $K$ represents the bias terms that we add to the
+Moreover, the last \(K\) represents the bias terms that we add to the
 respective filter after each dot product computation with the data.</p>
   </li>
   <li>
     <p><strong>Operation:</strong> Each d-th slice of the output tensor (of size
-$W_2 \times H2$) is the result of computing the cross-correlation
+\(W_2 \times H2\)) is the result of computing the cross-correlation
 between the d-th filter over the input tensor with a stride of S and
 offsetting the result by d-th bias afterwards.</p>
   </li>
@@ -559,14 +559,14 @@ have the same (re-arranged) set of weights and where most weights are
 set to zero except of a small neighborhood. Hence, the convolutional
 layer has much less parameters and is less prone to overfitting. To
 illustrate this point, let us consider the example of a
-$128 \times 128 \times 3$ input image that is taken by a convolutional
-layer with 32 $5 \times 5 \times 3$ filters, padding of 2 and a stride
-of 1. The output is a $128 \times 128 \times 32$ volume consisting of
-$524,288$ elements. We compute this volume with only
-\(32*5*5*3+32=2,432\) total parameters. In contrast, if this was a fully
+\(128 \times 128 \times 3\) input image that is taken by a convolutional
+layer with 32 \(5 \times 5 \times 3\) filters, padding of 2 and a stride
+of 1. The output is a \(128 \times 128 \times 32\) volume consisting of
+\(524,288\) elements. We compute this volume with only
+\(\)32<em>5</em>5*3+32=2,432\(\) total parameters. In contrast, if this was a fully
 connect layer that computes every output element based on its own
 specific weights, we would use
-$524,288 * (128 \times 128 \times 3) = 25,769,803,776$ parameters. This
+\(524,288 * (128 \times 128 \times 3) = 25,769,803,776\) parameters. This
 number is not only gigantic but it would also be difficult not to
 overfit the data even if we could store the parameters and compute the
 result.</p>
@@ -580,15 +580,15 @@ map separately and preserve the depth of the output volumes but not
 their height and width. As with cross-correlation, we slide the pooling
 filter over its input. However, we have to do this for each input
 channel separately because the pooling operation has no depth. A common
-setting is a $2 \times 2$ filter with stride 2 where the filter
+setting is a \(2 \times 2\) filter with stride 2 where the filter
 represents a max operation over four numbers. This filter gives us an
-output tensor that is downsampled by $2 \times 2$ along the first two
+output tensor that is downsampled by \(2 \times 2\) along the first two
 dimensions.</p>
 
 <h3 id="backward-pass">Backward pass</h3>
-<p>The Jacobian of a convolution layer $O = I \star W$
-is given by $I \star J^O$, where $J^O$ is the Jacobian that contains the
-upstream gradients $\delta^o$ with respect to the activation map
+<p>The Jacobian of a convolution layer \(O = I \star W\)
+is given by \(I \star J^O\), where \(J^O\) is the Jacobian that contains the
+upstream gradients \(\delta^o\) with respect to the activation map
 parameters. This is illustrated by Figure <a href="#fig:gradient-cross-correlation">4</a>. In comparison to the
 Jacobian for a fully-connected linear layer, the smaller, shared
 downstream gradient is only multiplied with the activations of its
@@ -613,12 +613,12 @@ the shaded element in <span class="math inline"><em>J</em><sup><em>W</em></sup><
 <p>We build complete CNNs by stacking convolutional
 and pooling layers. A classical architecture is LeNet-5 for digit
 classification from black &amp; white images of hand-written digits <d-cite key="lecun_gradient-based_1998"></d-cite>. A slightly simplified version has the form
-INPUT, [[CONV, POOL] $\times$ 2], CONV, FC, FC, SOFTMAX. In this
+INPUT, [[CONV, POOL] \(\times\) 2], CONV, FC, FC, SOFTMAX. In this
 notation, INPUT stands for a tensor of a batch of images
-($[100 \times 32 \times 32 \times 1]$ for a batch of 100 32 $\times$ 32
-black &amp; white images), CONV denotes six, sixteen, and 120 $5 \times 5$
+(\([100 \times 32 \times 32 \times 1]\) for a batch of 100 32 \(\times\) 32
+black &amp; white images), CONV denotes six, sixteen, and 120 \(5 \times 5\)
 filters with stride 1 and tanh activation, POOL denotes an average
-pooling layer with a 2 $\times$ 2 filter and a stride of 2, and FC
+pooling layer with a 2 \(\times\) 2 filter and a stride of 2, and FC
 represents fully-connected layers. The first layer has tanh activations
 and the last layer calculates the softmax probabilities for ten
 different digits. The FC layers are used to extract features not only
@@ -651,26 +651,26 @@ with the extreme gradients are set to zero or infinity, too.</p>
 
 <h3 id="skip-connections">Skip connections</h3>
 <p>We can alleviate the problem by connecting earlier
-(or bottom) layers, $h^{(i)}$, with later (or top) layers, $h^{(i+k)}$,
+(or bottom) layers, \(h^{(i)}\), with later (or top) layers, \(h^{(i+k)}\),
 via the duplication operation followed by the "+" operator. With that,
 we open up a new path past the majority of the stacked functions. We
 call this type of link a <em>skip connection</em>. The effect is that, in the
-backward pass, $l^{(i)}$ receives another downstream Jacobian
-$J^{(i+k)}\cdot … \cdot J^{(o)}$ that we add to the more complex
+backward pass, \(l^{(i)}\) receives another downstream Jacobian
+\(J^{(i+k)}\cdot ... \cdot J^{(o)}\) that we add to the more complex
 Jacobian
-$J^{(i+1)} \cdot J^{(i+2)} \cdot … \cdot J^{(i+k)} \cdot… \cdot J^{(o)}$.
+\(J^{(i+1)} \cdot J^{(i+2)} \cdot ... \cdot J^{(i+k)} \cdot... \cdot J^{(o)}\).
 Intuitively, the updates from the more complex Jacobian are used to
 learn the difference between the bottom layer and the top layer. As a
 result, we can learn a simple representation of the model without
 exposing the gradient to further multiplicative transformations and, in
 addition, we can learn another representation for more complex relations
 between the input features. An illustrative toy model similar to Figure
-<a href="https://www.tobiasstenzel.com/blog/2023/dl-backprop/#toy-example">1</a> is $C(\theta)= \tanh (\theta)^n$ where
-$n \in \mathbb{N}^+$ represents the number of subsequent tanh
+<a href="https://www.tobiasstenzel.com/blog/2023/dl-backprop/#toy-example">1</a> is \(C(\theta)= \tanh (\theta)^n\) where
+\(n \in \mathbb{N}^+\) represents the number of subsequent tanh
 operations. The model with skip connection is
-$C_{res}(\theta)= C(\theta) + \theta$. We can observe the described
-technical aspects by comparing $\partial C / \partial \theta$ with
-$\partial C_{res} / \partial \theta$ and the respective computational
+\(C_{res}(\theta)= C(\theta) + \theta\). We can observe the described
+technical aspects by comparing \(\partial C / \partial \theta\) with
+\(\partial C_{res} / \partial \theta\) and the respective computational
 graphs. An early implementation of this idea is Microsoft’s ResNet <d-cite key="he_deep_2016"></d-cite>. This architecture uses skip connections that only skip
 one layer at a time. We will return to the problem of vanishing and
 exploding gradients from lenthy network parths in our discussion of
@@ -689,10 +689,10 @@ biases in the convolution layers of CNNs:</p>
 <ul>
   <li>
     <p><strong>Translation invariance:</strong> the convolution operation is translation
-invariant, i.e. $f(x) = f(T(x))$ with $x, a \in \mathbb{R}^n$ and
-$T:\mathbb{R}:x \rightarrow \mathbb{R}^n$, where $f$ denotes the
-convolution and $T$ a transformation of the input. For images,
-$n=2$. The motivation is that we want to identify an object
+invariant, i.e. \(f(x) = f(T(x))\) with \(x, a \in \mathbb{R}^n\) and
+\(T:\mathbb{R}:x \rightarrow \mathbb{R}^n\), where \(f\) denotes the
+convolution and \(T\) a transformation of the input. For images,
+\(n=2\). The motivation is that we want to identify an object
 independent of changes to its position. For other transformations,
 such as rotations and change in color, however, we need to train on
 additional augmented images.</p>
@@ -726,11 +726,11 @@ fully connected layers.</p>
 </code></pre>]]></content><author><name>Tobias Stenzel</name></author><category term="neural-net-archetype" /><category term="backprop" /><category term="cross-correlation" /><category term="inductive-bias" /><category term="receptive-field" /><category term="compute-graph" /><summary type="html"><![CDATA[🔑️ Key sections about parameter sharing, inductive biases, skip connections, and cross-correlation.]]></summary></entry><entry><title type="html">5. Feedforward Neural Networks</title><link href="https://www.tobiasstenzel.com/blog/2023/dl-fnn/" rel="alternate" type="text/html" title="5. Feedforward Neural Networks" /><published>2023-03-05T00:00:00+00:00</published><updated>2023-03-05T00:00:00+00:00</updated><id>https://www.tobiasstenzel.com/blog/2023/dl-fnn</id><content type="html" xml:base="https://www.tobiasstenzel.com/blog/2023/dl-fnn/"><![CDATA[<h2 id="feedforward-neural-networks">Feedforward Neural Networks</h2>
 
 <p>In the last sections we learned that we can compute any differentiable
-loss function between an arbitrary differentiable function $f$ that
-takes input $x$ and outputs predictions $\hat{y}$ and the data $(x,y)$,
-and optimize the model $f$ with respect to its parameters $\theta$ with
+loss function between an arbitrary differentiable function \(f\) that
+takes input \(x\) and outputs predictions \(\hat{y}\) and the data \((x,y)\),
+and optimize the model \(f\) with respect to its parameters \(\theta\) with
 stochastic gradient descent. In this section, we look at how to
-construct $f$ as a neural network.</p>
+construct \(f\) as a neural network.</p>
 
 <h3 id="vanilla-neural-networks">Vanilla Neural Networks</h3>
 
@@ -741,21 +741,21 @@ element-wise non-linearities. The other idea is that we can repeat, or
 layer, these two transformations multiple times. For instance,
 abstracting from the concrete structure of the input and output data, we
 would write a neural network with two fully connected layers as
-$f(x)=W_1 \phi (W_1 x)$, where $\phi$ represents an an element-wise
-non-linearity like tanh and $W_1$, $W_2$ are matrices that interact,
+\(f(x)=W_1 \phi (W_1 x)\), where \(\phi\) represents an an element-wise
+non-linearity like tanh and \(W_1\), \(W_2\) are matrices that interact,
 scale, and shift the inputs. A 3-layer neural networks would be
-implemented as $f(x)=W_3 \phi (W_1 \phi (W_1 x))$, and so forth. The
+implemented as \(f(x)=W_3 \phi (W_1 \phi (W_1 x))\), and so forth. The
 outputs from the intermediate functions are called hidden layers, and
 one output a hidden unit. We can think of hidden units as feature
 abstractions from the previous layer, or latent features for the next
 layer. During training, the neural network learns which feature
 abstractions are useful to the next layer. A network is called deep if
 it has more than one hidden layer. Common choices for non-linearity
-$\phi$ are tanh, the rectified linear unit (ReLU) $\max(0,x)$, and the
-logistic function $1/(1+e^{-x})$. Usually, we add an additional element
-$x_0 = 1$ to the input vector. The corresponding weight, or bias,
-$b:=w_0$ shifts the output. The choice of the last layer depends on the
-type of output data $y$. For instance, we could select the logistic
+\(\phi\) are tanh, the rectified linear unit (ReLU) \(\max(0,x)\), and the
+logistic function \(1/(1+e^{-x})\). Usually, we add an additional element
+\(x_0 = 1\) to the input vector. The corresponding weight, or bias,
+\(b:=w_0\) shifts the output. The choice of the last layer depends on the
+type of output data \(y\). For instance, we could select the logistic
 function for binary classification, the softmax function for multi-class
 classification, and a linear layer to predict natural numbers. Similar
 to our toy example in Figure <a href="https://www.tobiasstenzel.com/blog/2023/dl-backprop/#toy-example">1</a>
@@ -805,49 +805,49 @@ end of each update computation.</p>
 <ul>
   <li>
     <p><strong>ReLU:</strong> the derivative of the element-wise ReLU is given by
-$\frac{\partial ReLU}{\partial z} = 0$ if $x \leq$ 0 and 1 if x
-$&gt;$ 0. As a consequence, we propagate only the
+\(\frac{\partial ReLU}{\partial z} = 0\) if \(x \leq\) 0 and 1 if x
+\(&gt;\) 0. As a consequence, we propagate only the
 gradient for the neurons with positive activations back to the
 previous layer.</p>
   </li>
   <li>
-    <p><strong>Linear layer:</strong> Let $z = W x$ be a linear layer with one input
-channel and $n$ elements, $x \in \mathbb{R}^{n \times 1}$, with
-$W \in \mathbb{R}^{m \times n}$ and let $z, \delta 
- := \frac{\partial L}{\partial z} \in  \mathbb{R}^{m \times 1}$.
+    <p><strong>Linear layer:</strong> Let \(z = W x\) be a linear layer with one input
+channel and \(n\) elements, \(x \in \mathbb{R}^{n \times 1}\), with
+\(W \in \mathbb{R}^{m \times n}\) and let \(z, \delta 
+ := \frac{\partial L}{\partial z} \in  \mathbb{R}^{m \times 1}\).
 Then
-$\frac{\partial L}{\partial W} = \frac{\partial L}{\partial z} \frac{\partial z}{\partial W} = \delta x^T$.
-The same result, $\delta X^T$, holds for linear layers with $k$
+\(\frac{\partial L}{\partial W} = \frac{\partial L}{\partial z} \frac{\partial z}{\partial W} = \delta x^T\).
+The same result, \(\delta X^T\), holds for linear layers with \(k\)
 features or input channels, i.e. with
-$X \in \mathbb{R}^{n \times k}$ and
-$Z, \delta \in \mathbb{R}^{m \times k}$. Hence, <em>each</em> input
+\(X \in \mathbb{R}^{n \times k}\) and
+\(Z, \delta \in \mathbb{R}^{m \times k}\). Hence, <em>each</em> input
 receives the input-specic respective weighted sum of the upstream
 gradient of <em>all</em> neurons from the next layer.</p>
   </li>
   <li>
-    <p><strong>Softmax:</strong> Let $\hat{p}=\text{softmax}(z)$ denote the softmax
-probabiltities with $\hat{p}, z \in \mathbb{R}^{n \times m}$ and let
-$L(\hat{p},y)$ with $y \in \mathbb{R}^{n \times 1}$ be the scalar
+    <p><strong>Softmax:</strong> Let \(\hat{p}=\text{softmax}(z)\) denote the softmax
+probabiltities with \(\hat{p}, z \in \mathbb{R}^{n \times m}\) and let
+\(L(\hat{p},y)\) with \(y \in \mathbb{R}^{n \times 1}\) be the scalar
 cross-entropy loss. We get
-$\frac{\partial L}{\partial z} = \frac{1}{n}(\hat{p} - y \otimes \vec{1}^m
-)$, where $\otimes$ denotes the outer product between two vectors.
-If we add another logit layer $l\in \mathbb{R}^{n \times m}$ below
+\(\frac{\partial L}{\partial z} = \frac{1}{n}(\hat{p} - y \otimes \vec{1}^m
+)\), where \(\otimes\) denotes the outer product between two vectors.
+If we add another logit layer \(l\in \mathbb{R}^{n \times m}\) below
 the softmax, we obtain the following simple result:</p>
   </li>
 </ul>
 
-\[\frac{\partial L}{\partial l_{i,j}} =
+<p>\(\)\frac{\partial L}{\partial l_{i,j}} =
 \begin{cases}
-   \hat{p}_{i,j} &amp; \text{if i $\neq$ j} \\
-   \hat{p}_{i,j} - 1 &amp; \text{if i = j}.
-\end{cases}\]
+   \hat{p}<em>{i,j} &amp; \text{if i \(\neq\) j} <br />
+   \hat{p}</em>{i,j} - 1 &amp; \text{if i = j}.
+\end{cases}\(\)</p>
 
 <ul>
-  <li>Intuitively, for each example $i \in 1,…,n$, the gradients for
+  <li>Intuitively, for each example \(i \in 1,...,n\), the gradients for
 each parameter that flow from each predicted probability is
 increased by the amount that the predicted probability differs from
-the actual label (times $1/n$). Therefore, gradient descent in
-particular updates parameters $\theta$ towards the direction of the
+the actual label (times \(1/n\)). Therefore, gradient descent in
+particular updates parameters \(\theta\) towards the direction of the
 gradients from the bad predictions.</li>
 </ul>
 
