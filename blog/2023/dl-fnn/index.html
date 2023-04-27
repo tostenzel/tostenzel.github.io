@@ -309,11 +309,11 @@ the softmax, we obtain the following simple result:</p>
   </li>
 </ul>
 
-<p>\(\frac{\partial L}{\partial l_{i,j}} =
+\[\frac{\partial L}{\partial l_{i,j}} =
 \begin{cases}
-   \hat{p}_{i,j} &amp; \text{if i\)\neq\(j} \\
+   \hat{p}_{i,j} &amp; \text{if i $\neq$ j} \\
    \hat{p}_{i,j} - 1 &amp; \text{if i = j}.
-\end{cases}\)</p>
+\end{cases}\]
 
 <ul>
   <li>Intuitively, for each example \(i \in 1,...,n\), the gradients for
