@@ -16,7 +16,7 @@ news: true  # includes a list of news items
 social: true  # includes social icons at the bottom of the page
 ---
 
-Hi, my name is Tobias! I'm writing my Master's thesis in Computer Vision about transformers and video data at Mannheim University.
+Hi, my name is Tobias! I have completed my Data Science degree and my Master's thesis in Computer Vision about transformers and video data at Mannheim University.
 
 I admire accessible explanations of complex things at the right level of abstraction.
 
