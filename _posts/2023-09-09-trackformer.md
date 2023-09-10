@@ -432,7 +432,7 @@ class="math inline"><em>t</em> = 3</span>.
 ### Results
 
 Trackformer achieved state-of-the-art performance in
-multi-object tracking on MOT17 and MOT20 datasets. It is important to pre-train the model on large tracking datasets, to use track augmentations, and probably also to use pre-trained detection weights.<br/><br/>
+multi-object tracking on MOT17 and MOT20 datasets. It is important to pre-train the model on large tracking datasets, to use track augmentations, and probably also to use pre-trained detection weights for tracking-specific pre-training.<br/><br/>
 
 <figure id="fig:object-queries">
 <center><img src="/assets/img/dl-series/paper-deformable-detr.png" style="width:66.6%"></center>
