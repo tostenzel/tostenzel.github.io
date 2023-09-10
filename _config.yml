@@ -120,7 +120,7 @@ bing_site_verification:  # out your bing-site-verification ID (Bing Webmaster)
 
 blog_name: Deep Learning Blog # blog_name will be displayed in your blog page
 blog_nav_title: blog # your blog must have a title for it to be displayed in the nav bar
-blog_description: I blog about deep learning. <br /><br /> &#x23;dl-fundamentals links my series about Deep Learning fundamentals 🐳 (<font size="5">Start with the <a href="https://www.tobiasstenzel.com/blog/2023/dl-overview/">overview post</a>! 🎬 </font>) <br /><br /> &#x23;applications is a new category about cool use-cases and architectures. #
+blog_description: I blog about deep learning. <br /><br /> &#x23;dl-fundamentals links my series about Deep Learning fundamentals 🐳 (<font size="5">Start with the <a href="https://www.tobiasstenzel.com/blog/2023/dl-overview/">overview post</a>! 🎬 </font>) <br /><br /> &#x23;applications is a new category about interesting use cases and architectures. #
 permalink: /blog/:year/:title/
 
 # Pagination
