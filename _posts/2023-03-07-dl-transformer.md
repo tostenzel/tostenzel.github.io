@@ -5,7 +5,7 @@ date: 2023-03-08
 description: ⏮️ <b><i>I recommend reading the RNN post first for the encoder-decoder architecture.</i></b>
 #categories: deep-learning
 #categories: deep-learning
-tags: neural-net-archetype attention
+tags: dl-fundamentals neural-net-archetype attention
 giscus_comments: true
 related_posts: true
 bibliography: references.bib

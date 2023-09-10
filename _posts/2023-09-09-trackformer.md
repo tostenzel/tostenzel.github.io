@@ -2,10 +2,10 @@
 layout: distill
 title: Trackformer — Multi-Object Tracking with Transformers
 date: 2023-03-08
-description: A lower level explanation of Meinhardt et al. (2022)'s paper about applying the transformer to multi-object tracking (MOT)
+description: A lower-level explanation of Meinhardt et al. (2022)'s paper about applying the transformer to multi-object tracking (MOT)
 #categories: deep-learning
 #categories: deep-learning
-tags: application transformer MOT multiple-object-tracking
+tags: applications transformer MOT multiple-object-tracking
 giscus_comments: true
 related_posts: true
 bibliography: references.bib

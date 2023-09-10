@@ -4,7 +4,7 @@ title: 4. Backpropagation
 date: 2023-03-04
 description: 💡 <b><i> Includes a nice detail about why we don't 'frontpropagate'. ;-) </i></b>
 #categories: deep-learning
-tags: backprop reverse-accumulation compute-graph
+tags: dl-fundamentals backprop reverse-accumulation compute-graph
 giscus_comments: true
 related_posts: true
 bibliography: references.bib
