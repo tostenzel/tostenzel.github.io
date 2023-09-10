@@ -23,15 +23,15 @@ authors:
 #   - we may want to automate TOC generation in the future using
 #     jekyll-toc plugin (https://github.com/toshimaru/jekyll-toc).
 toc:
-  - name: Trackformer
-    subsections:
-    - name: 1) DETR as Object Detector
-    - name: 2) Trackformer as Multi-Object Tracker
-    - name: 3) Extra. Deformable DETR as More Efficient Detector
-
+  - name: 1.) Introduction
+  - name: 2.) DETR as Object Detector
+  - name: 3.) Trackformer as Multi-Object Tracker
+  - name: 4.) Extra. Deformable DETR as More Efficient Detector
 
 
 ---
+
+## 1.) Introduction
 
 This blog post provides a detailed explanation of the transformer-based tracking model Trackformer <d-cite key="meinhardt_trackformer_2022"></d-cite>. Trackformer not only achieved state-of-the art results but has also a comparably simple architecture that facilitates implementation and maintenance for practitioners. The coolest thing about this blog post is the inclusion of two self-made images that depict Trackformer’s training process for different scenarios where objects are (re-)entering, leaving, or moving in a camera-recorded, dynamic scene.<br/>
 
@@ -44,7 +44,7 @@ We will delve into both models in more detail separately. First, we will explore
 </figure>
 
 
-### 1) DETR as Object Detector
+## 2.) DETR as Object Detector
 
 Previous object detection systems incorporate various manually designed
 elements, such as anchor generation, rule-based training target
@@ -239,7 +239,7 @@ intensive.<br/><br/>
 <center><img src="/assets/img/dl-series/paper-trackformer.png" style="width:66.6%"></center>
 </figure>
 
-### 2) Trackformer as Multi-Object Tracker
+## 3.) Trackformer as Multi-Object Tracker
 
 Trackformer <d-cite key="meinhardt_trackformer_2022"></d-cite> extends DETR to multi-object
 tracking. To be precise, it uses the variant Deformable DETR <d-cite key="zhu_deformable_2021"></d-cite>, presumably because the results were better.
@@ -438,7 +438,7 @@ multi-object tracking on MOT17 and MOT20 datasets. It is important to pre-train 
 <center><img src="/assets/img/dl-series/paper-deformable-detr.png" style="width:66.6%"></center>
 </figure>
 
-### 3) Extra. Deformable DETR as More Efficient Detector
+## 4.) Extra. Deformable DETR as More Efficient Detector
 
 In order to tackle these challenges, <d-cite key="zhu_deformable_2021"></d-cite> introduces a
 deformable attention module as replacement for the conventional
