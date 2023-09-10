@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Trackformer — Multi-Object Tracking with Transformers | Tobias  Stenzel</title>
     <meta name="author" content="Tobias  Stenzel">
-    <meta name="description" content="A lower-level explanation of the paper &lt;b&gt;&lt;i&gt;Multi-Object Tracking with Transformers (Meinhardt et al., 2022)&lt;/i&gt;&lt;/b&gt; including DETR (Carion et al., 2020) and Deformable DETR (Zhu et al., 2020) 🎥.">
+    <meta name="description" content="A lower-level explanation of the paper &lt;b&gt;&lt;i&gt;Multi-Object Tracking with Transformers (Meinhardt et al., 2022)&lt;/i&gt;&lt;/b&gt; including DETR (Carion et al., 2020) and Deformable DETR (Zhu et al., 2020). 🎥">
 
 
     <!-- Bootstrap & MDB -->
@@ -67,7 +67,7 @@
 <d-front-matter>
     <script async type="text/json">{
       "title": "Trackformer — Multi-Object Tracking with Transformers",
-      "description": "A lower-level explanation of the paper <b><i>Multi-Object Tracking with Transformers (Meinhardt et al., 2022)</i></b> including DETR (Carion et al., 2020) and Deformable DETR (Zhu et al., 2020) 🎥.",
+      "description": "A lower-level explanation of the paper <b><i>Multi-Object Tracking with Transformers (Meinhardt et al., 2022)</i></b> including DETR (Carion et al., 2020) and Deformable DETR (Zhu et al., 2020). 🎥",
       "published": "March 8, 2023",
       "authors": [
         {
@@ -164,7 +164,7 @@
         </p>
         <br><br>
         <h1>Trackformer — Multi-Object Tracking with Transformers</h1>
-        <p>A lower-level explanation of the paper <b><i>Multi-Object Tracking with Transformers (Meinhardt et al., 2022)</i></b> including DETR (Carion et al., 2020) and Deformable DETR (Zhu et al., 2020) 🎥.</p>
+        <p>A lower-level explanation of the paper <b><i>Multi-Object Tracking with Transformers (Meinhardt et al., 2022)</i></b> including DETR (Carion et al., 2020) and Deformable DETR (Zhu et al., 2020). 🎥</p>
         <p class="post-tags">
           <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
             ·  
@@ -200,7 +200,7 @@
 
 <p>This blog post provides a detailed explanation of the transformer-based tracking model Trackformer <d-cite key="meinhardt_trackformer_2022"></d-cite>. Trackformer not only achieved state-of-the art results but has also a comparably simple architecture that facilitates implementation and maintenance for practitioners. The coolest thing about this blog post is the inclusion of two self-made images that depict Trackformer’s training process for different scenarios where objects are (re-)entering, leaving, or moving in a camera-recorded, dynamic scene.<br></p>
 
-<p>Multi-object tracking (MOT) is an important task in the Computer Vision domain. MOT is closely related to object detection because tracking models utilize the detections in each frame of a video with the aim of assigning the same ID to the same objects across different frames over time. Trackformer uses the transformer-based object detector DETR <d-cite key="carion_end--end_2020"></d-cite>. The primary concept behind DETR is to learn a larger number of transformer-decoder embeddings that generate bounding boxes (by cross-attending to the image features), with a set of these embeddings successfully matched to the actual objects in an image. The fundamental idea behind Trackformer is to feed the output embeddings from successfully matched embeddings to the transformer for the next image in a video sequence and train these embeddings to match the same object again. In this configuration, the intertemporally matched embeddings carry the identity of an object over to the next image.<br></p>
+<p>Multi-object tracking (MOT) is an important task in the Computer Vision domain. MOT is closely related to object detection because tracking models utilize the detections in each frame of a video with the aim of assigning the same ID to the same objects across different frames over time. Trackformer uses the transformer-based object detector DEtection TRansformer (DETR) <d-cite key="carion_end--end_2020"></d-cite>. The primary concept behind DETR is to learn a larger number of transformer-decoder embeddings that generate bounding boxes (by cross-attending to the image features), with a set of these embeddings successfully matched to the actual objects in an image. The fundamental idea behind Trackformer is to feed the output embeddings from successfully matched embeddings to the transformer for the next image in a video sequence and train these embeddings to match the same object again. In this configuration, the intertemporally matched embeddings carry the identity of an object over to the next image.<br></p>
 
 <p>We will delve into both models in more detail separately. First, we will explore DETR <d-cite key="carion_end--end_2020"></d-cite>. I will explain the complete model during inference time, then during training time, including the loss function, and subsequently, we will discuss advantages, disadvantages, and results. Second, we will repeat the same process for Trackformer <d-cite key="meinhardt_trackformer_2022"></d-cite>. Finally, we will learn about Deformable DETR <d-cite key="zhu_deformable_2021"></d-cite>, which is a more efficient version of DETR. Deformable DETR employs deformable attention instead of regular attention. Trackformer actually utilizes Deformable DETR for its detections. The Deformable DETR paper is quite technical, so feel free to skip this part!<br><br></p>
 
