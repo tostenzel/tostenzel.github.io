@@ -249,7 +249,7 @@ three sub-tasks of track initialization (detection), prediction of next
 positions, and matching predictions with detections. Thereby, it
 bypasses intermediate layers that are usually present in previous
 pipeline designs, similar to how DETR facilitated object detection. The
-main idea is depicted by
+main idea is depicted by Figure
 [3](#fig:trackformer). It is to re-use DETR's *decoded* object
 queries that have been matched to an actual object in one frame and use
 them as additional object queries for the next frame as *autoregressive
@@ -440,7 +440,7 @@ multi-object tracking on MOT17 and MOT20 datasets. It is important to pre-train 
 
 ## 4.) Extra. Deformable DETR as More Efficient Detector
 
-In order to tackle these challenges, <d-cite key="zhu_deformable_2021"></d-cite> introduces a
+In order to address DETR's disadvantages, <d-cite key="zhu_deformable_2021"></d-cite> introduces a
 deformable attention module as replacement for the conventional
 attention module in DETR's transformer model. Drawing inspiration from
 deformable convolution <d-cite key="dai_deformable_2017"></d-cite> <d-cite key="zhu_deformable_2021"></d-cite>, the
