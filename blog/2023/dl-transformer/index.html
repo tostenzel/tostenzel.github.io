@@ -352,7 +352,7 @@ source self-attention calculates outputs in \(\mathbb{R}^{L \times D}\).</p>
     <p><strong>Multi-head self-attention layer (red):</strong> This layer is the cornerstone of the Transformer’s ability to capture contextual information from input sequences. It allows the model to focus on different parts of the input sequence simultaneously. Self-attention is a mechanism where each input element contributes to the representation of every other element, making it robust to capturing long-range dependencies and essential for tasks such as machine translation <d-cite key="vaswani_attention_2017"></d-cite>.</p>
   </li>
   <li>
-    <p><strong>Position-wise fully-connected feed-forward network :</strong> This layer introduces non-linearity into the network, allowing the model to capture complex patterns and relationships within the data.</p>
+    <p><strong>Position-wise fully-connected feed-forward network (blue):</strong> This layer introduces non-linearity into the network, allowing the model to capture complex patterns and relationships within the data.</p>
   </li>
 </ol>
 
@@ -403,7 +403,7 @@ source self-attention calculates outputs in \(\mathbb{R}^{L \times D}\).</p>
 <center><img src="/assets/img/dl-series/2k-transformer-complete.png" style="width:100%"></center>
 </figure>
 
-<p><strong>Figure 10. The complete transformer.</strong> In its original form, the Transformer processes both source and target sequences through embedding layers, creating representations of dimension D = 512 for each element. This embedding strategy is a cornerstone of the Transformer’s ability to handle input and output sequences of different lengths effectively. The key to this flexibility lies in the use of position embeddings, which preserve positional information by adding sinusoidal positional encoding vectors to the embeddings. These position embeddings carry information about the position of each element within the sequence, allowing the model to distinguish between different positions and capture positional dependencies. The term “(Shifted) Outputs” emphasizes the autoregressive nature of the decoding process, where each output position depends on previously generated positions. Image adapted from <d-cite key="lin_survey_2022"></d-cite>.</p>
+<p><strong>Figure 10. The complete transformer.</strong> In its original form, the Transformer processes both source and target sequences through embedding layers (light blue), creating representations of dimension D = 512 for each element. This embedding strategy is a cornerstone of the Transformer’s ability to handle input and output sequences of different lengths effectively. The key to this flexibility lies in the use of position embeddings (purple), which preserve positional information by adding sinusoidal positional encoding vectors to the embeddings. These position embeddings carry information about the position of each element within the sequence, allowing the model to distinguish between different positions and capture positional dependencies. The term “(Shifted) Outputs” emphasizes the autoregressive nature of the decoding process, where each output position depends on previously generated positions. Image adapted from <d-cite key="lin_survey_2022"></d-cite>.</p>
 
 <p>The Transformer possesses several critical properties:</p>
 
