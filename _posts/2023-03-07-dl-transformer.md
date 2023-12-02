@@ -26,12 +26,12 @@ toc:
   - name: Transformer
     subsections:
     - name: Attention
-    - name: Key, value and query
-    - name: Multi-head attention
-    - name: Transformer encoder
-    - name: Transformer decoder
-    - name: The complete transformer architecture
-    - name: Complexity comparison
+    - name: Key, Value and Query
+    - name: Multi-Head Attention
+    - name: Transformer Encoder
+    - name: Transformer Decoder
+    - name: The Complete Transformer Architecture
+    - name: Complexity Comparison
 
 ---
 
@@ -117,7 +117,7 @@ Finally, we will look at the complete model, and how it replaces the
 positional information from the encoder RNN in a simple way without any
 recurrence.
 
-### Key, value and query
+### Key, Value and Query
 
 As we do not use recurrence of single sequence
 elements anymore, let us denote the whole sequence of input embeddings
@@ -151,7 +151,7 @@ important layer where the queries are also source representations and in
 the decoder, there is layer where keys and values are also target
 representation.
 
-### Multi-head attention
+### Multi-Head Attention
 
 Instead of computing the attention once, the
 multi-head approach splits the three input matrices into smaller parts
@@ -173,27 +173,27 @@ source self-attention calculates outputs in $$\mathbb{R}^{L \times D}$$.
 
 ### Transformer Encoder
 
-The Transformer architecture, as introduced by Vaswani et al. in 2017 [@vaswani_attention_2017], represents a groundbreaking advancement in deep learning, particularly in the fields of natural language processing and sequence modeling. The heart of the Transformer is its encoder, which plays a pivotal role in generating rich input representations using self-attention mechanisms.
+The Transformer architecture, as introduced by Vaswani et al. in 2017 <d-cite key="vaswani_attention_2017"></d-cite>, represents a groundbreaking advancement in deep learning, particularly in the fields of natural language processing and sequence modeling. However, nowadays it is the go-to model for many other areas, especially when a lot of resources are available. The first major part of the Transformer is its encoder, which plays a pivotal role in generating rich input representations using self-attention mechanisms.
 
 <figure id="fig:transformer-encoder">
 <center><img src="/assets/img/dl-series/2i-transformer-encoder.png" style="width:40%"></center>
 </figure>
 
-**Figure 8. Transformer encoder.** In its original form, the encoder consists of a stack of N = 6 identical layers, each with unique parameters. These layers consist of two critical components:
+**Figure 8. Transformer encoder.** The Transformer Encoder consists of a stack of identical layers, including a multi-head self-attention layer (Red) for capturing contextual information and a position-wise fully-connected feed-forward network for introducing non-linearity. These two components work synergistically to process input sequences effectively and extract meaningful representations, with attention parameters focusing on dependencies and position-wise FNN parameters capturing position-specific patterns. Image adapted from <d-cite key="lin_survey_2022"></d-cite>.
 
-1. **Multi-Head Self-Attention Layer (Red):** This layer is the cornerstone of the Transformer's ability to capture contextual information from input sequences. It allows the model to focus on different parts of the input sequence simultaneously. Self-attention is a mechanism where each input element contributes to the representation of every other element, making it robust to capturing long-range dependencies and essential for tasks such as machine translation [@vaswani_attention_2017].
+In its original form, the encoder consists of a stack of N = 6 identical layers, each with unique parameters. These layers consist of two critical components:
 
-2. **Point-Wise Fully-Connected Feed-Forward Network (Blue):** This layer introduces non-linearity into the network, allowing the model to capture complex patterns and relationships within the data.
+1. **Multi-head self-attention layer (red):** This layer is the cornerstone of the Transformer's ability to capture contextual information from input sequences. It allows the model to focus on different parts of the input sequence simultaneously. Self-attention is a mechanism where each input element contributes to the representation of every other element, making it robust to capturing long-range dependencies and essential for tasks such as machine translation <d-cite key="vaswani_attention_2017"></d-cite>.
 
-These two components, self-attention and point-wise FNN, are fundamental in processing input sequences of varying length effectively and extracting meaningful representations. It is crucial to understand the clear distinction between the parameters used in the attention mechanism and those employed in the position-wise Fully-Connected Feed-Forward Network (FNN) in order to understand their task and functionality: 
+2. **Position-wise fully-connected feed-forward network :** This layer introduces non-linearity into the network, allowing the model to capture complex patterns and relationships within the data.
 
-- **Attention Parameters:** The attention mechanism's parameters are responsible for capturing dependencies and relationships between elements within the sequence. These parameters are shared across all positions in the sequence, enabling the model to learn to attend to different parts of the input sequence effectively.
+These two components, self-attention and position-wise FNN, are fundamental in processing input sequences of varying length effectively and extracting meaningful representations. It is crucial to understand the clear distinction between the parameters used in the attention mechanism and those employed in the position-wise Fully-Connected Feed-Forward Network (FNN) in order to understand the modules specific tasks and mechanisms: 
 
-- **Position-Wise FNN Parameters:** In contrast, the position-wise FNN parameters introduce non-linearity and complexity into the model. Specifically, the same position-wise Feed-Forward Network (FNN) is applied to each position within the input sequence independently. This means that the parameters of the FNN are shared across all positions in the sequence. The position-wise FNN typically consists of two linear transformations followed by a non-linear activation function (e.g., ReLU). These transformations are applied uniformly to each element in the sequence, allowing the model to capture position-specific patterns and relationships. The number of FNN parameters is much larger than the number of attention parameters.
+- **Attention parameters:** The attention mechanism's parameters are responsible for capturing dependencies and relationships between elements within the sequence. These parameters are shared across all positions in the sequence, enabling the model to learn to attend to different parts of the input sequence effectively.
 
-These two sets of parameters work in synergy to process input sequences effectively while accommodating varying sequence lengths and capturing both global and position-specific information.
+- **Position-wise FNN parameters:** In contrast, the position-wise FNN parameters introduce non-linearity and complexity into the model. Specifically, the same position-wise Feed-Forward Network (FNN) is applied to each position within the input sequence independently. This means that the parameters of the FNN are shared across all positions in the sequence. The position-wise FNN typically consists of two linear transformations followed by a non-linear activation function (e.g., ReLU). These transformations are applied uniformly to each element in the sequence, allowing the model to capture position-specific patterns and relationships. The number of FNN parameters is much larger than the number of attention parameters.
 
-After processing through these layers, the Transformer encoder adds the respective previous input vector to both outputs and normalizes the results using normalized residual layers (yellow). Importantly, in the self-attention layer, queries are also functions of the input embeddings, which enhances the model's ability to capture context and dependencies effectively.
+These two sets of parameters work in synergy to process input sequences effectively while accommodating varying sequence lengths and capturing both global and position-specific information. After processing through these layers, the Transformer encoder adds the respective previous input vector to both outputs and normalizes the results using normalized residual layers (yellow). Importantly, in the self-attention layer, queries are also functions of the input embeddings, which enhances the model's ability to capture context and dependencies effectively.
 
 
 ### Transformer Decoder
@@ -204,9 +204,11 @@ The decoder network, illustrated in Figure [9](#fig:transformer-decoder), is equ
 <center><img src="/assets/img/dl-series/2j-transformer-decoder.png" style="width:66%"></center>
 </figure>
 
-**Figure 9. Transformer decoder.** Similar to the encoder, the decoder comprises N = 6 identical layers. These layers consist of:
+**Figure 9. Transformer decoder.** The Transformer decoder plays a crucial role in autoregressively generating sequences based on encoded source representations. It includes a masked multi-head self-attention layer to capture dependencies within the target sequence, a multi-head cross-attention layer for accessing relevant source information, and a fully-connected feed-forward network to model complex relationships, all followed by normalized residual layers for stability. Image adapted from <d-cite key="lin_survey_2022"></d-cite>.
 
-1. **Masked Multi-Head Self-Attention Layer (Red):** In the decoder, this layer is masked to prevent attending to future positions in the output sequence. It focuses on capturing dependencies among elements within the target sequence that have already been generated. This masking is crucial for ensuring the autoregressive nature of the decoder, allowing it to generate sequences one element at a time [@vaswani_attention_2017]. Specifically, the masked multi-head self-attention layer in the decoder prevents the model from attending to future positions in the (Shifted) Outputs sequence. This mechanism ensures that each position in the (Shifted) Outputs sequence is generated based on the previously generated elements, adhering to the autoregressive nature of sequence generation.
+Similar to the encoder, the decoder comprises N = 6 identical layers. These layers consist of:
+
+1. **Masked Multi-Head Self-Attention Layer (Red):** In the decoder, this layer is masked to prevent attending to future positions in the output sequence. It focuses on capturing dependencies among elements within the target sequence that have already been generated. This masking is crucial for ensuring the autoregressive nature of the decoder, allowing it to generate sequences one element at a time <d-cite key="vaswani_attention_2017"></d-cite>. Specifically, the masked multi-head self-attention layer in the decoder prevents the model from attending to future positions in the (Shifted) Outputs sequence. This mechanism ensures that each position in the (Shifted) Outputs sequence is generated based on the previously generated elements, adhering to the autoregressive nature of sequence generation.
 
 2. **Multi-Head Cross-Attention Layer (Red):** The decoder generates queries from the previously generated target representations and uses them to attend to the encoded source representations. This mechanism ensures that the decoder accesses relevant information from the source to generate the next part of the target sequence.
 
@@ -216,17 +218,17 @@ Each of these layers is followed by a normalized residual layer (yellow), contri
 
 ### The Complete Transformer Architecture
 
-Figure [10](#fig:transformer-complete) presents the holistic view of the complete Transformer architecture, highlighting its key properties and advantages:
+Figure [10](#fig:transformer-complete) presents the complete Transformer architecture:
 
 <figure id="fig:transformer-complete">
 <center><img src="/assets/img/dl-series/2k-transformer-complete.png" style="width:100%"></center>
 </figure>
 
-**Figure 10. The complete transformer.** In its original form, the Transformer processes both source and target sequences through embedding layers, creating representations of dimension D = 512 for each element. This embedding strategy is a cornerstone of the Transformer's ability to handle input and output sequences of different lengths effectively. The key to this flexibility lies in the use of position embeddings, which preserve positional information by adding sinusoidal positional encoding vectors to the embeddings. These position embeddings carry information about the position of each element within the sequence, allowing the model to distinguish between different positions and capture positional dependencies. The term "(Shifted) Outputs" emphasizes the autoregressive nature of the decoding process, where each output position depends on previously generated positions.
+**Figure 10. The complete transformer.** In its original form, the Transformer processes both source and target sequences through embedding layers, creating representations of dimension D = 512 for each element. This embedding strategy is a cornerstone of the Transformer's ability to handle input and output sequences of different lengths effectively. The key to this flexibility lies in the use of position embeddings, which preserve positional information by adding sinusoidal positional encoding vectors to the embeddings. These position embeddings carry information about the position of each element within the sequence, allowing the model to distinguish between different positions and capture positional dependencies. The term "(Shifted) Outputs" emphasizes the autoregressive nature of the decoding process, where each output position depends on previously generated positions. Image adapted from <d-cite key="lin_survey_2022"></d-cite>.
 
 The Transformer possesses several critical properties:
 
-- **Inductive Bias for Self-Similarity:** The self-attention mechanism empowers the model to identify recurring patterns or themes within the data, irrespective of their positions. This inductive bias is invaluable in real-world domains where recurrence is a prevalent pattern [@vaswani_attention_2017].
+- **Inductive Bias for Self-Similarity:** The self-attention mechanism empowers the model to identify recurring patterns or themes within the data, irrespective of their positions. This inductive bias is invaluable in real-world domains where recurrence is a prevalent pattern <d-cite key="vaswani_attention_2017"></d-cite>.
 
 - **Expressive Forward Pass:** The Transformer establishes direct and intricate connections between all input and output elements, facilitating the learning of complex algorithms in a few steps.
 
@@ -235,7 +237,7 @@ The Transformer possesses several critical properties:
 
 ### Complexity Comparison
 
-To conclude this chapter, let's compare the complexities of the three main architectures in deep learning, as shown in Table [2](#fig:comparison), based on the survey by Lin et al. in 2022 [@lin2022survey]:
+To conclude this chapter, let's compare the complexities of the three main architectures in deep learning, as shown in Table [2](#fig:comparison), based on the survey by Lin et al. in 2022 <d-cite key="lin_survey_2022"></d-cite>:
 
 <figure id="fig:comparison">
 <center><img src="/assets/img/dl-series/complexity-comparison.png" style="width:55%"></center>
