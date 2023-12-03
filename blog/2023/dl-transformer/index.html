@@ -366,7 +366,7 @@ source self-attention calculates outputs in \(\mathbb{R}^{L \times D}\).</p>
   </li>
 </ul>
 
-<p>These two sets of parameters work in synergy to process input sequences effectively while accommodating varying sequence lengths and capturing both global and position-specific information. After processing through these layers, the Transformer encoder adds the respective previous input vector to both outputs and normalizes the results using normalized residual layers (yellow). Importantly, in the self-attention layer, queries are also functions of the input embeddings, which enhances the model’s ability to capture context and dependencies effectively.</p>
+<p>These two sets of parameters work in synergy to process input sequences effectively while accommodating varying sequence lengths and capturing both global and position-specific information. After processing through these layers, the Transformer encoder adds the respective previous input vector to both outputs and normalizes the results using normalized residual layers (yellow). Importantly, in the self-attention layer, queries are also functions of the input embeddings, which enhances the model’s ability to capture context and dependencies within the input sequence effectively.</p>
 
 <h3 id="transformer-decoder">Transformer Decoder</h3>
 
