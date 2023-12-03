@@ -312,10 +312,7 @@ of the dot product as a similarity measure, the context matrix shows the
 that is weighted by its similarity to the output (so far). \(c(Q,K,V)\) is
 a matrix because we now compute the attention scores for every target
 (query) dimension at once. However, we mask embeddings for unseen target
-elements in every period. In the transformer encoder, there is an
-important layer where the queries are also source representations and in
-the decoder, there is layer where keys and values are also target
-representation.</p>
+elements in every period. In the transformer encoder, there is an important module where the queries are also source representations (self-attention) and in the decoder, there is a module where keys and values are also target representations (cross-attention).</p>
 
 <h3 id="multi-head-attention">Multi-Head Attention</h3>
 
