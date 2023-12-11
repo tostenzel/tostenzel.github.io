@@ -257,18 +257,7 @@ We call $$C(\theta)$$ the cost function.
     <center><img src="/assets/img/dl-series/supervised-learning.png" style="width:100%"></center>
 </figure>
 <b>Figure 1: Computational graph for a general supervised learning
-approach.</b> Examples <span
-class="math inline">{<em>x</em><sub><em>i</em></sub>}<sub><em>i</em> = 1</sub><sup><em>n</em></sup></span>
-and parameters <span class="math inline"><em>θ</em></span> are taken by
-model f to predict the targets by <span
-class="math inline">{<em>ŷ</em><sub><em>i</em></sub>}<sub><em>i</em> = 1</sub><sup><em>n</em></sup></span>.
-Data loss L computes the difference between the predictions and the
-targets <span
-class="math inline">{<em>y</em><sub><em>i</em></sub>}<sub><em>i</em> = 1</sub><sup><em>n</em></sup></span>.
-Regularization loss R penalizes extreme parameters. The sum of both
-penalties is given by cost C. Oftentimes we use predicted class
-probabilities <span class="math inline"><em>p̂</em></span> instead of
-(rounded) predictions.
+approach.</b> Examples $$\{x_i\}_{i=1}^{n}$$ and parameters $$\theta$$ are taken by model $f$ to predict the targets $$\{y_i\}_{i=1}^{n}$$. Data loss $L$ computes the difference between the predictions and the targets $$\{y_i\}_{i=1}^{n}$$. Regularization loss $R$ penalizes extreme parameters. The sum of both penalties is given by cost $$C$$. Oftentimes, we use predicted class probabilities $$\hat{p}$$ instead of (rounded) predictions.
 
 
 ## Citation

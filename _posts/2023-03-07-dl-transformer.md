@@ -123,7 +123,7 @@ As we do not use recurrence of single sequence
 elements anymore, let us denote the whole sequence of input embeddings
 by $$X \in \mathbb{R}^{L \times D^{(x)}}$$. $$L$$ can either be the complete
 input length $$T_x$$ or later only a fraction of it. $$D^{(x)}$$ is the
-input embedding's length. Let us denoted the sequence of output
+input embedding's length. Let us denote the sequence of output
 embeddings by $$Y \in \mathbb{R}^{M \times D^{(y)}}$$. The transformer
 uses an extension of the attention mechanism, the multi-head attention,
 as its core building block. The first step is that, instead of using the
