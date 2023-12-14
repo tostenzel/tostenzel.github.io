@@ -32,6 +32,8 @@ toc:
     - name: Transformer Decoder
     - name: The Complete Transformer Architecture
     - name: Complexity Comparison
+    - name: Appendix — Naming Convention of Key, Value and Query
+
 
 ---
 
@@ -61,22 +63,7 @@ additionally concatenated with $$s$$ to predict the output layer.
 <figure id="fig:attention">
 <center><img src="/assets/img/dl-series/2h-attention.png" style="width:50%"></center>
 </figure>
-<b>Figure 7. Encoder-Decoder with attention.</b> In contrast to the
-encoder-decoder RNN, the output layer is a function of the concatenation
-of the hidden states and a time-dependent context vector (black boxes).
-The main idea is that the context vector <span
-class="math inline"><em>c</em><sub><em>t</em></sub></span> is a function
-of all hidden states <span
-class="math inline">{<em>h</em>}<sub><em>t</em> = 1</sub><sup><em>T</em></sup></span>
-instead of only the last one (and the previous state <span
-class="math inline"><em>s</em><sub><em>t</em> − 1</sub></span>). This
-function is called <em>attention</em> (red). The black box represents
-vector concatenation. <span
-class="math inline"><em>c</em><sub>1</sub></span> is initialized with
-<span class="math inline"><em>h</em><sub>4</sub></span>, <span
-class="math inline"><em>s</em><sub>1</sub></span> with arbitrary values,
-and <span class="math inline"><em>o</em><sub>1</sub></span> is
-discarded.  
+<b>Figure 7. Encoder-Decoder with attention.</b> In contrast to the encoder-decoder RNN, the output layer is a function of the concatenation of the hidden states and a time-dependent context vector (black boxes). The main idea is that the context vector $$c_t$$ is a function of all hidden states $$\{h_t\}_{t=1}^{T}$$ instead of only the last one (and the previous state $$s_{t-1}$$). This function is called *attention* (red). The black box represents vector concatenation. $$c_1$$ is initialized with $h_4$, $$s_1$$ with arbitrary values, and $$o_1$$ is discarded.
 <br>
 
 The attention function that returns the context vector for output $$y_t$$
@@ -135,18 +122,20 @@ $$V=XW^v \in \mathbb{R}^{L \times D_v}$$, and an output encoding
 $$Q=YW^q \in \mathbb{R}^{M \times D_k}$$, with
 $$W^k \in \mathbb{R}^{D^{(x)} \times D_k}, W^q \in \mathbb{R}^{D^{(y)} \times D_k}$$
 and $$W^v \in \mathbb{R}^{D^{(x)} \times D_v}$$. Note that source and
-target embeddings are projected linearly into the same space. We compute
+target embeddings are projected linearly into the same space. With that, we can compute the dot product between input and output sequences of different length and obtain $$D_v$$ embeddings of dimension $$M$$. We compute
 attention with
 
 $$\begin{align}c(Q,K,V)=\text{Softmax}\big(\frac{QK^T}{\sqrt{n}}\big)V.\end{align}$$
 
-We call (K,V) key-value pairs and Q the query. Using the interpretation
-of the dot product as a similarity measure, the context matrix shows the
-(self-)similarity between the input and a representation of the input
-that is weighted by its similarity to the output (so far). $$c(Q,K,V)$$ is
-a matrix because we now compute the attention scores for every target
-(query) dimension at once. However, we mask embeddings for unseen target
-elements in every period. In the transformer encoder, there is an important module where the queries are also source representations (self-attention) and in the decoder, there is a module where keys and values are also target representations (cross-attention).
+
+In this equation, we refer to $$(K, V)$$ as key-value pairs, and $$Q$$ as the query (see Appendix for an explanation of the names). By interpreting the dot product as a similarity measure, the context matrix $$c(Q,K,V) \in \mathbb{R}^{M \times D_v}$$ illustrates the similarity between the input and a representation of the input, which is weighted by its similarity to the output (in the context of cross-attention).
+
+Let's summarize the computation in simpler terms: The context matrix comprises $$M$$ rows, one for each output element, and $$D_v$$ columns, corresponding to the dimensions of the value vectors. To delve deeper, we consider each row in the resulting context matrix $$c(Q, K, V)$$. For a specific output element, its row is computed by taking a weighted sum of the value vectors from matrix $$V$$. These weights are determined by the similarity between the query vector for that output element (from matrix $$Q$$) and the key vectors for all elements in the input sequence (from matrix $$K$$). The Softmax function is applied to normalize these weights for each output element.
+
+Importantly, we apply masking to the embeddings for unseen target elements at each time step, ensuring that only relevant input elements contribute to the computation. The context matrix serves as the foundation for subsequent computations in the attention mechanism, allowing the model to determine how much attention to allocate to each part of the input sequence when generating the output.
+
+In the transformer encoder, there is an important module where the queries are also source representations and in the decoder, there is a module where keys and values are also target representations (self-attention).
+
 
 ### Multi-Head Attention
 
@@ -156,7 +145,7 @@ and then computes the scaled dot-product attention for each part in
 parallel. The independent attention outputs are then concatenated and
 linearly transformed into the next layer's input dimension. This allows
 us to learn from different representations of the current information
-simultaneously with high efficiency.
+simultaneously with high efficiency. In the [CNN post](https://www.tobiasstenzel.com/blog/2023/dl-cnn/), we have already introduced the principle of applying the same operation multiple times with different learned sets of parameters: remember that CNNs contain stacks of multiple filters to provide the model with multiple feature maps, each covering different aspects of the input image. Multi-head attenttion is defined by
 
 $$\begin{align}\text{MultiHead}(X_q, X_k, X_v)= [ \text{head}_1;...;\text{head}_h ] W^o,\end{align}$$
 
@@ -167,6 +156,7 @@ the linear transformation in the output dimensions. These four weight
 matrices are learned during training. Target self-attention and cross
 attention layers compute outputs in $$\mathbb{R}^{M \times D}$$, and
 source self-attention calculates outputs in $$\mathbb{R}^{L \times D}$$.
+
 
 ### Transformer Encoder
 
@@ -244,6 +234,26 @@ To conclude this chapter, let's compare the complexities of the three main archi
 
 In summary, the Transformer architecture's success lies in its ability to capture complex dependencies, handle sequences of varying lengths, and process them efficiently through its innovative components, making it a fundamental building block in modern deep learning.
 
+
+## Appendix — Naming Convention of Key, Value and Query
+
+The naming convention of "key," "query," and "value" in the context of attention mechanisms is rooted in their respective roles and functions within the mechanism. These names help clarify how each component contributes to the computation of the context vector in attention.
+
+**Key (K):** The key is essentially a set of representations derived from the input sequence (or encoder states in the case of sequence-to-sequence models like the Transformer). These representations are crucial for determining how much attention should be given to each element in the input sequence when generating an output. Keys are used to match against the queries.
+
+*Reasoning:* Think of the "key" as a guide or a set of pointers that specify which parts of the input sequence are relevant for generating the output. It helps the model identify what to focus on.
+
+**Query (Q):** The query represents what the model is currently trying to generate or pay attention to within the output sequence. In other words, it's a representation of the current target or decoder state.
+
+*Reasoning:* The "query" represents the current "question" or "target" that the model is interested in. It's used to determine how well each element in the input sequence (represented by keys) aligns or matches with the current target.
+
+**Value (V):** The value component contains the information that will be used to produce the context vector. Like keys, values are derived from the input sequence. However, they represent the content or information associated with each element in the input sequence.
+
+*Reasoning:* The "value" carries the actual information that the model will use when generating the output. It's like the "answer" or "content" associated with each part of the input sequence.
+
+To put it all together, the attention mechanism calculates a weighted sum of values based on the similarity between the query and keys. This weighted sum, known as the context vector, is used to determine how much each part of the input sequence should contribute to the current output. The keys help identify which parts are relevant, the query specifies what is being looked for, and the values provide the information to be used.
+
+This naming convention, while abstract, makes the roles and relationships of these components intuitive, facilitating a clearer understanding of how attention mechanisms work in neural networks.
 
 ## Citation
 
