@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://www.tobiasstenzel.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.tobiasstenzel.com/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-12-11T21:49:46+00:00</updated><id>https://www.tobiasstenzel.com/feed.xml</id><title type="html">blank</title><subtitle>Tobias&apos; homepage.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://www.tobiasstenzel.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.tobiasstenzel.com/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-12-14T20:36:28+00:00</updated><id>https://www.tobiasstenzel.com/feed.xml</id><title type="html">blank</title><subtitle>Tobias&apos; homepage.
 </subtitle><entry><title type="html">8. Transformer</title><link href="https://www.tobiasstenzel.com/blog/2023/dl-transformer/" rel="alternate" type="text/html" title="8. Transformer" /><published>2023-03-08T00:00:00+00:00</published><updated>2023-03-08T00:00:00+00:00</updated><id>https://www.tobiasstenzel.com/blog/2023/dl-transformer</id><content type="html" xml:base="https://www.tobiasstenzel.com/blog/2023/dl-transformer/"><![CDATA[<h2 id="transformer">Transformer</h2>
 
 <p>In the last section we learned that RNNs have problems with learning
@@ -25,17 +25,7 @@ additionally concatenated with \(s\) to predict the output layer.</p>
 <figure id="fig:attention">
 <center><img src="/assets/img/dl-series/2h-attention.png" style="width:50%" /></center>
 </figure>
-<p><b>Figure 7. Encoder-Decoder with attention.</b> In contrast to the
-encoder-decoder RNN, the output layer is a function of the concatenation
-of the hidden states and a time-dependent context vector (black boxes).
-The main idea is that the context vector <span class="math inline"><em>c</em><sub><em>t</em></sub></span> is a function
-of all hidden states <span class="math inline">{<em>h</em>}<sub><em>t</em> = 1</sub><sup><em>T</em></sup></span>
-instead of only the last one (and the previous state <span class="math inline"><em>s</em><sub><em>t</em> − 1</sub></span>). This
-function is called <em>attention</em> (red). The black box represents
-vector concatenation. <span class="math inline"><em>c</em><sub>1</sub></span> is initialized with
-<span class="math inline"><em>h</em><sub>4</sub></span>, <span class="math inline"><em>s</em><sub>1</sub></span> with arbitrary values,
-and <span class="math inline"><em>o</em><sub>1</sub></span> is
-discarded.<br />
+<p><b>Figure 7. Encoder-Decoder with attention.</b> In contrast to the encoder-decoder RNN, the output layer is a function of the concatenation of the hidden states and a time-dependent context vector (black boxes). The main idea is that the context vector \(c_t\) is a function of all hidden states \(\{h_t\}_{t=1}^{T}\) instead of only the last one (and the previous state \(s_{t-1}\)). This function is called <em>attention</em> (red). The black box represents vector concatenation. \(c_1\) is initialized with $h_4$, \(s_1\) with arbitrary values, and \(o_1\) is discarded.
 <br /></p>
 
 <p>The attention function that returns the context vector for output \(y_t\)
@@ -94,18 +84,18 @@ dot-product with two different input encodings,
 \(Q=YW^q \in \mathbb{R}^{M \times D_k}\), with
 \(W^k \in \mathbb{R}^{D^{(x)} \times D_k}, W^q \in \mathbb{R}^{D^{(y)} \times D_k}\)
 and \(W^v \in \mathbb{R}^{D^{(x)} \times D_v}\). Note that source and
-target embeddings are projected linearly into the same space. We compute
+target embeddings are projected linearly into the same space. With that, we can compute the dot product between input and output sequences of different length and obtain \(D_v\) embeddings of dimension \(M\). We compute
 attention with</p>
 
 \[\begin{align}c(Q,K,V)=\text{Softmax}\big(\frac{QK^T}{\sqrt{n}}\big)V.\end{align}\]
 
-<p>We call (K,V) key-value pairs and Q the query. Using the interpretation
-of the dot product as a similarity measure, the context matrix shows the
-(self-)similarity between the input and a representation of the input
-that is weighted by its similarity to the output (so far). \(c(Q,K,V)\) is
-a matrix because we now compute the attention scores for every target
-(query) dimension at once. However, we mask embeddings for unseen target
-elements in every period. In the transformer encoder, there is an important module where the queries are also source representations (self-attention) and in the decoder, there is a module where keys and values are also target representations (cross-attention).</p>
+<p>In this equation, we refer to \((K, V)\) as key-value pairs, and \(Q\) as the query (see Appendix for an explanation of the names). By interpreting the dot product as a similarity measure, the context matrix \(c(Q,K,V) \in \mathbb{R}^{M \times D_v}\) illustrates the similarity between the input and a representation of the input, which is weighted by its similarity to the output (in the context of cross-attention).</p>
+
+<p>Let’s summarize the computation in simpler terms: The context matrix comprises \(M\) rows, one for each output element, and \(D_v\) columns, corresponding to the dimensions of the value vectors. To delve deeper, we consider each row in the resulting context matrix \(c(Q, K, V)\). For a specific output element, its row is computed by taking a weighted sum of the value vectors from matrix \(V\). These weights are determined by the similarity between the query vector for that output element (from matrix \(Q\)) and the key vectors for all elements in the input sequence (from matrix \(K\)). The Softmax function is applied to normalize these weights for each output element.</p>
+
+<p>Importantly, we apply masking to the embeddings for unseen target elements at each time step, ensuring that only relevant input elements contribute to the computation. The context matrix serves as the foundation for subsequent computations in the attention mechanism, allowing the model to determine how much attention to allocate to each part of the input sequence when generating the output.</p>
+
+<p>In the transformer encoder, there is an important module where the queries are also source representations and in the decoder, there is a module where keys and values are also target representations (self-attention).</p>
 
 <h3 id="multi-head-attention">Multi-Head Attention</h3>
 
@@ -115,7 +105,7 @@ and then computes the scaled dot-product attention for each part in
 parallel. The independent attention outputs are then concatenated and
 linearly transformed into the next layer’s input dimension. This allows
 us to learn from different representations of the current information
-simultaneously with high efficiency.</p>
+simultaneously with high efficiency. In the <a href="https://www.tobiasstenzel.com/blog/2023/dl-cnn/">CNN post</a>, we have already introduced the principle of applying the same operation multiple times with different learned sets of parameters: remember that CNNs contain stacks of multiple filters to provide the model with multiple feature maps, each covering different aspects of the input image. Multi-head attenttion is defined by</p>
 
 \[\begin{align}\text{MultiHead}(X_q, X_k, X_v)= [ \text{head}_1;...;\text{head}_h ] W^o,\end{align}\]
 
@@ -222,6 +212,26 @@ source self-attention calculates outputs in \(\mathbb{R}^{L \times D}\).</p>
 <p><strong>Table 2. Comparison of computation complexity between models.</strong> The “length” refers to the number of elements in the input sequence, and “dim” denotes the embedding depth for each element. It’s worth noting that attention mechanisms, as used in Transformers, excel when the input sequence length is much smaller than the embedding depth. This advantage is evident in tasks like machine translation or question-answering, where capturing long-range dependencies is crucial. However, for direct application to image data, which inherently has a larger input length (e.g., CIFAR images with 3072 elements), preprocessing steps are necessary to reduce the input length effectively.</p>
 
 <p>In summary, the Transformer architecture’s success lies in its ability to capture complex dependencies, handle sequences of varying lengths, and process them efficiently through its innovative components, making it a fundamental building block in modern deep learning.</p>
+
+<h2 id="appendix--naming-convention-of-key-value-and-query">Appendix — Naming Convention of Key, Value and Query</h2>
+
+<p>The naming convention of “key,” “query,” and “value” in the context of attention mechanisms is rooted in their respective roles and functions within the mechanism. These names help clarify how each component contributes to the computation of the context vector in attention.</p>
+
+<p><strong>Key (K):</strong> The key is essentially a set of representations derived from the input sequence (or encoder states in the case of sequence-to-sequence models like the Transformer). These representations are crucial for determining how much attention should be given to each element in the input sequence when generating an output. Keys are used to match against the queries.</p>
+
+<p><em>Reasoning:</em> Think of the “key” as a guide or a set of pointers that specify which parts of the input sequence are relevant for generating the output. It helps the model identify what to focus on.</p>
+
+<p><strong>Query (Q):</strong> The query represents what the model is currently trying to generate or pay attention to within the output sequence. In other words, it’s a representation of the current target or decoder state.</p>
+
+<p><em>Reasoning:</em> The “query” represents the current “question” or “target” that the model is interested in. It’s used to determine how well each element in the input sequence (represented by keys) aligns or matches with the current target.</p>
+
+<p><strong>Value (V):</strong> The value component contains the information that will be used to produce the context vector. Like keys, values are derived from the input sequence. However, they represent the content or information associated with each element in the input sequence.</p>
+
+<p><em>Reasoning:</em> The “value” carries the actual information that the model will use when generating the output. It’s like the “answer” or “content” associated with each part of the input sequence.</p>
+
+<p>To put it all together, the attention mechanism calculates a weighted sum of values based on the similarity between the query and keys. This weighted sum, known as the context vector, is used to determine how much each part of the input sequence should contribute to the current output. The keys help identify which parts are relevant, the query specifies what is being looked for, and the values provide the information to be used.</p>
+
+<p>This naming convention, while abstract, makes the roles and relationships of these components intuitive, facilitating a clearer understanding of how attention mechanisms work in neural networks.</p>
 
 <h2 id="citation">Citation</h2>
 
