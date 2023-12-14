@@ -166,7 +166,7 @@ The Transformer architecture, as introduced by Vaswani et al. in 2017 <d-cite ke
 <center><img src="/assets/img/dl-series/2i-transformer-encoder.png" style="width:40%"></center>
 </figure>
 
-**Figure 8. Transformer encoder.** The Transformer Encoder consists of a stack of identical layers, including a multi-head self-attention layer (Red) for capturing contextual information and a position-wise fully-connected feed-forward network for introducing non-linearity. These two components work synergistically to process input sequences effectively and extract meaningful representations, with attention parameters focusing on dependencies and position-wise FNN parameters capturing position-specific patterns. Image adapted from <d-cite key="lin_survey_2022"></d-cite>.
+**Figure 8. Transformer encoder.** The Transformer Encoder consists of a stack of identical layers, including a multi-head self-attention layer (Red) for capturing contextual information and a position-wise fully-connected feed-forward network for introducing non-linearity. These two components work synergistically to process input sequences effectively and extract meaningful representations, with attention parameters focusing on dependencies and position-wise FNN parameters capturing position-specific patterns. Image source: <d-cite key="lin_survey_2022"></d-cite>.
 
 In its original form, the encoder consists of a stack of N = 6 identical layers, each with unique parameters. These layers consist of two critical components:
 
@@ -191,7 +191,7 @@ The decoder network, illustrated in Figure [9](#fig:transformer-decoder), is equ
 <center><img src="/assets/img/dl-series/2j-transformer-decoder.png" style="width:66%"></center>
 </figure>
 
-**Figure 9. Transformer decoder.** The Transformer decoder plays a crucial role in autoregressively generating sequences based on encoded source representations. It includes a masked multi-head self-attention layer to capture dependencies within the target sequence, a multi-head cross-attention layer for accessing relevant source information, and a fully-connected feed-forward network to model complex relationships, all followed by normalized residual layers for stability. Image adapted from <d-cite key="lin_survey_2022"></d-cite>.
+**Figure 9. Transformer decoder.** The Transformer decoder plays a crucial role in autoregressively generating sequences based on encoded source representations. It includes a masked multi-head self-attention layer to capture dependencies within the target sequence, a multi-head cross-attention layer for accessing relevant source information, and a fully-connected feed-forward network to model complex relationships, all followed by normalized residual layers for stability. Image source <d-cite key="lin_survey_2022"></d-cite>.
 
 Similar to the encoder, the decoder comprises N = 6 identical layers. These layers consist of:
 
@@ -211,7 +211,7 @@ Figure [10](#fig:transformer-complete) presents the complete Transformer archite
 <center><img src="/assets/img/dl-series/2k-transformer-complete.png" style="width:100%"></center>
 </figure>
 
-**Figure 10. The complete transformer.** In its original form, the Transformer processes both source and target sequences through embedding layers (light blue), creating representations of dimension D = 512 for each element. This embedding strategy is a cornerstone of the Transformer's ability to handle input and output sequences of different lengths effectively. The key to this flexibility lies in the use of position embeddings (purple), which preserve positional information by adding sinusoidal positional encoding vectors to the embeddings. These position embeddings carry information about the position of each element within the sequence, allowing the model to distinguish between different positions and capture positional dependencies. The term "(Shifted) Outputs" emphasizes the autoregressive nature of the decoding process, where each output position depends on previously generated positions. Image adapted from <d-cite key="lin_survey_2022"></d-cite>.
+**Figure 10. The complete transformer.** In its original form, the Transformer processes both source and target sequences through embedding layers (light blue), creating representations of dimension D = 512 for each element. This embedding strategy is a cornerstone of the Transformer's ability to handle input and output sequences of different lengths effectively. The key to this flexibility lies in the use of position embeddings (purple), which preserve positional information by adding sinusoidal positional encoding vectors to the embeddings. These position embeddings carry information about the position of each element within the sequence, allowing the model to distinguish between different positions and capture positional dependencies. The term "(Shifted) Outputs" emphasizes the autoregressive nature of the decoding process, where each output position depends on previously generated positions. Image source <d-cite key="lin_survey_2022"></d-cite>.
 
 The Transformer possesses several critical properties:
 
