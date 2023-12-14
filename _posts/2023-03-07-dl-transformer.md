@@ -73,7 +73,7 @@ expression:
 $$\begin{align}c_t = \sum_{i=1}^n \alpha_{t,i} h_i\end{align}$$
 
 $$\alpha_{t,i}$$ is a softmax function of another function *score* that
-measure how well output $$y_t$$ and input $$x_i$$ are aligned through the
+measures how well output $$y_t$$ and input $$x_i$$ are aligned through the
 encoder state $$h_i$$:
 
 $$\begin{align}\alpha_{t,i} = \text{align}(y_t,x_i) = \frac{\exp \text{score}(s_{t-1}, h_i)}{\sum_{j=1}^n\exp\text{score} (s_{t-1}, h_j)}.\end{align}$$
