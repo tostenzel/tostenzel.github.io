@@ -292,7 +292,7 @@ dot-product with two different input encodings,
 \(Q=YW^q \in \mathbb{R}^{M \times D_k}\), with
 \(W^k \in \mathbb{R}^{D^{(x)} \times D_k}, W^q \in \mathbb{R}^{D^{(y)} \times D_k}\)
 and \(W^v \in \mathbb{R}^{D^{(x)} \times D_v}\). Note that source and
-target embeddings are projected linearly into the same space. With that, we can compute the dot product between input and output sequences of different length and obtain \(D_v\) embeddings of dimension \(M\). We compute
+target embeddings are projected into a shared or common vector space with consistent dimensions. With that, we can compute the dot product between input and output sequences of different fixes maximal length and obtain \(D_v\) embeddings of dimension \(M\). We compute
 attention with</p>
 
 \[\begin{align}c(Q,K,V)=\text{Softmax}\big(\frac{QK^T}{\sqrt{n}}\big)V.\end{align}\]
@@ -393,7 +393,7 @@ source self-attention calculates outputs in \(\mathbb{R}^{L \times D}\).</p>
 <center><img src="/assets/img/dl-series/2k-transformer-complete.png" style="width:100%"></center>
 </figure>
 
-<p><strong>Figure 10. The complete transformer.</strong> In its original form, the Transformer processes both source and target sequences through embedding layers (light blue), creating representations of dimension D = 512 for each element. This embedding strategy is a cornerstone of the Transformer’s ability to handle input and output sequences of different lengths effectively. The key to this flexibility lies in the use of position embeddings (purple), which preserve positional information by adding sinusoidal positional encoding vectors to the embeddings. These position embeddings carry information about the position of each element within the sequence, allowing the model to distinguish between different positions and capture positional dependencies. The term “(Shifted) Outputs” emphasizes the autoregressive nature of the decoding process, where each output position depends on previously generated positions. Image source <d-cite key="lin_survey_2022"></d-cite>.</p>
+<p><strong>Figure 10. The complete transformer.</strong> In its original form, the Transformer processes both source and target sequences through embedding layers (light blue), creating representations of dimension D = 512 for each element. Adding sinusoidal positional encoding vectors to the embeddings pallows the model to distinguish between different positions and capture positional dependencies. The Transformer’s ability to handle input and output sequences of different lengths is primarily achieved through its masking mechanism. Padding masks ensure that the model does not consider padded elements when calculating attention scores, and the self-attention mechanism can adapt to variable-length sequences while maintaining coherence. The term “(Shifted) Outputs” emphasizes the autoregressive nature of the decoding process, where each output position depends on previously generated positions. Image source <d-cite key="lin_survey_2022"></d-cite>.</p>
 
 <p>The Transformer possesses several critical properties:</p>
 
