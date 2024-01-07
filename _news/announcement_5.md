@@ -1,7 +1,7 @@
 ---
 layout: post
-date: 2023-12-01 07:59:00-0400
+date: 2024-01-7 07:59:00-0400
 inline: true
 ---
 
-Major overhaul for the [Transformer post](https://www.tobiasstenzel.com/blog/2023/dl-transformer/) clarifying the difference in tasks and parameter sharing between FNN and attention modules and explaining the Transformer's generative nature. 🤖
+Lately, I have been working on [edugrad](https://github.com/tostenzel/edugrad), a simple and accesible implementation of a deep learning framework. Its purpose is to reveal the core components of such libraries. 🐍
