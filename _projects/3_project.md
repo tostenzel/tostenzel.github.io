@@ -1,6 +1,6 @@
 ---
 layout: page
-title:  edugrad
+title:  ''
 description: A simple and accesible implementation of a deep learning framework. Its purpose is to reveal the core components of such libraries.
 img: assets/projects/edugrad-header.png
 redirect: https://github.com/tostenzel/edugrad
