@@ -43,14 +43,17 @@ This is the structure:
 5. [Feedforward Neural Networks](https://www.tobiasstenzel.com/blog/2023/dl-fnn/)
 6. [Convolutional Neural Networks](https://www.tobiasstenzel.com/blog/2023/dl-cnn/)
 7. [Recurrent Neural Networks](https://www.tobiasstenzel.com/blog/2023/dl-rnn/)
-8. [Transformer](https://www.tobiasstenzel.com/blog/2023/dl-transformer/)
+8. [Transformer Pt. 1](https://www.tobiasstenzel.com/blog/2023/attention/)
+9. [Transformer Pt. 2](https://www.tobiasstenzel.com/blog/2023/attention/)
+
 
 ## Highlights
 
 Some highlights are:
 
-1. Preparing the introduction of the transformer carefully via self-made, detailed figures of [vanilla RNN](https://www.tobiasstenzel.com/blog/2023/dl-rnn/#fig:vanilla-rnn), [encoder-decoder RNN](https://www.tobiasstenzel.com/blog/2023/dl-rnn/#fig:encoder-decoder-rnn) and [encoder-decoder RNN with attention](https://www.tobiasstenzel.com/blog/2023/dl-transformer/#fig:attention/) ✨
+1. Preparing the introduction of the transformer carefully via self-made, detailed figures of [vanilla RNN](https://www.tobiasstenzel.com/blog/2023/dl-rnn/#fig:vanilla-rnn), [encoder-decoder RNN](https://www.tobiasstenzel.com/blog/2023/dl-rnn/#fig:encoder-decoder-rnn) and [encoder-decoder RNN with attention](https://www.tobiasstenzel.com/blog/2023/dl-attention/#fig:attention/) ✨
 2. Explicitly spelling out [what makes the transformer great](https://www.tobiasstenzel.com/blog/2023/dl-transformer/#the-complete-transformer-architecture) ✨
+3. Underlining the difference between (i) cross-attention and self-attention by introducing the attention mechanism with (i) and the transformer with (ii) in two separate articles. 👈 👉
 3. Explaining convolution (or rather cross-correlation) with the [right figure and equation](https://www.tobiasstenzel.com/blog/2023/dl-cnn/#cross-correlation) ⚖
 4. Explaining backpropagation with a very simple [toy example](https://www.tobiasstenzel.com/blog/2023/dl-backprop/#toy-example) 🪀
 5. An explanation of [why we do not "frontpropagate"](https://www.tobiasstenzel.com/blog/2023/dl-backprop/#reverse-accumulation) although the multiplication in the chain rule is commutative 🤯
