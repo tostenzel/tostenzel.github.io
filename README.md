@@ -224,8 +224,7 @@ Set up Ruby (includes Bundler) at macOS:
 - Ruby 3.3.7 works
 - Delete ruby-version file that might overwrite the desired ruby version set by ruby global/local **version_number**
 - in gemfile.lock check that in the BUNDLED WITH section, the bundler version corresponds to the local bundler version (accessible via `gem list bundler`)
-
-brew install imagemagick for convert command during exec jekyll serve
+- type `brew install imagemagick` for convert command during exec jekyll serve
 
 Assuming you have [Ruby](https://www.ruby-lang.org/en/downloads/) and [Bundler](https://bundler.io/) installed on your system (*hint: for ease of managing ruby gems, consider using [rbenv](https://github.com/rbenv/rbenv)*).
 
@@ -234,7 +233,7 @@ $ bundle install  # delete lock file that is crated at first try and re-try if f
 $ bundle exec jekyll serve --lsi  # verify
 
 ```
-You don't need docker-compose, especially since the operation system is not the same as the local verison that we have nor set up.
+You don't need docker-compose, especially since the operation system is not the same as the local version that we have nor set up.
 
 To work locally with the homepage, run
 
