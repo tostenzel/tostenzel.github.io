@@ -391,10 +391,6 @@ Finally, the decoder uses a function \(\mathrm{Output}\) to map \(s_t^{(\mathrm{
 
 <p>In many actual implementations, submodules (a) and (b) may be fused into a single recurrent or feed-forward block. The above separation is conceptual, highlighting that the decoder is simultaneously <em>encoding the partial outputs</em> and <em>referencing the encoder representation</em>.</p>
 
-<p>Below is a concise, merged note that introduces <strong>tokenization</strong>, explains <strong>where tokens come from</strong>, and shows <strong>how special tokens</strong> like \(\langle sos \rangle\) and \(\langle eos \rangle\) fit into an RNN-based sequence-to-sequence setup:</p>
-
-<p>A good place to mention tokenization and its connection to the decoder’s softmax output head is <strong>immediately after</strong> you introduce the special tokens \(\langle sos \rangle\) (start-of-sentence) and \(\langle eos \rangle\) (end-of-sentence). That section already discusses how we handle variable-length sequences, so it’s natural to add a brief note on how tokens (including \(\langle sos \rangle\) and \(\langle eos \rangle\)) are drawn from a fixed vocabulary and how the softmax maps the decoder’s hidden state to a probability distribution over that vocabulary. For example:</p>
-
 <blockquote>
   <p><strong>Dealing with Sequences of Different Lengths</strong><br>
 To allow different input and output lengths, we introduce two special tokens:</p>
