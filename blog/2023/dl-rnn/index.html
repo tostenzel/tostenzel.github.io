@@ -204,7 +204,7 @@
           </nav>
         </d-contents>
 
-        <h2 id="recurrent-neural-networks">Recurrent Neural Networks</h2>
+        <h1 id="recurrent-neural-networks">Recurrent Neural Networks</h1>
 
 <p>Many tasks require input or output spaces that contain sequences. For example, in translation programs, words are often encoded as sequences of one-hot vectors. Each one-hot vector has a 1 at the position of an integer mapped to a word in a fixed vocabulary.
 A simple recurrent neural network (RNN) processes a sequence of vectors \(\{x_1, \dots, x_T\}\) using the recurrence formula:</p>
@@ -250,7 +250,7 @@ h_t = f_\theta(h_{t-1}, x_t).
 
 <hr>
 
-<h3 id="vanilla-recurrent-neural-networks">Vanilla Recurrent Neural Networks</h3>
+<h2 id="vanilla-recurrent-neural-networks">Vanilla Recurrent Neural Networks</h2>
 
 <p>Vanilla RNNs use a simple recurrence defined by:</p>
 
@@ -317,7 +317,7 @@ step.</p>
 
 <hr>
 
-<h3 id="the-encoderdecoder-architecture">The Encoder–Decoder Architecture</h3>
+<h2 id="the-encoderdecoder-architecture">The Encoder–Decoder Architecture</h2>
 
 <p>An encoder–decoder model is build for applications that involve generating a sequence of potentially different length from another sequence. One such application is translation or question answering. In its most general case, the model transforms an input sequence
 \(\begin{align}
@@ -408,11 +408,11 @@ To allow different input and output lengths, we introduce two special tokens:</p
 
 <hr>
 
-<h3 id="encoder-decoder-rnns">Encoder-Decoder RNNs</h3>
+<h2 id="encoder-decoder-rnns">Encoder-Decoder RNNs</h2>
 
 <p>We now specialize this generic view to an RNN-based encoder–decoder. We will (i) specify a fairly general RNN recurrence form, and then (ii) show how it can reduce to simple linear transformations with a standard nonlinearity.</p>
 
-<p><strong>General RNN Recurrence for Encoder and Decoder</strong></p>
+<h3 id="general-rnn-recurrence-for-encoder-and-decoder">General RNN Recurrence for Encoder and Decoder</h3>
 
 <ul>
   <li>
@@ -447,7 +447,7 @@ This single function \(f_{\mathrm{dec}}\) effectively does:</p>
   </li>
 </ul>
 
-<p><strong>Vanilla Encoder-Decoder RNN</strong></p>
+<h3 id="vanilla-encoder-decoder-rnn">Vanilla Encoder-Decoder RNN</h3>
 
 <p>In the simplest “vanilla” RNN, the encoder might be:</p>
 
@@ -525,7 +525,7 @@ embedded information of a whole input sequence.<br>
   during the backward pass.</li>
 </ol>
 
-<h3 id="the-exploding-and-vanishing-gradient-problem">The Exploding and Vanishing Gradient Problem</h3>
+<h2 id="the-exploding-and-vanishing-gradient-problem">The Exploding and Vanishing Gradient Problem</h2>
 
 <p>We now explore the second problem—vanishing and exploding gradients—more formally. Consider the vanilla RNN’s loss with respect to the weight matrix in Equation \(\ref{eq:vanilla-rnn}\). Its derivative can be written as:</p>
 
@@ -562,7 +562,7 @@ embedded information of a whole input sequence.<br>
 
 <p>In essence, \(\frac{\partial h_{t+1}}{\partial h_k}\) is the product of Jacobians from time \(t\) down to \(k\). Because an RNN processes sequences, this product can become very large if \((t-k)\) is large (i.e., if the sequence is long).</p>
 
-<p><strong>Vanishing and Exploding Effects</strong></p>
+<h3 id="vanishing-and-exploding-effects">Vanishing and Exploding Effects</h3>
 
 <p>To see why gradients may vanish or explode, assume for simplicity that each local Jacobian \(\tfrac{\partial h_{t+1}}{\partial h_t}\) is constant over time. Let us denote this constant Jacobian by \(J\). Suppose we decompose \(J\) via its eigendecomposition, yielding eigenvalues \(\lambda_1, \lambda_2, \dots, \lambda_n\) and corresponding eigenvectors \(v_1, v_2, \dots, v_n\), with</p>
 
@@ -581,7 +581,7 @@ embedded information of a whole input sequence.<br>
 
 <p>In practice, vanishing gradients are especially common when activation derivatives \(\phi'\) stay below 1 in magnitude (as with sigmoid or tanh). As a result, the earliest hidden states in the sequence receive almost no gradient information, hurting the model’s ability to capture long-range dependencies and effectively limiting its “long-term memory.”</p>
 
-<p><strong>Mitigation Strategies</strong></p>
+<h3 id="mitigation-strategies">Mitigation Strategies</h3>
 
 <p>Various methods aim to alleviate exploding or vanishing gradients. Examples include:</p>
 
