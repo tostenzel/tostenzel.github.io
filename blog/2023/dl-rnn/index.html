@@ -196,8 +196,9 @@
             <div><a href="#recurrent-neural-networks">Recurrent Neural Networks</a></div>
             <ul>
               <li><a href="#vanilla-neural-networks">Vanilla Neural Networks</a></li>
-              <li><a href="#encoder-decorder-rnns">Encoder-Decorder RNNs</a></li>
-              <li><a href="#backward-pass">Backward Pass</a></li>
+              <li><a href="#the-encoder-decoder-architecture">The Encoder-Decoder Architecture</a></li>
+              <li><a href="#encoder-decoder-rnns">Encoder-Decoder RNNs</a></li>
+              <li><a href="#the-exploding-and-vanishing-gradient-problem">The Exploding and Vanishing Gradient Problem</a></li>
               
             </ul>
           </nav>
@@ -205,61 +206,96 @@
 
         <h2 id="recurrent-neural-networks">Recurrent Neural Networks</h2>
 
-<p>Many tasks require input or output spaces that contain sequences. For
-instance, in translation programs we oftentimes encode words as
-sequences of one-hot vectors. These vectors are index vectors with a one
-at the position of an integer that maps to a word in a fixed vocabulary.
-A simple recurrent neural network (RNN) processes a sequence of vectors
-\(\{x_1, ..., x_T\}\) with a recurrence formula
-\(h_t = f_\theta(h_{t-1},x_t)\). The function \(f\) that we will describe in
-more detail below takes the same parameters \(\theta\) at every time step
-to process an arbitrary number of vectors (cf. parameter sharing and
-inductive bias). An interpretation of the hidden vector \(h\) is that of a
-summary of all previous \(x\) vectors. A common initialization is
-\(h_0=\vec{0}\). We can define \(f\) according to three criteria. The first
-criterion is the input and output space. We would model \(f\) differently
-for spaces from one to many, many to one or many to many vectors. The
-second criterion is the order in which we process input vectors and
-predict output vectors. This depends on the nature of the data. For
-example, we may either want to predict \(y_t\) directly after processing
-\(x_t\), or predict the complete output sequence \(\{y_1, ..., y_T\}\) after
-we have processed the complete input sequence \(\{x_i\}_{i=1}^T\). Another
-option is to not only compute a summary of the past but also a summary
-of the future and use both vectors in our predictions. The third
-criterion is how we want to improve upon drawbacks of the model
-formulation for longer sequences. We will come to this point later in
-this section. To illustrate how RNNs work, we will look at two examples.</p>
+<p>Many tasks require input or output spaces that contain sequences. For example, in translation programs, words are often encoded as sequences of one-hot vectors. Each one-hot vector has a 1 at the position of an integer mapped to a word in a fixed vocabulary.
+A simple recurrent neural network (RNN) processes a sequence of vectors \(\{x_1, \dots, x_T\}\) using the recurrence formula:</p>
+
+\[\begin{align}
+h_t = f_\theta(h_{t-1}, x_t).
+\end{align}\]
+
+<ul>
+  <li>\(f\) is a function (detailed below) that uses the same parameters \(\theta\) at every time step. This implies parameter sharing and introduces an inductive bias for modeling sequences.</li>
+  <li>We can interpret the hidden vector \(h_t\) as a summary of all previous \(x\)-vectors.</li>
+  <li>A common initialization is \(h_0 = \vec{0}\).</li>
+</ul>
+
+<p>We can define \(f\) according to <strong>three criteria</strong>:</p>
+
+<ul>
+  <li>
+    <p><strong>1. Input–Output Space</strong><br>
+  Depending on the task, we may want to handle “one-to-many,” “many-to-one,” or “many-to-many” mappings between the inputs and outputs.</p>
+  </li>
+  <li>
+<strong>2. Order of Processing</strong><br>
+  The nature of the data may require:
+    <ul>
+      <li>Predicting \(y_t\) immediately after seeing \(x_t\).</li>
+      <li>Predicting the entire output sequence \(\{y_1, \dots, y_T\}\) only after reading the full input sequence \(\{x_1, \dots, x_T\}\) in one shot.</li>
+      <li>Predicting the output sequence bit by bit after reading the complete input in order to also include the output elements that where generated so far as information for the next prediction.</li>
+    </ul>
+  </li>
+  <li>
+<strong>3. Handling Long Sequences</strong><br>
+  As sequences grow longer, we encounter <strong>drawbacks</strong> (e.g., vanishing/exploding gradients).  We will address this point later in the section.</li>
+</ul>
+
+<p>To illustrate how RNNs work, let us look at two specific examples. The first example is a vanilla RNN for predicting the next character in a text prompt. The second example is a token level encoder-decoder RNN for translation that can also work well with longer text. We will prepare this example with a longer explanation of the encoder-decoder architecture in general. Understanding this concept is crucial for understanding modern transformer based models. Finally, we look at the backward pass of the vanilla RNN to understand fundamental problems of RNNs in a deeper way.</p>
+
+<blockquote>
+  <p><strong><em>Tokenization</em></strong></p>
+
+  <p>The examples here use sequences of characters or words. However, in realistic applications text is mapped to a sequence of elements that are instances of a fixed vocabulary. This mapping is achieved by neural networks called tokenizers. Tokens can be anything from words, subword segments, or individual characters.</p>
+</blockquote>
+
+<hr>
 
 <h3 id="vanilla-recurrent-neural-networks">Vanilla Recurrent Neural Networks</h3>
 
-<p>Vanilla Recurrent Neural Networks use a recurrence defined by</p>
+<p>Vanilla RNNs use a simple recurrence defined by:</p>
 
-<p>\(\)\begin{align}
+\[\begin{align}
 h_t &amp;= \phi \big ( W\begin{bmatrix}
-       x_{t} <br>
+       x_{t} \\
        h_{t-1} 
      \end{bmatrix}
      \big ).
 \label{eq:vanilla-rnn}
+\end{align}\]
+
+<ol>
+  <li>We concatenate the current input \(x_t\) and the previous hidden state \(h_{t-1}\).</li>
+  <li>We transform them linearly (by multiplying with \(W\)).</li>
+  <li>We apply a non-linear activation \(\phi\).</li>
+</ol>
+
+<p>In vector form, this is equivalent to:</p>
+
+<p>\(\)\begin{align}
+h_t = \phi \big ( W_{xh}x_t + W_{hh}h_{t-1} \big ).
+\(\)\end{align}</p>
+
+<ul>
+  <li>\(W_{xh}\) and \(W_{hh}\) are concatenated horizontally to form \(W\).</li>
+  <li>If \(x_t \in \mathbb{R}^D\) and \(h_t \in \mathbb{R}^H\), then<br>
+\(\,W_{xh} \in \mathbb{R}^{H \times D}\)<br>
+\(\,W_{hh} \in \mathbb{R}^{H \times H}\)<br>
+\(\,W \in \mathbb{R}^{\,H \times (D+H)}.\)</li>
+</ul>
+
+<p>Effectively, a vanilla RNN models the new hidden state \(h_t\) at each time step as a linear function of the previous hidden state \(h_{t-1}\), and the current input \(x_t\). Both inputs are passed through a non-linearity \(\phi\).</p>
+
+<p><strong>Example: Character-level Language Model</strong></p>
+
+<p>In a classification task—e.g., predicting the next character in a text prompt—one can apply a Softmax to a linear transformation of the hidden state at every time step:</p>
+
+<p>\(\)\begin{align}
+o_t = W_{ho}\,h_t,
+\quad
+\hat{y}_t = \text{Softmax}(o_t),
 \end{align}\(\)</p>
 
-<p>Here, we concatenate the current input and the previous hidden states,
-transform both linearly and pass it to a non-linear activation function.
-This vector notation is equivalent to
-\(h_t = \phi (W_{xh}x_t + W_{hh}h_{t-1})\). The two matrices \(W_{xh}\) and
-\(W_{hh}\) are concatenated horizontally to \(W\). If the input vectors
-\(x_t\) have dimension \(1 \times D\) and the hidden vectors dimension
-\(1 \times H\), then \(W_{xh} \in \mathbb{R}^{H \times D}\),
-\(W_{hh} \in \mathbb{R}^{H \times H}\), and weight matrix \(W\) is a matrix
-with dimensions \([H \times (D+H)]\). Vanilla RNN models the current
-hidden states \(h_t\) at each time step as a linear function of the
-elements in the previous hidden states \(h_{t-1}\) and the current input
-\(x_t\), transformed by a non-linearity. In a classification task, e.g.
-where we want to predict the next written letter in a prompt by the
-previously types letters, we would apply the Softmax function to a
-linear transformation of the hidden state at each time step,
-\(o_t = W_{ho} h_t\), in order to predict the next character’s one-hot
-encoding. This is illustrated by Figure
+<p>to predict the next character’s one-hot encoding. The linear transformation projects the hidden state into the alphabet space and the softmax function converts the real vector into the unit space. Then, we can use the character with the highest number as prediction. This is illustrated by Figure
 <a href="#fig:vanilla-rnn">5</a>.</p>
 
 <figure id="fig:vanilla-rnn">
@@ -279,41 +315,188 @@ graph has a cycle that shows that the same hidden states are shared
 across time and that the architecture is the same for each
 step.</p>
 
+<hr>
+
+<h3 id="the-encoderdecoder-architecture">The Encoder–Decoder Architecture</h3>
+
+<p>An encoder–decoder model is build for applications that involve generating a sequence of potentially different length from another sequence. One such application is translation or question answering. In its most general case, the model transforms an input sequence
+\(\begin{align}
+  X = \{x_1, x_2, \dots, x_{T_x}\}
+\end{align}\)
+into an output sequence
+\(\begin{align}
+  \hat{Y} = \{\hat{y}_1, \hat{y}_2, \dots, \hat{y}_{T_y}\}.
+\end{align}\)</p>
+
+<p>It is structured into two main components:</p>
+
+<p><strong>Encoder</strong><br>
+Produces an internal representation \(R\) of \(X\). Formally:</p>
+
+<p>\(\begin{align}
+  R = \mathrm{Encoder}(X).
+\end{align}\)</p>
+<ul>
+  <li>In some architectures, \(R\) is a <em>single vector</em> (often called a context).</li>
+  <li>In others (e.g., with attention), \(R\) is a <em>sequence of states</em> \(\{h_1,\dots,h_{T_x}\}\).</li>
+  <li>Or it may be multiple stacked layers of representations (e.g., in a Transformer).</li>
+</ul>
+
+<p><strong>Decoder</strong><br>
+Generates each output element \(\hat{y}_t\) (for \(t=1,\dots,T_y\)) one at a time, with an autoregressive dependence on its own partial output and on the encoder representation \(R\). Concretely, we can think of the decoder in three submodules:</p>
+
+<ul>
+  <li>
+    <p><strong>(a) Self-encoding of partial outputs</strong></p>
+
+    <p>The decoder keeps a hidden state \(s_t\) that “remembers” what it has generated so far:</p>
+
+\[\begin{align}
+    s_t^{(\mathrm{self})} = \mathrm{SelfEnc}\bigl(s_{t-1}^{(\mathrm{self})},\, \hat{y}_{t-1}\bigr).
+  \end{align}\]
+
+    <p>This submodule accumulates the history \(\{\hat{y}_1, \dots, \hat{y}_{t-1}\}\) into \(s_t^{(\mathrm{self})}\).</p>
+  </li>
+  <li>
+<strong>(b) Cross-encoding (referencing the encoder)</strong>
+The decoder also needs to incorporate the <strong>encoder’s representation</strong> \(R\). We denote this step by:
+\(\begin{align}
+    s_t^{(\mathrm{cross})} = \mathrm{CrossEnc}\bigl(s_t^{(\mathrm{self})},\, R\bigr).
+  \end{align}\)
+    <ul>
+      <li>In a simple setting, \(\mathrm{CrossEnc}\) might just copy or concatenate \(s_t^{(\mathrm{self})}\) with \(R\).</li>
+      <li>In an attention-based setting, \(\mathrm{CrossEnc}\) might compute a new context \(\tilde{c}_t\) from \(\{h_1,\dots,h_{T_x}\}\) and combine that with \(s_t^{(\mathrm{self})}\).</li>
+    </ul>
+  </li>
+  <li>
+<strong>(c) Output module</strong>
+Finally, the decoder uses a function \(\mathrm{Output}\) to map \(s_t^{(\mathrm{cross})}\) to a distribution over possible next tokens:
+\(\begin{align}
+    \hat{y}_t = \mathrm{Output}\bigl(s_t^{(\mathrm{cross})}\bigr).
+  \end{align}\)
+  Typically, \(\mathrm{Output}\) is a linear layer plus a softmax.</li>
+</ul>
+
+<p>Altogether, the generic decoder step might look like:</p>
+
+\[\begin{align}
+  \begin{aligned}
+    s_t^{(\mathrm{self})} &amp;= \mathrm{SelfEnc}\bigl(s_{t-1}^{(\mathrm{self})},\, \hat{y}_{t-1}\bigr),\\
+    s_t^{(\mathrm{cross})} &amp;= \mathrm{CrossEnc}\bigl(s_t^{(\mathrm{self})},\, R\bigr),\\
+    \hat{y}_t &amp;= \mathrm{Output}\bigl(s_t^{(\mathrm{cross})}\bigr).
+  \end{aligned}
+\end{align}\]
+
+<p>where \(\hat{y}_{t-1}\) is the decoder’s previous prediction.</p>
+
+<p>In many actual implementations, submodules (a) and (b) may be fused into a single recurrent or feed-forward block. The above separation is conceptual, highlighting that the decoder is simultaneously <em>encoding the partial outputs</em> and <em>referencing the encoder representation</em>.</p>
+
+<p>Below is a concise, merged note that introduces <strong>tokenization</strong>, explains <strong>where tokens come from</strong>, and shows <strong>how special tokens</strong> like \(\langle sos \rangle\) and \(\langle eos \rangle\) fit into an RNN-based sequence-to-sequence setup:</p>
+
+<p>A good place to mention tokenization and its connection to the decoder’s softmax output head is <strong>immediately after</strong> you introduce the special tokens \(\langle sos \rangle\) (start-of-sentence) and \(\langle eos \rangle\) (end-of-sentence). That section already discusses how we handle variable-length sequences, so it’s natural to add a brief note on how tokens (including \(\langle sos \rangle\) and \(\langle eos \rangle\)) are drawn from a fixed vocabulary and how the softmax maps the decoder’s hidden state to a probability distribution over that vocabulary. For example:</p>
+
+<blockquote>
+  <p><strong>Dealing with Sequences of Different Lengths</strong><br>
+To allow different input and output lengths, we introduce two special tokens:</p>
+  <ul>
+    <li>Start-of-sentence: \(\langle sos \rangle\)</li>
+    <li>End-of-sentence: \(\langle eos \rangle\)</li>
+  </ul>
+
+  <p>The encoder stops reading the input when it encounters \(\langle eos \rangle\). The decoder starts generating with \(\langle sos \rangle\) as \(y_1\) and stops when it generates \(\langle eos \rangle\).</p>
+</blockquote>
+
+<hr>
+
 <h3 id="encoder-decoder-rnns">Encoder-Decoder RNNs</h3>
 
-<p>An encoder-decoder architecture is designed to transform an input sequence into an output sequence, even when these sequences have different lengths. In general, the process is divided into two parts, the encoder and the decoder.
-The encoder RNN processes the entire input sequence to produce a final context vector. This context vector is intended to capture the overall meaning and interrelations of the input, serving as a distilled representation that summarizes all the important features of the input data. The decoder RNN generates the output sequence one token at a time. It starts by initializing its hidden state with the context vector provided by the encoder. From there, the decoder uses its own recurrent dynamics to “remember” and build upon the sequence of tokens it has already generated. In effect, it implicitly encodes the output sequence, with each new state depending on both the previous hidden state and the most recently generated token.
-The important detail here is that the encoder encodes the input sequence and the decoder not only interrelates inputs and previously generated output to generated the new output but also that it encodes the previously generated output to capture the overall meaning and its interrelations, too. Therefore, the decoder essentially is a “previous output encoder” and decoder at the same time!</p>
+<p>We now specialize this generic view to an RNN-based encoder–decoder. We will (i) specify a fairly general RNN recurrence form, and then (ii) show how it can reduce to simple linear transformations with a standard nonlinearity.</p>
 
-<p>Let us follow up by introducing a concrete formal example.Encoder-Decoder RNNs use the complete input history
-\(\{x_i\}_1^{T_x}\) to predict the first output \(y_1\). Then, it
-additionally uses the complete prediction history
-\(\{\hat{y}_i\}_1^{t-1}\) to predict the next \(y_t\) for \(t=2,...,T_y\). The
-model is able to generate sequences of arbitrary length that can be
-unequal to the length of the input sequence. An examplary task is
-translating sentences from English to German. Here, we work with one-hot
-encodings of words from a fixed vocabulary instead of letters from an
-alphabet. To build this RNN, we use the same recursion from the previous
-example as an encoder RNN. However, do not classify the output at each
-timestep directly. Instead, we use the last hidden state from the
-encoder \(h_T\) as a context vector \(c_0\). Intuitively, the context vector
-is an abstract representation of the entire input sentence. Then, we use
-another RNN, the decoder RNN to process the information from the context
-and the output from the previous period to generate the hidden states
-\(s_t\) for the current period:</p>
+<p><strong>General RNN Recurrence for Encoder and Decoder</strong></p>
 
-<p>\(\)\begin{align}
-s_t = \phi (W_{os}o_{t-1} + W_{ss}s_{t-1})
-\end{align}\(\)</p>
+<ul>
+  <li>
+    <p><strong>Encoder RNN</strong>:<br>
+\(\begin{align}
+  h_t = f_{\mathrm{enc}}(h_{t-1},\, x_t), 
+  \quad
+  t=1,\dots,T_x,
+\end{align}\)
+with some initialization \(h_0\). We take the final state \(h_{T_x}\) as
+\(\begin{align}
+  R = h_{T_x},
+\end{align}\)
+a single “context vector.”</p>
+  </li>
+  <li>
+    <p><strong>Decoder RNN</strong>: merges <strong>self-encoding</strong> and <strong>cross-encoding</strong> into a single update:
+\(\begin{align}
+  s_t = f_{\mathrm{dec}}\bigl(s_{t-1},\, \hat{y}_{t-1},\, R\bigr),
+  \quad
+  t=1,\dots,T_y,
+\end{align}\)
+and then
+\(\begin{align}
+  \hat{y}_t = \mathrm{Output}\bigl(s_t\bigr).
+\end{align}\)
+This single function \(f_{\mathrm{dec}}\) effectively does:</p>
+    <ol>
+      <li>Encode the partial outputs via \(\hat{y}_{t-1}\) and \(s_{t-1}\).</li>
+      <li>Cross-encode the encoder’s context \(R\).</li>
+    </ol>
+  </li>
+</ul>
 
-<p>with \(s_0 = c_0\) and, for instance \(y_0 = \vec{0}\). We then predict the
-next word’s one-hot encoding from the hidden states like in the last
-example with the softmax of \(o_t=W_{so}s_t\). To model the fact that
-input and output sequences can have different length, we require special
-start of sentence, \(&lt;\)sos\(&gt;\), and end of sentence, \(&lt;\)eos\(&gt;\), tokens.</p>
+<p><strong>Vanilla Encoder-Decoder RNN</strong></p>
 
-<p>The encoder uses the \(&lt;\)eos\(&gt;\) as \(x_{1}\). The decoder takes \(&lt;\)sos\(&gt;\)
-as \(y_1\) and stops the recursion when it returns \(&lt;\)eos\(&gt;\).</p>
+<p>In the simplest “vanilla” RNN, the encoder might be:</p>
+
+<p>\(\begin{align}
+  h_t = \phi\Bigl(
+    W_{\mathrm{enc}}^{(hh)}\,h_{t-1}
+    \;+\;
+    W_{\mathrm{enc}}^{(xh)}\,x_t
+  \Bigr),
+\end{align}\)
+where \(\phi(\cdot)\) is a nonlinearity (e.g. \(\tanh\)). Then we set</p>
+
+\[\begin{align}
+  R = h_{T_x}.
+\end{align}\]
+
+<p>For the decoder, we can define:</p>
+
+<ol>
+  <li>
+    <p><strong>Initialization</strong>: 
+\(\begin{align}
+  s_0 = R = h_{T_x}.
+\end{align}\)</p>
+  </li>
+  <li>
+    <p><strong>Recurrent update</strong>:
+\(\begin{align}
+  s_t = \phi\Bigl(
+    W_{\mathrm{dec}}^{(ss)}\,s_{t-1}
+    \;+\;
+    W_{\mathrm{dec}}^{(ys)}\,\hat{y}_{t-1}
+    \;+\;
+    W_{\mathrm{dec}}^{(cs)}\,R
+  \Bigr).
+\end{align}\)
+This merges the partial output (via \(\hat{y}_{t-1}\)) with the context \(R\).</p>
+  </li>
+  <li>
+    <p><strong>Output module</strong>:
+\(\begin{align}
+  \hat{y}_t = \mathrm{Softmax}\Bigl(
+    W_{\mathrm{dec}}^{(so)}\,s_t
+  \Bigr).
+\end{align}\)</p>
+  </li>
+</ol>
+
+<p>In this concrete instantiation, submodules (a) and (b) from the generic description appear in a single formula for \(s_t\). The <strong>output module</strong> is simply a linear (via \(W_{\mathrm{dec}}^{(so)}\)) plus softmax layer.</p>
 
 <figure id="fig:encoder-decoder-rnn">
 <center><img src="/assets/img/dl-series/2g-encoder-decoder-rnn.png" style="width:95%"></center>
@@ -333,59 +516,88 @@ architecture, we can predict sequences of arbitrary length using the
 embedded information of a whole input sequence.<br>
 <br></p>
 
-<p>The simplicity of the RNN’s formulation has two drawbacks. First, the
-connections between inputs and hidden states through linear layers and
-element-wise non-linearities is not flexible enough for some tasks.
-Second, the recurrent graph structure leads to problematic dynamics
-during the backward pass.</p>
+<p>The simplicity of the RNN’s formulation has two drawbacks.</p>
 
-<h3 id="exploding-and-vanishing-gradient-problem">Exploding and Vanishing Gradient Problem</h3>
+<ol>
+  <li>The connections between inputs and hidden states through linear layers and
+  element-wise non-linearities is not flexible enough for some tasks.</li>
+  <li>The recurrent graph structure leads to problematic dynamics
+  during the backward pass.</li>
+</ol>
 
-<p>We now explore the second
-problem more formally. The vanilla RNN’s loss with respect to the weight
-matrix in Equation
-<a href="#eq:vanilla-rnn">1</a> is given by:</p>
+<h3 id="the-exploding-and-vanishing-gradient-problem">The Exploding and Vanishing Gradient Problem</h3>
 
-<p>\(\)\begin{align}\frac{\partial L}{\partial W} = \sum_{t=1}^T \sum_{k=1}^{t+1} \frac{\partial L_{t+1}}{\partial o_{t+1}} \frac{\partial o_{t+1}}{\partial h_{t+1}} \frac{\partial h_{t+1}}{\partial h_{k}} \frac{\partial h_{k}}{\partial W}.
-\label{eq:rnn-derivative}\end{align}\(\) The crucial part is the derivative of the
-hidden layer in the next period with respect to some past layer \(k\). It
-is given by the recursive product \(\)\begin{align}\label{eq:rnn-derivative-recursion}
-\frac{\partial h_{t+1}}{\partial h_k} = \prod_{j=k}^t\frac{\partial h_{t+1}}{\partial h_{k}} = \frac{\partial h_{t+1}}{\partial h_{t}} \frac{\partial h_{t}}{\partial h_{t-1}} … \frac{\partial h_{k+1}}{\partial h_{k}} = \prod_{j=k}^t \text{diag} \big(W_{hh}\phi’ (W  [x_{j+1};h_j])\big).\end{align}\(\)
-Equation
-<a href="#eq:rnn-derivative-recursion">4</a> shows that, in order to compute
-the gradients for \(W_{xh}\) and \(W_{hh}\), we have to multiply a large
-number of Jacobians depending on the size of the input sequences. The
-reason is that the derivative of a hidden layer \(h_{t+1}\) with respect
-to some previous layer \(h_k\) equals the product of the derivatives from
-\(t+1\) to \(k+1\) with respect to their previous layers. For simplicity,
-let us assume that these derivatives are constant. Further, let us
-compute the eigendecomposition of the fixed Jacobian matrix
-\(\frac{\partial h_{t+1}}{\partial h_t}\) to analyze the problem more
-formally. We obtain the eigenvalues
-\(\lambda_1, \lambda_2,...,\lambda_n\), with
-\(|\lambda_1|&gt; |\lambda_2|&gt;...&gt;|\lambda_n|\), and the respective
-eigenvectors, \(v_1, v_2, ..., v_n\). With these components, we can write
-the constant update of the hidden state in the direction of an
-eigenvector \(v_i\) as \(\lambda_i \Delta\). During the backward pass from
-\(t+1\) to \(k\), this change becomes \(\lambda_i^{t-k} \Delta h\). As a
-result, if the largest eigenvalue \(\lambda_1\) is smaller than one, the
-gradient will vanish, and if it is larger than one, the gradient
-explodes. In practice, the gradients oftentimes rather vanishes due the
-contribution of the activation derivative which cannot exceed one. In
-this case, the earlier hidden states are barely updated. The effect is
-that the front parts of the input do not impact the prediction. In other
-words, our model has a weak long-term memory.</p>
+<p>We now explore the second problem—vanishing and exploding gradients—more formally. Consider the vanilla RNN’s loss with respect to the weight matrix in Equation \(\ref{eq:vanilla-rnn}\). Its derivative can be written as:</p>
 
-<p>There are many approaches to alleviate this problem. Examples are
-regularization, careful weight initializations, using ReLU activations
-only, and gated recurrent networks like Long Sort-Term Memory (LSTM) or
-Gated Recurrent Unit (GRU). We can view these gating mechanisms as much
-more sophisticated extensions of the skip connections from Chapter
-<a href="https://www.tobiasstenzel.com/blog/2023/dl-cnn/#skip-connections">5</a>. Today, the
-most common approach is the transformer architecture. It is not only
-less vulnerable to vanishing gradients but also provides a more
-expressive coupling of current inputs and previous states compared to
-vanilla RNNs.</p>
+<p>\(\)
+\begin{align}
+  \frac{\partial L}{\partial W}
+  = \sum_{t=1}^T \sum_{k=1}^{t+1}
+    \frac{\partial L_{t+1}}{\partial o_{t+1}}
+    \frac{\partial o_{t+1}}{\partial h_{t+1}}
+    \frac{\partial h_{t+1}}{\partial h_{k}}
+    \frac{\partial h_{k}}{\partial W}.
+\label{eq:rnn-derivative}
+\end{align}
+\(\)</p>
+
+<p>A key factor here is the derivative of the hidden state at time \(t+1\) with respect to a <em>past</em> hidden state \(h_k\). From the chain rule, it follows a recursive product:</p>
+
+<p>\(\)
+\begin{align}
+\label{eq:rnn-derivative-recursion}
+  \frac{\partial h_{t+1}}{\partial h_k}
+  = \prod_{j=k}^t
+    \frac{\partial h_{j+1}}{\partial h_j}
+  = \frac{\partial h_{t+1}}{\partial h_t}
+    \cdot
+    \frac{\partial h_t}{\partial h_{t-1}}
+    \cdots
+    \frac{\partial h_{k+1}}{\partial h_k}
+  = \prod_{j=k}^t \mathrm{diag} \bigl(
+      W_{hh} \,\phi’\bigl(W[x_{j+1} ;\,h_j]\bigr)
+    \bigr).
+\end{align}
+\(\)</p>
+
+<p>In essence, \(\frac{\partial h_{t+1}}{\partial h_k}\) is the product of Jacobians from time \(t\) down to \(k\). Because an RNN processes sequences, this product can become very large if \((t-k)\) is large (i.e., if the sequence is long).</p>
+
+<p><strong>Vanishing and Exploding Effects</strong></p>
+
+<p>To see why gradients may vanish or explode, assume for simplicity that each local Jacobian \(\tfrac{\partial h_{t+1}}{\partial h_t}\) is constant over time. Let us denote this constant Jacobian by \(J\). Suppose we decompose \(J\) via its eigendecomposition, yielding eigenvalues \(\lambda_1, \lambda_2, \dots, \lambda_n\) and corresponding eigenvectors \(v_1, v_2, \dots, v_n\), with</p>
+
+<p>\(\)
+\begin{align}
+|\lambda_1| \geq |\lambda_2| \geq \cdots \geq |\lambda_n|.
+\end{align}
+\(\)</p>
+
+<ul>
+  <li>
+<strong>Exploding Gradients</strong>: If \(\lvert\lambda_1\rvert &gt; 1\), then repeated multiplications by \(J\) cause gradients to grow exponentially, leading to exploding gradients.</li>
+  <li>
+<strong>Vanishing Gradients</strong>: Conversely, if \(\lvert\lambda_1\rvert &lt; 1\), the gradient norms shrink exponentially as they propagate back through time, eventually becoming negligibly small (vanishing).</li>
+</ul>
+
+<p>In practice, vanishing gradients are especially common when activation derivatives \(\phi'\) stay below 1 in magnitude (as with sigmoid or tanh). As a result, the earliest hidden states in the sequence receive almost no gradient information, hurting the model’s ability to capture long-range dependencies and effectively limiting its “long-term memory.”</p>
+
+<p><strong>Mitigation Strategies</strong></p>
+
+<p>Various methods aim to alleviate exploding or vanishing gradients. Examples include:</p>
+
+<ul>
+  <li>Regularization (e.g., gradient clipping)</li>
+  <li>Careful weight initialization</li>
+  <li>ReLU activations</li>
+  <li>Gated RNNs (LSTM or GRU), which introduce gating mechanisms akin to more sophisticated skip connections from Chapter
+<a href="https://www.tobiasstenzel.com/blog/2023/dl-cnn/#skip-connections">5</a>
+</li>
+  <li>Transformer architectures, which rely on attention instead of purely recurrent connections and thus suffer less from vanishing gradients while providing more expressive long-range interactions.</li>
+</ul>
+
+<p>Today, the most widely used approach in many sequence tasks is the <strong>transformer</strong>, which not only avoids many vanishing-gradient issues but also offers more flexible and powerful modeling of contextual information.</p>
+
+<hr>
 
 <h2 id="citation">Citation</h2>
 
