@@ -248,8 +248,6 @@ h_t = f_\theta(h_{t-1}, x_t).
   <p>The examples here use sequences of characters or words. However, in realistic applications text is mapped to a sequence of elements that are instances of a fixed vocabulary. This mapping is achieved by neural networks called tokenizers. Tokens can be anything from words, subword segments, or individual characters.</p>
 </blockquote>
 
-<hr>
-
 <h2 id="vanilla-recurrent-neural-networks">Vanilla Recurrent Neural Networks</h2>
 
 <p>Vanilla RNNs use a simple recurrence defined by:</p>
@@ -314,8 +312,6 @@ model will be trained to increase (decrease) the logits of the correct
 graph has a cycle that shows that the same hidden states are shared
 across time and that the architecture is the same for each
 step.</p>
-
-<hr>
 
 <h2 id="the-encoderdecoder-architecture">The Encoder–Decoder Architecture</h2>
 
@@ -401,8 +397,6 @@ To allow different input and output lengths, we introduce two special tokens:</p
 
   <p>The encoder stops reading the input when it encounters \(\langle eos \rangle\). The decoder starts generating with \(\langle sos \rangle\) as \(y_1\) and stops when it generates \(\langle eos \rangle\).</p>
 </blockquote>
-
-<hr>
 
 <h2 id="encoder-decoder-rnns">Encoder-Decoder RNNs</h2>
 
