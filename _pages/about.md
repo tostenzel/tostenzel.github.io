@@ -20,4 +20,4 @@ Hi, my name is Tobias! I have completed my Data Science degree and my Master's t
 
 I admire accessible explanations of complex things at the right level of abstraction.
 
-Perhaps I can give something back. I set up this site to share a few learnings on my <a href='http://tostenzel.github.io/blog/'>blog</a>. About deep learning to start with. 👻
+Perhaps I can give something back. I set up this site to share a few learnings on my <a href='https://www.tobiasstenzel.com/blog/'>ML Engineering Blog</a>. 👻

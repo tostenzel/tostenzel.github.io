@@ -858,3 +858,40 @@ pre {
     opacity: 1;
   }
 }
+
+/* Language label badge on fenced code blocks */
+div.highlighter-rouge {
+  position: relative;
+
+  &::before {
+    content: none; // only recognized languages (below) get a badge
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    padding: 2px 10px;
+    font-family: var(--bs-font-monospace, monospace);
+    font-size: 0.7rem;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    color: var(--global-text-color);
+    background-color: var(--global-card-bg-color);
+    border-bottom-left-radius: 6px;
+    border-top-right-radius: 6px;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+  }
+
+  // hide the badge on hover so it never collides with the Copy button
+  &:hover::before {
+    opacity: 0;
+  }
+}
+
+// per-language overrides (extend as more languages appear in posts)
+div.language-python.highlighter-rouge::before { content: "Python"; }
+div.language-bash.highlighter-rouge::before,
+div.language-shell.highlighter-rouge::before { content: "bash"; }
+div.language-latex.highlighter-rouge::before { content: "latex"; }
+div.language-yaml.highlighter-rouge::before { content: "yaml"; }
+div.language-json.highlighter-rouge::before { content: "json"; }

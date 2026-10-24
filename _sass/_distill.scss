@@ -35,6 +35,48 @@ d-article {
     display: inline;
   }
 
+  // Distill re-highlights ```python fences with Prism (class="token …")
+  // but does not load Prism's CSS, so tokens would otherwise all be one color.
+  .token.comment,
+  .token.prolog,
+  .token.doctype,
+  .token.cdata {
+    color: #6a737d;
+    font-style: italic;
+  }
+  .token.punctuation {
+    color: inherit;
+  }
+  .token.keyword,
+  .token.atrule,
+  .token.important,
+  .token.boolean {
+    color: #d73a49;
+    font-weight: 500;
+  }
+  .token.builtin,
+  .token.class-name {
+    color: #6f42c1;
+  }
+  .token.function {
+    color: #005cc5;
+  }
+  .token.string,
+  .token.char,
+  .token.attr-value {
+    color: #22863a;
+  }
+  .token.number {
+    color: #005cc5;
+  }
+  .token.operator {
+    color: #d73a49;
+  }
+  .token.constant,
+  .token.symbol {
+    color: #e36209;
+  }
+
   // Style taken from code blocks
   details {  
     color: var(--global-text-color);
@@ -153,6 +195,43 @@ d-appendix {
   padding-left: 0em;
 
 
+}
+
+html[data-theme='dark'] d-article {
+  .token.comment,
+  .token.prolog,
+  .token.doctype,
+  .token.cdata {
+    color: #8b949e;
+  }
+  .token.keyword,
+  .token.atrule,
+  .token.important,
+  .token.boolean {
+    color: #ff7b72;
+  }
+  .token.builtin,
+  .token.class-name {
+    color: #d2a8ff;
+  }
+  .token.function {
+    color: #79c0ff;
+  }
+  .token.string,
+  .token.char,
+  .token.attr-value {
+    color: #a5d6ff;
+  }
+  .token.number {
+    color: #79c0ff;
+  }
+  .token.operator {
+    color: #ff7b72;
+  }
+  .token.constant,
+  .token.symbol {
+    color: #ffa657;
+  }
 }
 
 @media (max-width: 1024px) {

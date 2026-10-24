@@ -118,9 +118,9 @@ bing_site_verification:  # out your bing-site-verification ID (Bing Webmaster)
 # Blog
 # -----------------------------------------------------------------------------
 
-blog_name: Deep Learning Blog # blog_name will be displayed in your blog page
+blog_name: ML Engineering Blog # blog_name will be displayed in your blog page
 blog_nav_title: blog # your blog must have a title for it to be displayed in the nav bar
-blog_description: <br /> <font size="5"> <b>&#x23;dl-fundamentals</b> links my series about Deep Learning fundamentals 🐳 (Start with the <a href="https://www.tobiasstenzel.com/blog/2023/dl-overview/">overview post</a>! 🎬) <br /><br /> <b>&#x23;applications</b> is a new category about interesting use cases and architectures. 📐✏️👷‍♀️</font> #
+blog_description: <br /> <font size="5"> <b>&#x23;dl-fundamentals</b> links my series about Deep Learning fundamentals 🐳 (Start with the <a href="https://www.tobiasstenzel.com/blog/2023/dl-overview/">overview post</a>! 🎬) <br /><br /> <b>&#x23;dsa-fundamentals</b> links my DSA Atlas series on data structures &amp; algorithms 🧭 (Start with the <a href="https://www.tobiasstenzel.com/blog/2026/dsa-overview/">overview post</a>! 🗺️) <br /><br /> <b>&#x23;applications</b> is about deep learning applications and architectures. 📐✏️👷‍♀️</font> #
 permalink: /blog/:year/:title/
 
 # Pagination
@@ -257,7 +257,7 @@ jekyll-archives:
     tag: '/blog/tag/:name/'
     category: '/blog/category/:name/'
 
-display_tags: ['dl-fundamentals', "applications"] # this tags will be dispalyed on the front page of your blog
+display_tags: ['dl-fundamentals', 'dsa-fundamentals', "applications"] # this tags will be dispalyed on the front page of your blog
 
 # -----------------------------------------------------------------------------
 # Jekyll Scholar
