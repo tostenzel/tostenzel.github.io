@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<!-- _layouts/distill.html --><html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">    <!-- Metadata, OpenGraph and Schema.org -->
+    
+
+    <!-- Standard metadata -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>3. Linear Structures | Tobias  Stenzel</title>
+    <meta name="author" content="Tobias  Stenzel">
+    <meta name="description" content="🧱 &lt;b&gt;&lt;i&gt;The workhorse containers: dynamic array, hash map/set, linked list, stack, deque.&lt;/i&gt;&lt;/b&gt;">
+
+
+    <!-- Bootstrap & MDB -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous">
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+    <!-- Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light">
+
+    <!-- Styles -->
+    
+    <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%93%9D&lt;/text&gt;&lt;/svg&gt;">
+    
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="canonical" href="https://www.tobiasstenzel.com/blog/2026/dsa-linear/">
+    
+    <!-- Dark Mode -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark">
+
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/dark_mode.js"></script>
+    
+
+
+    <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- MathJax -->
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        tags: 'ams'
+      }
+    };
+  </script>
+  <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+  <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+    <!-- Distill js -->
+    <script src="/assets/js/distillpub/template.v2.js"></script>
+    <script src="/assets/js/distillpub/transforms.v2.js"></script>
+    <script src="/assets/js/distillpub/overrides.js"></script>
+
+    <!-- _layouts/post.html -->
+  </head>
+
+  <body>
+<d-front-matter>
+    <script async type="text/json">{
+      "title": "3. Linear Structures",
+      "description": "🧱 <b><i>The workhorse containers: dynamic array, hash map/set, linked list, stack, deque.</i></b>",
+      "published": "October 19, 2026",
+      "authors": [
+        {
+          "author": "Tobias Stenzel",
+          "authorURL": "https://www.tobiasstenzel.com",
+          "affiliations": [
+            {
+              "name": "N/A",
+              "url": ""
+            }
+          ]
+        }
+        
+      ],
+      "katex": {
+        "delimiters": [
+          {
+            "left": "$",
+            "right": "$",
+            "display": false
+          },
+          {
+            "left": "$$",
+            "right": "$$",
+            "display": true
+          }
+        ]
+      }
+    }</script>
+  </d-front-matter>
+
+  
+
+    <!-- Header -->
+    <header>
+
+      <!-- Nav Bar -->
+      <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+        <div class="container">
+          <a class="navbar-brand title font-weight-lighter" href="/"><span class="font-weight-bold">Tobias </span>Stenzel</a>
+          <!-- Navbar Toggle -->
+          <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar top-bar"></span>
+            <span class="icon-bar middle-bar"></span>
+            <span class="icon-bar bottom-bar"></span>
+          </button>
+
+          <div class="collapse navbar-collapse text-right" id="navbarNav">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+
+              <!-- About -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/">about</a>
+              </li>
+              
+              <!-- Blog -->
+              <li class="nav-item active">
+                <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a>
+              </li>
+
+              <!-- Other pages -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/projects/">projects</a>
+              </li>
+
+              <!-- Toogle theme mode -->
+              <li class="toggle-container">
+                <button id="light-toggle" title="Change theme">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Scrolling Progress Bar -->
+      <progress id="progress" value="0">
+        <div class="progress-container">
+          <span class="progress-bar"></span>
+        </div>
+      </progress>
+    </header>
+
+
+    <!-- Content -->
+    <div class="post distill">
+
+      <d-title>
+          <p class="PageNavigation">
+          
+            <a class="prev" href="/blog/2026/dsa-foundations/">	⏮ 2. Foundations</a>
+          
+          
+            <a class="next" href="/blog/2026/dsa-techniques/">4. Array &amp; String Techniques ⏭</a>
+          
+        </p>
+        <br><br>
+        <h1>3. Linear Structures</h1>
+        <p>🧱 <b><i>The workhorse containers: dynamic array, hash map/set, linked list, stack, deque.</i></b></p>
+        <p class="post-tags">
+          <a href="/blog/2026"> <i class="fas fa-calendar fa-sm"></i> 2026 </a>
+            ·  
+            <a href="/blog/tag/dsa-fundamentals">
+              <i class="fas fa-hashtag fa-sm"></i> dsa-fundamentals</a>  
+              <a href="/blog/tag/arrays">
+              <i class="fas fa-hashtag fa-sm"></i> arrays</a>  
+              <a href="/blog/tag/hashing">
+              <i class="fas fa-hashtag fa-sm"></i> hashing</a>  
+              <a href="/blog/tag/linked-list">
+              <i class="fas fa-hashtag fa-sm"></i> linked-list</a>  
+              <a href="/blog/tag/stack">
+              <i class="fas fa-hashtag fa-sm"></i> stack</a>  
+              <a href="/blog/tag/queue">
+              <i class="fas fa-hashtag fa-sm"></i> queue</a>  
+              <a href="/blog/tag/deque">
+              <i class="fas fa-hashtag fa-sm"></i> deque</a>  
+              
+
+        </p>
+      </d-title>
+
+      <d-byline></d-byline>
+
+      <d-article>
+
+        <d-contents>
+          <nav class="l-text figcaption">
+          <h3>Contents</h3>
+            <div><a href="#a-dynamic-array-the-contiguous-primitive">A. Dynamic array: the contiguous primitive</a></div>
+            <div><a href="#b-linked-list-the-pointer-chained-primitive">B. Linked list: the pointer-chained primitive</a></div>
+            <div><a href="#c-stack-array-one-end-only">C. Stack: array, one end only</a></div>
+            <div><a href="#d-deque-linked-blocks-both-ends">D. Deque: linked blocks, both ends</a></div>
+            <div><a href="#e-hash-map-set-both-primitives-combined">E. Hash map / set: both primitives combined</a></div>
+            <div><a href="#connections">🔗 Connections</a></div>
+            
+          </nav>
+        </d-contents>
+
+        <p><strong>Two memory primitives.</strong> Every structure here is built on one of two layouts. Costs follow from the
+layout. Read the figure, read the cost:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Primitive</th>
+      <th>Memory layout</th>
+      <th>Access</th>
+      <th>Insert/delete at known position</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Contiguous</strong></td>
+      <td>Elements packed at consecutive addresses: \(\text{addr}(i)=\text{base}+i\cdot s\)</td>
+      <td>\(O(1)\)</td>
+      <td>\(O(n)\), must shift neighbors</td>
+    </tr>
+    <tr>
+      <td><strong>Pointer-chained</strong></td>
+      <td>Elements anywhere; each node stores a <code class="language-plaintext highlighter-rouge">next</code> address</td>
+      <td>\(O(n)\), follow \(i\) pointers</td>
+      <td>\(O(1)\), rewire two pointers</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The same two primitives power the hierarchical structures on <a href="https://www.tobiasstenzel.com/blog/2026/dsa-hierarchical/">Hierarchical Structures</a>: BST, trie, and
+Union-Find are pointer-chained; the heap is contiguous.</p>
+
+<hr>
+
+<h2 id="a-dynamic-array-the-contiguous-primitive">A. Dynamic array: the contiguous primitive</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · \(O(1)\) index and amortized \(O(1)\) append: the default container.
+<strong>Where</strong> · any time you need positional access or grow a sequence from the right end.</p>
+</blockquote>
+
+<p><strong>Figure 1 · Array memory layout: O(1) access and O(n) front insert.</strong></p>
+<center><img src="/assets/img/dsa-series/array_layout.png" style="width:80%"></center>
+<p><em>Left: \(\text{addr}(i) = \text{base} + i \cdot s\), one arithmetic op, no pointer chasing. Right: inserting at the front shifts every element right by one, unavoidable with contiguous memory.</em></p>
+
+<p><strong>Mechanism trace: <code class="language-plaintext highlighter-rouge">a.append(x)</code>.</strong></p>
+
+<p><em>Fast path</em> (<code class="language-plaintext highlighter-rouge">size &lt; capacity</code>):</p>
+<ol>
+  <li>Write <code class="language-plaintext highlighter-rouge">x</code> at index <code class="language-plaintext highlighter-rouge">size</code>, increment <code class="language-plaintext highlighter-rouge">size</code>. <strong>Done: \(O(1)\).</strong>
+</li>
+</ol>
+
+<p><em>Slow path</em> (<code class="language-plaintext highlighter-rouge">size == capacity</code>, array is full):</p>
+<ol>
+  <li>Allocate a new block of size \(2m\).</li>
+  <li>Copy all \(m\) elements across. Costs \(O(m)\), once.</li>
+  <li>Write <code class="language-plaintext highlighter-rouge">x</code>, set <code class="language-plaintext highlighter-rouge">capacity = 2m</code>, increment <code class="language-plaintext highlighter-rouge">size</code>.</li>
+</ol>
+
+<p><em>Why the slow path doesn’t ruin the average:</em></p>
+
+<p>Resizes happen at sizes \(1, 2, 4, \ldots, n\). Total copy work across all of them:</p>
+
+\[1 + 2 + 4 + \cdots + n \;=\; n\!\left(1 + \tfrac{1}{2} + \tfrac{1}{4} + \cdots\right) &lt; 2n\]
+
+<p>(geometric series with ratio \(\frac{1}{2}\), sum converges to 2). Spread across \(n\) appends:
+\(\frac{2n}{n} = O(1)\) per append on average → <strong>amortized \(O(1)\).</strong></p>
+
+<p><strong>Costs:</strong> access \(O(1)\) · search \(O(n)\) · append \(O(1)\)* · insert/delete at front \(O(n)\).</p>
+
+<p><strong>Use when:</strong> you index by position or append to the right end.
+<strong>Avoid for:</strong> repeated front insertions; use a deque (Section D).</p>
+
+<hr>
+
+<h2 id="b-linked-list-the-pointer-chained-primitive">B. Linked list: the pointer-chained primitive</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · \(O(1)\) insert/delete at any known position, no shifting.
+<strong>Where</strong> · the mental model behind deque internals and pointer-manipulation problems.</p>
+</blockquote>
+
+<p>Each element lives in a <strong>node</strong>: <code class="language-plaintext highlighter-rouge">{item, next}</code> where <code class="language-plaintext highlighter-rouge">next</code> is the memory address of the following
+node. Nodes sit at arbitrary addresses; the chain is only in the pointers, not in memory layout.</p>
+
+<p><strong>Figure 3 · Linked-list memory layout: non-contiguous nodes, pointer chain.</strong></p>
+<center><img src="/assets/img/dsa-series/linked_list_layout.png" style="width:80%"></center>
+<p><em>Addresses 0x04 → 0x11 → 0x07 → 0x0A: non-consecutive, only pointers connect them. New node X inserts with two pointer writes: ① new.next = head, ② head = new.</em></p>
+
+<p><strong>Mechanism trace: <code class="language-plaintext highlighter-rouge">insert_first(x)</code> (from the 6.006 notes).</strong></p>
+<ol>
+  <li>Allocate new node <code class="language-plaintext highlighter-rouge">N</code> with <code class="language-plaintext highlighter-rouge">N.item = x</code>.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">N.next = head</code>: new node points to old first.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">head = N</code>: list now starts at the new node.</li>
+  <li>Two pointer writes, regardless of list length → <strong>\(O(1)\).</strong>
+</li>
+</ol>
+
+<p><strong>Mechanism trace: <code class="language-plaintext highlighter-rouge">get_at(i)</code>.</strong></p>
+<ol>
+  <li>Start at <code class="language-plaintext highlighter-rouge">head</code>.</li>
+  <li>Follow <code class="language-plaintext highlighter-rouge">.next</code> pointers \(i\) times.</li>
+  <li>Return <code class="language-plaintext highlighter-rouge">node.item</code>. <strong>\(O(i)\): must traverse, no shortcut.</strong>
+</li>
+</ol>
+
+<p><strong>Costs:</strong> insert/delete at known node \(O(1)\) · access by index \(O(n)\) · search \(O(n)\).</p>
+
+<p>Python has no standalone linked list; <code class="language-plaintext highlighter-rouge">collections.deque</code> is backed by a linked structure and is what
+you actually use. Reversal and Floyd’s cycle detection live on <a href="https://www.tobiasstenzel.com/blog/2026/dsa-techniques/">Array &amp; String Techniques</a>.</p>
+
+<p><strong>Use when:</strong> front insertions are the bottleneck. Not for indexing.</p>
+
+<hr>
+
+<h2 id="c-stack-array-one-end-only">C. Stack: array, one end only</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · \(O(1)\) push/pop; a dynamic array with one self-imposed constraint.
+<strong>Where</strong> · matching/nesting, DFS frontier (<a href="https://www.tobiasstenzel.com/blog/2026/dsa-graphs/">Graphs</a>), undo.</p>
+</blockquote>
+
+<p>A <strong>stack</strong> is a dynamic array (<code class="language-plaintext highlighter-rouge">list</code>) with one rule: only touch index \(n-1\) (the top). Last in, first
+out. Since push is <code class="language-plaintext highlighter-rouge">append</code> and pop is <code class="language-plaintext highlighter-rouge">list.pop()</code>, both are amortized \(O(1)\) by the same doubling
+argument as Section A.</p>
+
+<p><strong>Figure 4 · Stack layout: array with a top pointer.</strong></p>
+<center><img src="/assets/img/dsa-series/stack_layout.png" style="width:80%"></center>
+<p><em>Before push: top sits at index 2, stack = <code class="language-plaintext highlighter-rouge">[A, B, C]</code>. After push(‘D’): top advances to index 3, one write. Pop simply retreats top, no memory erasure needed.</em></p>
+
+<p><strong>Mechanism trace: push and pop on <code class="language-plaintext highlighter-rouge">[A, B, C]</code>.</strong></p>
+<ol>
+  <li>
+<code class="language-plaintext highlighter-rouge">push('D')</code>: write <code class="language-plaintext highlighter-rouge">'D'</code> at index 3, top = 3. Stack = <code class="language-plaintext highlighter-rouge">[A, B, C, D]</code>. <strong>\(O(1)\).</strong>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">pop()</code>: read <code class="language-plaintext highlighter-rouge">stack[3]</code> = <code class="language-plaintext highlighter-rouge">'D'</code>, decrement top to 2. Returns <code class="language-plaintext highlighter-rouge">'D'</code>. <strong>\(O(1)\).</strong>
+</li>
+  <li>Top always points to the last element: one read or write, no shifting.</li>
+</ol>
+
+<p><strong>Application: matching <code class="language-plaintext highlighter-rouge">"(())"</code> with a stack.</strong></p>
+
+<p>Rule: opening bracket → push it. Closing bracket → pop the top and check it matches.
+If the stack is empty when you need to pop, or non-empty at the end, the string is invalid.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>step</th>
+      <th>char</th>
+      <th>action</th>
+      <th>stack after</th>
+      <th>why</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><code class="language-plaintext highlighter-rouge">(</code></td>
+      <td>push</td>
+      <td><code class="language-plaintext highlighter-rouge">['(']</code></td>
+      <td>opening → remember it</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code class="language-plaintext highlighter-rouge">(</code></td>
+      <td>push</td>
+      <td><code class="language-plaintext highlighter-rouge">['(', '(']</code></td>
+      <td>opening → remember it</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code class="language-plaintext highlighter-rouge">)</code></td>
+      <td>pop → <code class="language-plaintext highlighter-rouge">'('</code>
+</td>
+      <td><code class="language-plaintext highlighter-rouge">['(']</code></td>
+      <td>closing → the last-opened was <code class="language-plaintext highlighter-rouge">(</code>, matches ✓</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code class="language-plaintext highlighter-rouge">)</code></td>
+      <td>pop → <code class="language-plaintext highlighter-rouge">'('</code>
+</td>
+      <td><code class="language-plaintext highlighter-rouge">[]</code></td>
+      <td>closing → the last-opened was <code class="language-plaintext highlighter-rouge">(</code>, matches ✓</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>end</td>
+      <td>stack empty</td>
+      <td>n/a</td>
+      <td>all brackets paired → <strong>valid</strong>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The stack naturally enforces <em>the last opened must be the first closed</em>, exactly the LIFO property.</p>
+
+<p><strong>Costs:</strong> push/pop \(O(1)\)* · peek <code class="language-plaintext highlighter-rouge">stack[-1]</code> \(O(1)\) · search \(O(n)\).</p>
+
+<p><strong>Use when:</strong> you need to process items in reverse-arrival order or track “what was the last open thing?”</p>
+
+<hr>
+
+<h2 id="d-deque-linked-blocks-both-ends">D. Deque: linked blocks, both ends</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · \(O(1)\) at <em>both</em> ends, which a plain list cannot match for front operations.
+<strong>Where</strong> · BFS queues (<a href="https://www.tobiasstenzel.com/blog/2026/dsa-graphs/">Graphs</a>), sliding-window buffers (<a href="https://www.tobiasstenzel.com/blog/2026/dsa-techniques/">Array &amp; String Techniques</a>).</p>
+</blockquote>
+
+<p>A <strong>deque</strong> (<code class="language-plaintext highlighter-rouge">collections.deque</code>) is a linked list of fixed-size blocks (like Section B, but each “node” is an array of ~8 elements). Two pointers, <code class="language-plaintext highlighter-rouge">head</code> (front block + offset) and <code class="language-plaintext highlighter-rouge">tail</code> (back block + offset), give \(O(1)\) access at either end.</p>
+
+<p><strong>Figure 5 · Deque layout: linked blocks with head/tail offsets.</strong></p>
+<center><img src="/assets/img/dsa-series/deque_layout.png" style="width:80%"></center>
+<p><em>Three blocks linked like a linked list. The grey cell in the head block is reserved empty space: appendleft writes there and decrements the offset pointer. One write, no shifting, no allocation.</em></p>
+
+<p><strong>Mechanism trace: <code class="language-plaintext highlighter-rouge">appendleft('X')</code> on the deque from the figure (head block = <code class="language-plaintext highlighter-rouge">[_, A, B]</code>, offset=1).</strong></p>
+
+<p><em>Slot available, \(O(1)\):</em></p>
+<ol>
+  <li>Free slot exists at <code class="language-plaintext highlighter-rouge">head.offset - 1</code> (the <code class="language-plaintext highlighter-rouge">_</code> position).</li>
+  <li>Write <code class="language-plaintext highlighter-rouge">'X'</code> there, decrement offset to 0. Head block = <code class="language-plaintext highlighter-rouge">[X, A, B]</code>. <strong>One write, done.</strong>
+</li>
+</ol>
+
+<p><em>Block full, still \(O(1)\):</em></p>
+<ol>
+  <li>Allocate one new block, link it as the new head.</li>
+  <li>Write <code class="language-plaintext highlighter-rouge">'X'</code> into the new block. <strong>One allocation, one write.</strong>
+</li>
+</ol>
+
+<p><em>Contrast, <code class="language-plaintext highlighter-rouge">list.insert(0, 'X')</code> on <code class="language-plaintext highlighter-rouge">[A, B, C, D, E]</code>:</em></p>
+<ol>
+  <li>Every element shifts: \(a[i] \leftarrow a[i-1]\) for \(i = n-1, \ldots, 1\).</li>
+  <li>Write <code class="language-plaintext highlighter-rouge">'X'</code> at index 0. <strong>\(O(n)\), unavoidable with contiguous memory.</strong>
+</li>
+</ol>
+
+<p><strong>Figure 6 · Front insertion: list O(n) vs deque O(1).</strong></p>
+<center><img src="/assets/img/dsa-series/list_deque_contrast.png" style="width:80%"></center>
+<p><em>Left: inserting <code class="language-plaintext highlighter-rouge">'X'</code> at the front of <code class="language-plaintext highlighter-rouge">[A, B, C]</code> forces all three elements to shift right. Right: deque rewires two pointers, so <code class="language-plaintext highlighter-rouge">A, B, C</code> don’t move.</em></p>
+
+<p><strong>Costs:</strong> appendleft/popleft/append/pop \(O(1)\) · index access \(O(n)\).</p>
+
+<p><strong>Use when:</strong> both ends are hot, like queues and double-ended buffers. Never <code class="language-plaintext highlighter-rouge">list.pop(0)</code> in a loop.</p>
+
+<hr>
+
+<h2 id="e-hash-map--set-both-primitives-combined">E. Hash map / set: both primitives combined</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · \(O(1)\) average lookup, insert, delete. Replacing a list scan with a set lookup is the most
+common O(n²)→O(n) win in real code.
+<strong>Where</strong> · any time your first instinct is “scan a list for X”.</p>
+</blockquote>
+
+<p>A hash table is built from <strong>both primitives</strong>: a <strong>contiguous array</strong> of \(m\) buckets, where each
+bucket is the head of a <strong>pointer-chained list</strong> of items that hash to the same slot.</p>
+
+<p><strong>The hash function</strong> \(h : \{0,\ldots,u-1\} \to \{0,\ldots,m-1\}\) maps a key to a bucket index.
+Instead of one slot per possible key (universe size \(u\)), we use only \(m \approx n\) slots.</p>
+
+<p><strong>Figure 7 · Hash table with chaining (\(m=8\) buckets, \(h(k) = k \bmod 8\)).</strong></p>
+<center><img src="/assets/img/dsa-series/hash_table_chaining.png" style="width:80%"></center>
+<p><em>Orange buckets have collisions; their chains stay short (\(n/m \approx 1\)), so lookup is still \(O(1)\) average. The trace below uses \(m=5\) for simplicity: same principle, smaller numbers.</em></p>
+
+<p><strong>Mechanism trace: <code class="language-plaintext highlighter-rouge">d[k]</code> (lookup).</strong>
+Table: \(m=5\), \(h(k)=k \bmod 5\). Stored keys: 2, 7, 14.
+Since \(2\bmod5=2\), \(7\bmod5=2\), \(14\bmod5=4\):
+<code class="language-plaintext highlighter-rouge">table = [[], [], [2, 7], [], [14]]</code>, so bucket 2 has collision chain \([2 \to 7]\).</p>
+
+<p>Look up <code class="language-plaintext highlighter-rouge">d[7]</code>:</p>
+<ol>
+  <li>\(b = 7 \bmod 5 = 2\), one arithmetic op.</li>
+  <li>Go to <code class="language-plaintext highlighter-rouge">table[2]</code>, chain \([2 \to 7]\).</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">2 == 7</code>? No. Advance. <code class="language-plaintext highlighter-rouge">7 == 7</code>? <strong>Yes → found.</strong>
+</li>
+  <li>Expected chain length \(= n/m = 3/5 &lt; 1\) → <strong>\(O(1)\) expected.</strong>
+</li>
+</ol>
+
+<ul>
+  <li>
+<strong>\(O(1)\) in practice:</strong> Python picks a random constant at startup and mixes it into every hash
+computation (the “hash seed”). This means an attacker cannot craft keys that all land in the same
+bucket, which is the only way to get O(n) chains in practice. The table also resizes when
+\(n/m &gt; \text{threshold}\) (same amortized doubling as Section A), keeping chain length \(\approx 1\).</li>
+</ul>
+
+<p><strong>The four sub-uses</strong> (from the upcoming pattern-triggers post):</p>
+<ul>
+  <li>
+<strong>Membership</strong>: <code class="language-plaintext highlighter-rouge">x in s</code> → \(O(1)\).</li>
+  <li>
+<strong>Dedup</strong>: <code class="language-plaintext highlighter-rouge">set(items)</code> removes duplicates in \(O(n)\).</li>
+  <li>
+<strong>Count</strong>: <code class="language-plaintext highlighter-rouge">Counter(items)</code> gives frequency map in \(O(n)\).</li>
+  <li>
+<strong>Group-by</strong>: <code class="language-plaintext highlighter-rouge">d.setdefault(key, []).append(val)</code> buckets items by key in \(O(n)\).</li>
+</ul>
+
+<p><strong>Costs:</strong> lookup/insert/delete \(O(1)\) average · \(O(n)\) worst case (all keys collide) · no ordering.</p>
+
+<p><strong>The \(O(1)\) lookup is what eliminates the inner loop.</strong> Before vs after:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Before: O(n²), inner scan on every outer step
+</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">y</span><span class="p">:</span> <span class="bp">...</span>
+
+<span class="c1"># After: O(n), pre-load b into a set, one lookup per outer step
+</span><span class="n">b_set</span> <span class="o">=</span> <span class="nf">set</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>          <span class="c1"># O(n) once
+</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>             <span class="c1"># O(n)
+</span>    <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">b_set</span><span class="p">:</span>      <span class="c1"># O(1)
+</span>        <span class="bp">...</span>
+</code></pre></div></div>
+
+<p>Recognition trigger on the upcoming pattern-triggers post; PR-audit version on the upcoming DSA-at-work post.</p>
+
+<hr>
+
+<h2 id="-connections">🔗 Connections</h2>
+
+<ul>
+  <li>Memory and cost rules: <a href="https://www.tobiasstenzel.com/blog/2026/dsa-foundations/">Foundations</a>.</li>
+  <li>Master map: <a href="https://www.tobiasstenzel.com/blog/2026/dsa-overview/">Overview</a>.</li>
+  <li>Linked-list idioms (reversal, Floyd’s cycle), two-pointer and window techniques: <a href="https://www.tobiasstenzel.com/blog/2026/dsa-techniques/">Array &amp; String Techniques</a>.</li>
+  <li>Hash map as adjacency list in graphs; stack in DFS; deque in BFS: <a href="https://www.tobiasstenzel.com/blog/2026/dsa-graphs/">Graphs</a>.</li>
+  <li>Hash sub-uses (membership / dedup / count / group-by) as recognition triggers: the upcoming pattern-triggers post.</li>
+</ul>
+
+      <div class="PageNavigation">
+        
+          <a class="prev" href="/blog/2026/dsa-foundations/">	⏮ 2. Foundations</a>
+        
+        
+          <a class="next" href="/blog/2026/dsa-techniques/">4. Array &amp; String Techniques ⏭</a>
+        
+      </div>
+      </d-article>
+
+      <d-appendix>
+        <d-footnote-list></d-footnote-list>
+        <d-citation-list></d-citation-list>
+      </d-appendix>
+
+      <d-bibliography src="/assets/bibliography/"></d-bibliography><div id="giscus_thread" style="max-width: 800px; margin: 0 auto;">
+  <script>
+    let giscusTheme = localStorage.getItem("theme");
+    let giscusAttributes = {
+        "src": "https://giscus.app/client.js",
+        "data-repo": "tostenzel/tostenzel.github.io",
+        "data-repo-id": "MDEwOlJlcG9zaXRvcnk2MDAyNDM2NQ==",
+        "data-category": "Comments",
+        "data-category-id": "DIC_kwDOA5PmLc4CTBt6",
+        "data-mapping": "title",
+        "data-strict": "1",
+        "data-reactions-enabled": "1",
+        "data-emit-metadata": "0",
+        "data-input-position": "bottom",
+        "data-theme": giscusTheme,
+        "data-lang": "en",
+        "crossorigin": "anonymous",
+        "async": "",
+    };
+
+
+    let giscusScript = document.createElement("script");
+    Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value));
+    document.getElementById("giscus_thread").appendChild(giscusScript);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://giscus.app/?ref_noscript" rel="external nofollow noopener" target="_blank">comments powered by giscus.</a>
+</noscript>
+</div>
+</div>
+
+    <!-- Footer -->
+
+    <!-- Bootsrap & MDB scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fgLAgv7fyCGopR/gBNq2iW3ZKIdqIcyshnUULC4vex8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script>
+
+    
+    
+
+<!-- Scrolling Progress Bar -->
+<script type="text/javascript">
+  /*
+   * This JavaScript code has been adapted from the article 
+   * https://css-tricks.com/reading-position-indicator/ authored by Pankaj Parashar, 
+   * published on the website https://css-tricks.com on the 7th of May, 2014.
+   * Couple of changes were made to the original code to make it compatible 
+   * with the `al-foio` theme.
+   */
+  const progressBar = $("#progress");
+  /*
+   * We set up the bar after all elements are done loading.
+   * In some cases, if the images in the page are larger than the intended
+   * size they'll have on the page, they'll be resized via CSS to accomodate
+   * the desired size. This mistake, however, breaks the computations as the
+   * scroll size is computed as soon as the elements finish loading.
+   * To account for this, a minimal delay was introduced before computing the
+   * values.
+   */
+  window.onload = function () {
+    setTimeout(progressBarSetup, 50);
+  };
+  /*
+   * We set up the bar according to the browser.
+   * If the browser supports the progress element we use that.
+   * Otherwise, we resize the bar thru CSS styling
+   */
+  function progressBarSetup() {
+    if ("max" in document.createElement("progress")) {
+      initializeProgressElement();
+      $(document).on("scroll", function() {
+        progressBar.attr({ value: getCurrentScrollPosition() });
+      });
+      $(window).on("resize", initializeProgressElement);
+    } else {
+      resizeProgressBar();
+      $(document).on("scroll", resizeProgressBar);
+      $(window).on("resize", resizeProgressBar);
+    }
+  }
+  /*
+   * The vertical scroll position is the same as the number of pixels that
+   * are hidden from view above the scrollable area. Thus, a value > 0 is
+   * how much the user has scrolled from the top
+   */
+  function getCurrentScrollPosition() {
+    return $(window).scrollTop();
+  }
+
+  function initializeProgressElement() {
+    let navbarHeight = $("#navbar").outerHeight(true);
+    $("body").css({ "padding-top": navbarHeight });
+    $("progress-container").css({ "padding-top": navbarHeight });
+    progressBar.css({ top: navbarHeight });
+    progressBar.attr({
+      max: getDistanceToScroll(),
+      value: getCurrentScrollPosition(),
+    });
+  }
+  /*
+   * The offset between the html document height and the browser viewport
+   * height will be greater than zero if vertical scroll is possible.
+   * This is the distance the user can scroll
+   */
+  function getDistanceToScroll() {
+    return $(document).height() - $(window).height();
+  }
+
+  function resizeProgressBar() {
+    progressBar.css({ width: getWidthPercentage() + "%" });
+  }
+  // The scroll ratio equals the percentage to resize the bar
+  function getWidthPercentage() {
+    return (getCurrentScrollPosition() / getDistanceToScroll()) * 100;
+  }
+</script>
+
+  
+</body>
+</html>

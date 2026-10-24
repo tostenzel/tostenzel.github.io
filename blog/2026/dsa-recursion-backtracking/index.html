@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<!-- _layouts/distill.html --><html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">    <!-- Metadata, OpenGraph and Schema.org -->
+    
+
+    <!-- Standard metadata -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>6. Recursion &amp; Backtracking | Tobias  Stenzel</title>
+    <meta name="author" content="Tobias  Stenzel">
+    <meta name="description" content="🔁 &lt;b&gt;&lt;i&gt;The recursion mental model and the choose/explore/un-choose backtracking template.&lt;/i&gt;&lt;/b&gt;">
+
+
+    <!-- Bootstrap & MDB -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous">
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+    <!-- Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light">
+
+    <!-- Styles -->
+    
+    <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%93%9D&lt;/text&gt;&lt;/svg&gt;">
+    
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="canonical" href="https://www.tobiasstenzel.com/blog/2026/dsa-recursion-backtracking/">
+    
+    <!-- Dark Mode -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark">
+
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/dark_mode.js"></script>
+    
+
+
+    <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- MathJax -->
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        tags: 'ams'
+      }
+    };
+  </script>
+  <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+  <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+    <!-- Distill js -->
+    <script src="/assets/js/distillpub/template.v2.js"></script>
+    <script src="/assets/js/distillpub/transforms.v2.js"></script>
+    <script src="/assets/js/distillpub/overrides.js"></script>
+
+    <!-- _layouts/post.html -->
+  </head>
+
+  <body>
+<d-front-matter>
+    <script async type="text/json">{
+      "title": "6. Recursion & Backtracking",
+      "description": "🔁 <b><i>The recursion mental model and the choose/explore/un-choose backtracking template.</i></b>",
+      "published": "October 22, 2026",
+      "authors": [
+        {
+          "author": "Tobias Stenzel",
+          "authorURL": "https://www.tobiasstenzel.com",
+          "affiliations": [
+            {
+              "name": "N/A",
+              "url": ""
+            }
+          ]
+        }
+        
+      ],
+      "katex": {
+        "delimiters": [
+          {
+            "left": "$",
+            "right": "$",
+            "display": false
+          },
+          {
+            "left": "$$",
+            "right": "$$",
+            "display": true
+          }
+        ]
+      }
+    }</script>
+  </d-front-matter>
+
+  
+
+    <!-- Header -->
+    <header>
+
+      <!-- Nav Bar -->
+      <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+        <div class="container">
+          <a class="navbar-brand title font-weight-lighter" href="/"><span class="font-weight-bold">Tobias </span>Stenzel</a>
+          <!-- Navbar Toggle -->
+          <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar top-bar"></span>
+            <span class="icon-bar middle-bar"></span>
+            <span class="icon-bar bottom-bar"></span>
+          </button>
+
+          <div class="collapse navbar-collapse text-right" id="navbarNav">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+
+              <!-- About -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/">about</a>
+              </li>
+              
+              <!-- Blog -->
+              <li class="nav-item active">
+                <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a>
+              </li>
+
+              <!-- Other pages -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/projects/">projects</a>
+              </li>
+
+              <!-- Toogle theme mode -->
+              <li class="toggle-container">
+                <button id="light-toggle" title="Change theme">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Scrolling Progress Bar -->
+      <progress id="progress" value="0">
+        <div class="progress-container">
+          <span class="progress-bar"></span>
+        </div>
+      </progress>
+    </header>
+
+
+    <!-- Content -->
+    <div class="post distill">
+
+      <d-title>
+          <p class="PageNavigation">
+          
+            <a class="prev" href="/blog/2026/dsa-hierarchical/">	⏮ 5. Hierarchical Structures</a>
+          
+          
+            <a class="next" href="/blog/2026/dsa-sorting-searching/">7. Sorting &amp; Searching ⏭</a>
+          
+        </p>
+        <br><br>
+        <h1>6. Recursion &amp; Backtracking</h1>
+        <p>🔁 <b><i>The recursion mental model and the choose/explore/un-choose backtracking template.</i></b></p>
+        <p class="post-tags">
+          <a href="/blog/2026"> <i class="fas fa-calendar fa-sm"></i> 2026 </a>
+            ·  
+            <a href="/blog/tag/dsa-fundamentals">
+              <i class="fas fa-hashtag fa-sm"></i> dsa-fundamentals</a>  
+              <a href="/blog/tag/recursion">
+              <i class="fas fa-hashtag fa-sm"></i> recursion</a>  
+              <a href="/blog/tag/backtracking">
+              <i class="fas fa-hashtag fa-sm"></i> backtracking</a>  
+              <a href="/blog/tag/subsets">
+              <i class="fas fa-hashtag fa-sm"></i> subsets</a>  
+              <a href="/blog/tag/permutations">
+              <i class="fas fa-hashtag fa-sm"></i> permutations</a>  
+              
+
+        </p>
+      </d-title>
+
+      <d-byline></d-byline>
+
+      <d-article>
+
+        <d-contents>
+          <nav class="l-text figcaption">
+          <h3>Contents</h3>
+            <div><a href="#a-recursion-mental-model">A. Recursion mental model</a></div>
+            <div><a href="#b-backtracking-template-and-subsets-application">B. Backtracking template and subsets application</a></div>
+            <ul>
+              <li><a href="#subsets-application">Subsets application</a></li>
+              
+            </ul>
+<div><a href="#c-permutations">C. Permutations</a></div>
+            <div><a href="#d-combinations">D. Combinations</a></div>
+            <div><a href="#connections">🔗 Connections</a></div>
+            
+          </nav>
+        </d-contents>
+
+        <p><strong>The unifying idea.</strong> Recursion reduces a problem to a smaller version of itself, hitting a base
+case to stop. Backtracking is recursion over a <em>choice tree</em>: at each node you pick one option,
+recurse into it, then undo the pick before trying the next. The template is the same every time;
+only the base case and the choice set change.</p>
+
+<hr>
+
+<h2 id="a-recursion-mental-model">A. Recursion mental model</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · express solutions that naturally decompose into smaller versions of the same problem.
+<strong>Where</strong> · any algorithm that halves or shrinks its input: merge sort, binary search, tree
+traversal (<a href="https://www.tobiasstenzel.com/blog/2026/dsa-graphs/">Graphs</a>).</p>
+</blockquote>
+
+<p>Every recursive function needs exactly two things: a <strong>base case</strong> that stops the recursion, and
+a <strong>recursive case</strong> that makes the input strictly smaller. If both hold, the function is correct
+by induction. You never need to trace the full call chain manually.</p>
+
+<p><strong>Example problem:</strong> compute \(n!\) (factorial).</p>
+
+<p><strong>Algorithm:</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>               <span class="c1"># base case: stop here
+</span>        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>   <span class="c1"># recursive case: shrink n by 1
+</span>
+<span class="nf">factorial</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>   <span class="c1"># → 24
+</span></code></pre></div></div>
+
+<p><strong>Figure 1 · Recursion call stack for <code class="language-plaintext highlighter-rouge">factorial(4)</code>.</strong></p>
+<center><img src="/assets/img/dsa-series/recursion_stack.png" style="width:80%"></center>
+<p><em>Each frame makes one smaller call until n=0 (orange, base case). The results unwind upward:
+1 → 1 → 2 → 6 → 24.</em></p>
+
+<p><strong>Mechanism trace — <code class="language-plaintext highlighter-rouge">factorial(3)</code>:</strong></p>
+<ol>
+  <li>
+<code class="language-plaintext highlighter-rouge">factorial(3)</code>: 3 ≠ 0 → call <code class="language-plaintext highlighter-rouge">factorial(2)</code>.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">factorial(2)</code>: 2 ≠ 0 → call <code class="language-plaintext highlighter-rouge">factorial(1)</code>.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">factorial(1)</code>: 1 ≠ 0 → call <code class="language-plaintext highlighter-rouge">factorial(0)</code>.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">factorial(0)</code>: base case → return 1.</li>
+  <li>Unwind: \(1 \cdot 1 = 1\) → \(2 \cdot 1 = 2\) → \(3 \cdot 2 = 6\).</li>
+</ol>
+
+<p><strong>Cost:</strong> \(O(n)\) calls, \(O(n)\) stack space — one frame pushed per recursive call, up to depth \(n\).</p>
+
+<p><em>Add memoization here → that’s Dynamic Programming, deliberately deferred from this atlas.</em></p>
+
+<blockquote>
+  <p><strong>[DP expansion — ~4 lines]</strong> When subproblems repeat (e.g. <code class="language-plaintext highlighter-rouge">fib(3)</code> called multiple times),
+plain recursion recomputes them. Add a cache: <code class="language-plaintext highlighter-rouge">memo = {}; if n in memo: return memo[n]</code>. This
+is memoization — the top-down form of DP. The call tree becomes a DAG; cost drops from \(O(2^n)\)
+to \(O(n)\). Bottom-up DP builds the same table iteratively without the call stack overhead.</p>
+</blockquote>
+
+<hr>
+
+<h2 id="b-backtracking-template-and-subsets-application">B. Backtracking template and subsets application</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · explore every combination of choices without writing nested loops of unknown depth.
+<strong>Where</strong> · subsets, permutations, combinations, constraint satisfaction — all are instances of
+this one template.</p>
+</blockquote>
+
+<p>Backtracking is DFS over a choice tree (see <a href="https://www.tobiasstenzel.com/blog/2026/dsa-graphs/">Graphs</a> for DFS). At each node: <strong>choose</strong> one
+option, <strong>explore</strong> its subtree, <strong>unchoose</strong> to restore state, then try the next option.</p>
+
+<p><strong>The template</strong> (only the base case and choices differ across problems):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">backtrack</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">choices</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nf">base_case</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>           <span class="c1"># a complete answer — record it
+</span>        <span class="n">results</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">path</span><span class="p">[:])</span>
+        <span class="k">return</span>
+    <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">choices</span><span class="p">:</span>
+        <span class="n">path</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span>                         <span class="c1"># choose
+</span>        <span class="nf">backtrack</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nf">remaining</span><span class="p">(</span><span class="n">choices</span><span class="p">,</span> <span class="n">choice</span><span class="p">))</span> <span class="c1"># explore
+</span>        <span class="n">path</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>                                  <span class="c1"># unchoose
+</span></code></pre></div></div>
+
+<h3 id="subsets-application">Subsets application</h3>
+
+<blockquote>
+  <p><strong>Why</strong> · generate all \(2^n\) subsets of a set — the canonical backtracking instance.
+<strong>Where</strong> · power sets, feature combinations, any “include or exclude each item” problem.</p>
+</blockquote>
+
+<p><strong>How subsets differs from the template:</strong></p>
+<ul>
+  <li>No base case guard — record unconditionally at every node, because every path is a valid subset.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">remaining(choices, choice)</code> = elements after the current index (<code class="language-plaintext highlighter-rouge">i + 1</code>) — avoids duplicates.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">subsets</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="n">results</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">path</span><span class="p">[:])</span>          <span class="c1"># every path is a valid subset
+</span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+        <span class="n">path</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>         <span class="c1"># choose nums[i]
+</span>        <span class="nf">subsets</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>         <span class="c1"># explore: only later elements
+</span>        <span class="n">path</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>                   <span class="c1"># unchoose
+</span>
+<span class="nf">subsets</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[])</span>
+<span class="c1"># results: [[], [1], [1,2], [1,2,3], [1,3], [2], [2,3], [3]]
+</span></code></pre></div></div>
+
+<p><strong>Figure 2 · Choice tree for subsets of <code class="language-plaintext highlighter-rouge">[1, 2, 3]</code>.</strong></p>
+<center><img src="/assets/img/dsa-series/backtrack_tree.png" style="width:80%"></center>
+<p><em>Each edge is a choice (+1 = include, skip = exclude). Every path from root to leaf is one subset.
+Orange leaves are the 8 results — the empty set is the root itself.</em></p>
+
+<p><strong>Mechanism trace</strong> (first branch of Figure 2):</p>
+<ol>
+  <li>
+<code class="language-plaintext highlighter-rouge">subsets(0, [])</code>: record <code class="language-plaintext highlighter-rouge">[]</code>. Choose 1 → path.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">subsets(1, [1])</code>: record. Choose 2 → path <code class="language-plaintext highlighter-rouge">[1,2]</code>.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">subsets(2, [1,2])</code>: record <code class="language-plaintext highlighter-rouge">[1,2]</code>. Choose 3 → path <code class="language-plaintext highlighter-rouge">[1,2,3]</code>.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">subsets(3, [1,2,3])</code>: record <code class="language-plaintext highlighter-rouge">[1,2,3]</code>. No choices left → return.</li>
+  <li>Unchoose 3 → <code class="language-plaintext highlighter-rouge">[1,2]</code>. Unchoose 2 →. Choose 3 → path <code class="language-plaintext highlighter-rouge">[1,3]</code>… and so on.</li>
+</ol>
+
+<p><strong>Cost:</strong> \(O(2^n \cdot n)\) — \(2^n\) subsets, each up to \(n\) elements to copy.</p>
+
+<blockquote>
+  <p><strong>[DP expansion — ~3 lines]</strong> If you only need to <em>count</em> subsets satisfying a constraint (e.g.
+“how many subsets sum to target \(T\)?”), backtracking is \(O(2^n)\) but DP is \(O(n \cdot T)\).
+Subproblems overlap: “can we reach sum \(s\) using items \(0..i\)?” recurs identically from many
+paths. Cache the answer and the exponential collapse to polynomial.</p>
+</blockquote>
+
+<hr>
+
+<h2 id="c-permutations">C. Permutations</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · generate all \(n!\) orderings of \(n\) items — every item used exactly once.
+<strong>Where</strong> · scheduling, anagram generation, any “arrange all items” problem.</p>
+</blockquote>
+
+<p><strong>Example problem:</strong> all permutations of <code class="language-plaintext highlighter-rouge">nums = [1, 2, 3]</code>.</p>
+
+<p>Difference from subsets: every item is used exactly once, and order matters. Track which items have
+been used with a <code class="language-plaintext highlighter-rouge">used</code> array; recurse until the path is full.</p>
+
+<p><strong>Figure 3 · Permutation tree for <code class="language-plaintext highlighter-rouge">[1, 2, 3]</code>.</strong></p>
+<center><img src="/assets/img/dsa-series/permutation_tree.png" style="width:80%"></center>
+<p><em>Three choices at the root (any of 1, 2, 3 can go first), two at each second level, one at the
+third. Six leaves — one per permutation.</em></p>
+
+<p><strong>Algorithm:</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">permutations</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">used</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">==</span> <span class="nf">len</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>      <span class="c1"># all items placed — record
+</span>        <span class="n">results</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">path</span><span class="p">[:])</span>
+        <span class="k">return</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="k">continue</span>                <span class="c1"># skip already-used items
+</span>        <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">path</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="nf">permutations</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">used</span><span class="p">)</span>
+        <span class="n">path</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+        <span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="nf">permutations</span><span class="p">([],</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="nf">len</span><span class="p">(</span><span class="n">nums</span><span class="p">))</span>
+<span class="c1"># results: all 6 permutations of [1,2,3]
+</span></code></pre></div></div>
+
+<p><strong>Mechanism trace</strong> (first permutation):</p>
+<ol>
+  <li>
+<code class="language-plaintext highlighter-rouge">used=[F,F,F]</code>. Choose index 0 (value 1) → path, <code class="language-plaintext highlighter-rouge">used=[T,F,F]</code>.</li>
+  <li>Choose index 1 (value 2) → path <code class="language-plaintext highlighter-rouge">[1,2]</code>, <code class="language-plaintext highlighter-rouge">used=[T,T,F]</code>.</li>
+  <li>Choose index 2 (value 3) → path <code class="language-plaintext highlighter-rouge">[1,2,3]</code>. Full → record. (Figure 3.)</li>
+  <li>Unchoose 3, unchoose 2, choose index 2 (value 3) → path <code class="language-plaintext highlighter-rouge">[1,3]</code>…</li>
+</ol>
+
+<p><strong>Cost:</strong> \(O(n! \cdot n)\) — \(n!\) permutations, each of length \(n\).</p>
+
+<hr>
+
+<h2 id="d-combinations">D. Combinations</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · generate all \(\binom{n}{k}\) subsets of exactly size \(k\) — pruning makes it much faster
+than generating all subsets and filtering.
+<strong>Where</strong> · fixed-size selections, \(k\)-element feature sets, any “choose exactly \(k\)” problem.</p>
+</blockquote>
+
+<p><strong>Example problem:</strong> all combinations of size <code class="language-plaintext highlighter-rouge">k = 2</code> from <code class="language-plaintext highlighter-rouge">nums = [1, 2, 3]</code>.</p>
+
+<p>Difference from subsets: only paths of exactly length <code class="language-plaintext highlighter-rouge">k</code> are answers. Pruning: if the remaining
+elements can’t fill the path to size <code class="language-plaintext highlighter-rouge">k</code>, stop early.</p>
+
+<p><strong>Figure 4 · Pruning cuts branches that can’t reach <code class="language-plaintext highlighter-rouge">k = 2</code>.</strong></p>
+<center><img src="/assets/img/dsa-series/pruning_demo.png" style="width:80%"></center>
+<p><em>Left: all paths explored without pruning (\(2^3 = 8\) paths). Right: branches marked ✗ are cut
+because the remaining elements are fewer than still needed — only \(\binom{3}{2} = 3\) paths remain.</em></p>
+
+<p><strong>Algorithm:</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">combinations</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>              <span class="c1"># reached target size — record
+</span>        <span class="n">results</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">path</span><span class="p">[:])</span>
+        <span class="k">return</span>
+    <span class="n">remaining</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span> <span class="n">start</span>
+    <span class="n">needed</span> <span class="o">=</span> <span class="n">k</span> <span class="o">-</span> <span class="nf">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">remaining</span> <span class="o">&lt;</span> <span class="n">needed</span><span class="p">:</span>          <span class="c1"># can't reach k — prune this branch
+</span>        <span class="k">return</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+        <span class="n">path</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="nf">combinations</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">path</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+
+<span class="nf">combinations</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[])</span>
+<span class="c1"># results: [[1,2], [1,3], [2,3]]
+</span></code></pre></div></div>
+
+<p><strong>Mechanism trace:</strong></p>
+<ol>
+  <li>
+<code class="language-plaintext highlighter-rouge">start=0, path=[]</code>. Need 2. Remaining=3. OK → choose 1 → path.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">start=1, path=[1]</code>. Need 1. Remaining=2. OK → choose 2 → path <code class="language-plaintext highlighter-rouge">[1,2]</code>. Full → record.</li>
+  <li>Unchoose 2 → choose 3 → path <code class="language-plaintext highlighter-rouge">[1,3]</code>. Full → record.</li>
+  <li>Unchoose 3, unchoose 1 → choose 2 → path. Need 1. Remaining=1. OK → choose 3 → <code class="language-plaintext highlighter-rouge">[2,3]</code>. Record.</li>
+</ol>
+
+<p><strong>Cost:</strong> \(O\!\left(\binom{n}{k} \cdot k\right)\) with pruning — \(\binom{n}{k}\) valid paths, each of length \(k\) to copy. Without pruning every node in the \(2^n\) subset tree would be visited.</p>
+
+<hr>
+
+<h2 id="-connections">🔗 Connections</h2>
+
+<ul>
+  <li>Recursive cost analysis (master theorem): <a href="https://www.tobiasstenzel.com/blog/2026/dsa-foundations/">Foundations</a>.</li>
+  <li>Recursion used in merge sort and quicksort: <a href="https://www.tobiasstenzel.com/blog/2026/dsa-sorting-searching/">Sorting &amp; Searching</a>.</li>
+  <li>Backtracking = DFS over a choice tree: <a href="https://www.tobiasstenzel.com/blog/2026/dsa-graphs/">Graphs</a>.</li>
+  <li>Backtracking trigger in the pattern sheet: the upcoming pattern-triggers post.</li>
+</ul>
+
+      <div class="PageNavigation">
+        
+          <a class="prev" href="/blog/2026/dsa-hierarchical/">	⏮ 5. Hierarchical Structures</a>
+        
+        
+          <a class="next" href="/blog/2026/dsa-sorting-searching/">7. Sorting &amp; Searching ⏭</a>
+        
+      </div>
+      </d-article>
+
+      <d-appendix>
+        <d-footnote-list></d-footnote-list>
+        <d-citation-list></d-citation-list>
+      </d-appendix>
+
+      <d-bibliography src="/assets/bibliography/"></d-bibliography><div id="giscus_thread" style="max-width: 800px; margin: 0 auto;">
+  <script>
+    let giscusTheme = localStorage.getItem("theme");
+    let giscusAttributes = {
+        "src": "https://giscus.app/client.js",
+        "data-repo": "tostenzel/tostenzel.github.io",
+        "data-repo-id": "MDEwOlJlcG9zaXRvcnk2MDAyNDM2NQ==",
+        "data-category": "Comments",
+        "data-category-id": "DIC_kwDOA5PmLc4CTBt6",
+        "data-mapping": "title",
+        "data-strict": "1",
+        "data-reactions-enabled": "1",
+        "data-emit-metadata": "0",
+        "data-input-position": "bottom",
+        "data-theme": giscusTheme,
+        "data-lang": "en",
+        "crossorigin": "anonymous",
+        "async": "",
+    };
+
+
+    let giscusScript = document.createElement("script");
+    Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value));
+    document.getElementById("giscus_thread").appendChild(giscusScript);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://giscus.app/?ref_noscript" rel="external nofollow noopener" target="_blank">comments powered by giscus.</a>
+</noscript>
+</div>
+</div>
+
+    <!-- Footer -->
+
+    <!-- Bootsrap & MDB scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fgLAgv7fyCGopR/gBNq2iW3ZKIdqIcyshnUULC4vex8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script>
+
+    
+    
+
+<!-- Scrolling Progress Bar -->
+<script type="text/javascript">
+  /*
+   * This JavaScript code has been adapted from the article 
+   * https://css-tricks.com/reading-position-indicator/ authored by Pankaj Parashar, 
+   * published on the website https://css-tricks.com on the 7th of May, 2014.
+   * Couple of changes were made to the original code to make it compatible 
+   * with the `al-foio` theme.
+   */
+  const progressBar = $("#progress");
+  /*
+   * We set up the bar after all elements are done loading.
+   * In some cases, if the images in the page are larger than the intended
+   * size they'll have on the page, they'll be resized via CSS to accomodate
+   * the desired size. This mistake, however, breaks the computations as the
+   * scroll size is computed as soon as the elements finish loading.
+   * To account for this, a minimal delay was introduced before computing the
+   * values.
+   */
+  window.onload = function () {
+    setTimeout(progressBarSetup, 50);
+  };
+  /*
+   * We set up the bar according to the browser.
+   * If the browser supports the progress element we use that.
+   * Otherwise, we resize the bar thru CSS styling
+   */
+  function progressBarSetup() {
+    if ("max" in document.createElement("progress")) {
+      initializeProgressElement();
+      $(document).on("scroll", function() {
+        progressBar.attr({ value: getCurrentScrollPosition() });
+      });
+      $(window).on("resize", initializeProgressElement);
+    } else {
+      resizeProgressBar();
+      $(document).on("scroll", resizeProgressBar);
+      $(window).on("resize", resizeProgressBar);
+    }
+  }
+  /*
+   * The vertical scroll position is the same as the number of pixels that
+   * are hidden from view above the scrollable area. Thus, a value > 0 is
+   * how much the user has scrolled from the top
+   */
+  function getCurrentScrollPosition() {
+    return $(window).scrollTop();
+  }
+
+  function initializeProgressElement() {
+    let navbarHeight = $("#navbar").outerHeight(true);
+    $("body").css({ "padding-top": navbarHeight });
+    $("progress-container").css({ "padding-top": navbarHeight });
+    progressBar.css({ top: navbarHeight });
+    progressBar.attr({
+      max: getDistanceToScroll(),
+      value: getCurrentScrollPosition(),
+    });
+  }
+  /*
+   * The offset between the html document height and the browser viewport
+   * height will be greater than zero if vertical scroll is possible.
+   * This is the distance the user can scroll
+   */
+  function getDistanceToScroll() {
+    return $(document).height() - $(window).height();
+  }
+
+  function resizeProgressBar() {
+    progressBar.css({ width: getWidthPercentage() + "%" });
+  }
+  // The scroll ratio equals the percentage to resize the bar
+  function getWidthPercentage() {
+    return (getCurrentScrollPosition() / getDistanceToScroll()) * 100;
+  }
+</script>
+
+  
+</body>
+</html>

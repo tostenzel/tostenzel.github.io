@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<!-- _layouts/distill.html --><html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">    <!-- Metadata, OpenGraph and Schema.org -->
+    
+
+    <!-- Standard metadata -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>8. Graphs | Tobias  Stenzel</title>
+    <meta name="author" content="Tobias  Stenzel">
+    <meta name="description" content="🕸️ &lt;b&gt;&lt;i&gt;The capstone: representation, BFS/DFS, topological sort, shortest paths, and MST.&lt;/i&gt;&lt;/b&gt;">
+
+
+    <!-- Bootstrap & MDB -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous">
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+    <!-- Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light">
+
+    <!-- Styles -->
+    
+    <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%93%9D&lt;/text&gt;&lt;/svg&gt;">
+    
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="canonical" href="https://www.tobiasstenzel.com/blog/2026/dsa-graphs/">
+    
+    <!-- Dark Mode -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark">
+
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/dark_mode.js"></script>
+    
+
+
+    <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- MathJax -->
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        tags: 'ams'
+      }
+    };
+  </script>
+  <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+  <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+    <!-- Distill js -->
+    <script src="/assets/js/distillpub/template.v2.js"></script>
+    <script src="/assets/js/distillpub/transforms.v2.js"></script>
+    <script src="/assets/js/distillpub/overrides.js"></script>
+
+    <!-- _layouts/post.html -->
+  </head>
+
+  <body>
+<d-front-matter>
+    <script async type="text/json">{
+      "title": "8. Graphs",
+      "description": "🕸️ <b><i>The capstone: representation, BFS/DFS, topological sort, shortest paths, and MST.</i></b>",
+      "published": "October 24, 2026",
+      "authors": [
+        {
+          "author": "Tobias Stenzel",
+          "authorURL": "https://www.tobiasstenzel.com",
+          "affiliations": [
+            {
+              "name": "N/A",
+              "url": ""
+            }
+          ]
+        }
+        
+      ],
+      "katex": {
+        "delimiters": [
+          {
+            "left": "$",
+            "right": "$",
+            "display": false
+          },
+          {
+            "left": "$$",
+            "right": "$$",
+            "display": true
+          }
+        ]
+      }
+    }</script>
+  </d-front-matter>
+
+  
+
+    <!-- Header -->
+    <header>
+
+      <!-- Nav Bar -->
+      <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+        <div class="container">
+          <a class="navbar-brand title font-weight-lighter" href="/"><span class="font-weight-bold">Tobias </span>Stenzel</a>
+          <!-- Navbar Toggle -->
+          <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar top-bar"></span>
+            <span class="icon-bar middle-bar"></span>
+            <span class="icon-bar bottom-bar"></span>
+          </button>
+
+          <div class="collapse navbar-collapse text-right" id="navbarNav">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+
+              <!-- About -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/">about</a>
+              </li>
+              
+              <!-- Blog -->
+              <li class="nav-item active">
+                <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a>
+              </li>
+
+              <!-- Other pages -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/projects/">projects</a>
+              </li>
+
+              <!-- Toogle theme mode -->
+              <li class="toggle-container">
+                <button id="light-toggle" title="Change theme">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Scrolling Progress Bar -->
+      <progress id="progress" value="0">
+        <div class="progress-container">
+          <span class="progress-bar"></span>
+        </div>
+      </progress>
+    </header>
+
+
+    <!-- Content -->
+    <div class="post distill">
+
+      <d-title>
+          <p class="PageNavigation">
+          
+            <a class="prev" href="/blog/2026/dsa-sorting-searching/">	⏮ 7. Sorting &amp; Searching</a>
+          
+          
+        </p>
+        <br><br>
+        <h1>8. Graphs</h1>
+        <p>🕸️ <b><i>The capstone: representation, BFS/DFS, topological sort, shortest paths, and MST.</i></b></p>
+        <p class="post-tags">
+          <a href="/blog/2026"> <i class="fas fa-calendar fa-sm"></i> 2026 </a>
+            ·  
+            <a href="/blog/tag/dsa-fundamentals">
+              <i class="fas fa-hashtag fa-sm"></i> dsa-fundamentals</a>  
+              <a href="/blog/tag/graphs">
+              <i class="fas fa-hashtag fa-sm"></i> graphs</a>  
+              <a href="/blog/tag/bfs">
+              <i class="fas fa-hashtag fa-sm"></i> bfs</a>  
+              <a href="/blog/tag/dfs">
+              <i class="fas fa-hashtag fa-sm"></i> dfs</a>  
+              <a href="/blog/tag/shortest-paths">
+              <i class="fas fa-hashtag fa-sm"></i> shortest-paths</a>  
+              <a href="/blog/tag/mst">
+              <i class="fas fa-hashtag fa-sm"></i> mst</a>  
+              
+
+        </p>
+      </d-title>
+
+      <d-byline></d-byline>
+
+      <d-article>
+
+        <d-contents>
+          <nav class="l-text figcaption">
+          <h3>Contents</h3>
+            <div><a href="#a-graph-representations">A. Graph representations</a></div>
+            <div><a href="#b-bfs-and-dfs">B. BFS and DFS</a></div>
+            <div><a href="#c-topological-sort">C. Topological sort</a></div>
+            <div><a href="#d-shortest-paths">D. Shortest paths</a></div>
+            <div><a href="#e-minimum-spanning-tree">E. Minimum spanning tree</a></div>
+            <div><a href="#connections">🔗 Connections</a></div>
+            
+          </nav>
+        </d-contents>
+
+        <p><strong>The unifying idea.</strong> A graph is a set of nodes connected by edges. Almost every “model
+relationships” problem reduces to one of five operations: represent the graph, traverse it (BFS/DFS),
+order it (topo sort), find cheapest paths (shortest paths), or find the cheapest spanning structure
+(MST). This sheet covers all five.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Problem shape</th>
+      <th>Operation</th>
+      <th>Section</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Model relationships between entities; choose how to store them</td>
+      <td>Representation</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>Visit all reachable nodes; find shortest path in unweighted graph; detect cycles</td>
+      <td>BFS / DFS</td>
+      <td>B</td>
+    </tr>
+    <tr>
+      <td>Schedule tasks with prerequisites; process in dependency order</td>
+      <td>Topological sort</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <td>Find minimum-cost path from one source to all other nodes</td>
+      <td>Shortest paths</td>
+      <td>D</td>
+    </tr>
+    <tr>
+      <td>Connect all nodes with minimum total edge weight, no cycles</td>
+      <td>MST</td>
+      <td>E</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h2 id="a-graph-representations">A. Graph representations</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · the right representation determines whether every operation is fast or slow.
+<strong>Where</strong> · any graph problem; choose before coding.</p>
+</blockquote>
+
+<p>A graph \(G = (V, E)\) has vertices \(V\) and edges \(E\). Two standard representations:</p>
+
+<p><strong>Adjacency list</strong> — a dict mapping each node to its neighbors. Standard for sparse graphs.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># unweighted directed graph: 0→1, 0→2, 1→3, 2→3, 3→4
+</span><span class="n">graph</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">0</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+    <span class="mi">4</span><span class="p">:</span> <span class="p">[],</span>
+<span class="p">}</span>
+
+<span class="c1"># weighted: each neighbor is a (node, weight) pair
+</span><span class="n">weighted</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">0</span><span class="p">:</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">)],</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">)],</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>Adjacency matrix</strong> — a 2D array where <code class="language-plaintext highlighter-rouge">matrix[u][v]</code> holds the edge weight (0 if no edge).
+Standard for dense graphs or when \(O(1)\) edge lookup is required.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># same graph as a matrix (5 nodes)
+</span><span class="n">matrix</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>   <span class="c1"># node 0
+</span>    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>   <span class="c1"># node 1
+</span>    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>   <span class="c1"># node 2
+</span>    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>   <span class="c1"># node 3
+</span>    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>   <span class="c1"># node 4
+</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>Figure 1 · The same graph as an adjacency list and adjacency matrix.</strong></p>
+<center><img src="/assets/img/dsa-series/graph_representations.png" style="width:80%"></center>
+<p><em>Orange cells in the matrix mark edges. The list only stores existing edges; the matrix stores all
+possible pairs — that difference drives the space and lookup costs.</em></p>
+
+<p><strong>Cost comparison:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Adjacency list</th>
+      <th>Adjacency matrix</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Space</td>
+      <td>\(O(V + E)\)</td>
+      <td>\(O(V^2)\)</td>
+    </tr>
+    <tr>
+      <td>Edge lookup <code class="language-plaintext highlighter-rouge">(u,v)</code>
+</td>
+      <td>\(O(\deg(u))\) — scan neighbors</td>
+      <td>\(O(1)\) — direct index</td>
+    </tr>
+    <tr>
+      <td>Iterate all edges</td>
+      <td>\(O(V + E)\)</td>
+      <td>\(O(V^2)\)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Use list</strong> when the graph is sparse (\(E \ll V^2\)) — most real graphs. <strong>Use matrix</strong> when \(V\) is
+small and you need fast edge queries, or when the graph is dense.</p>
+
+<hr>
+
+<h2 id="b-bfs-and-dfs">B. BFS and DFS</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · reach all nodes reachable from a source; differ in <em>what order</em> they visit nodes, which
+determines what each algorithm can guarantee.
+<strong>Where</strong> · BFS for shortest paths in unweighted graphs and level-order traversal; DFS for topo
+sort, cycle detection, and connected components.</p>
+</blockquote>
+
+<p>Both algorithms visit every reachable node exactly once: \(O(V + E)\) — one pass over each vertex
+and each edge. The difference is the data structure that controls visit order.</p>
+
+<p><strong>Figure 2 · BFS wavefront vs DFS corridor on the same graph.</strong></p>
+<center><img src="/assets/img/dsa-series/bfs_dfs_comparison.png" style="width:80%"></center>
+<p><em>BFS (left): expands level by level — all nodes at distance \(k\) before any at \(k+1\). DFS (right):
+plunges down one path until stuck, then backtracks. Numbers show DFS visit order.</em></p>
+
+<hr>
+
+<p><strong>BFS</strong> — uses a queue; guarantees shortest path in unweighted graphs.</p>
+
+<p>The queue is FIFO, so all nodes discovered at distance 1 are processed before any at distance 2,
+and so on. A node is never revisited (<code class="language-plaintext highlighter-rouge">if neighbor not in dist</code> prevents it), so its distance is
+fixed at the first — and therefore minimum — number of hops it took to reach it.</p>
+
+<p><strong>Invariant:</strong> <em>all nodes at distance \(k\) from the source are fully processed before any node at
+distance \(k+1\) is visited.</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+
+<span class="k">def</span> <span class="nf">bfs</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="p">{</span><span class="n">source</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="nf">deque</span><span class="p">([</span><span class="n">source</span><span class="p">])</span>
+    <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="nf">popleft</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dist</span><span class="p">:</span>
+                <span class="n">dist</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">queue</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dist</span>
+</code></pre></div></div>
+
+<p><strong>Mechanism trace</strong> on the graph from Figure 2, source = s:</p>
+<ol>
+  <li>Queue:. Visit s (dist=0). Enqueue a, b.</li>
+  <li>Queue: <code class="language-plaintext highlighter-rouge">[a, b]</code>. Visit a (dist=1). Enqueue c.</li>
+  <li>Queue: <code class="language-plaintext highlighter-rouge">[b, c]</code>. Visit b (dist=1). Enqueue d, e.</li>
+  <li>Queue: <code class="language-plaintext highlighter-rouge">[c, d, e]</code>. Visit c, d, e (dist=2). Queue empty → done.</li>
+</ol>
+
+<p><strong>Cost:</strong> \(O(V + E)\) — each node enqueued once, each edge examined once.</p>
+
+<hr>
+
+<p><strong>DFS</strong> — uses recursion (implicit stack); produces finish order used for topo sort.</p>
+
+<p>The call stack naturally goes as deep as possible before backtracking. A node finishes (returns)
+only after all nodes reachable from it have been fully explored — deeper nodes finish first,
+shallower nodes last. Section C uses this finish order for topological sort.</p>
+
+<p><strong>Invariant:</strong> <em>a node is marked finished only after all nodes reachable from it are finished.</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">visited</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">visited</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">visited</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+    <span class="n">visited</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">source</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+            <span class="nf">dfs</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">visited</span>   <span class="c1"># reachability only; Section C extends this to record finish order
+</span></code></pre></div></div>
+
+<p><strong>Mechanism trace</strong> on Figure 2, source = s:</p>
+<ol>
+  <li>Visit s → recurse into a.</li>
+  <li>Visit a → recurse into c.</li>
+  <li>Visit c → no unvisited neighbors → <strong>c finished</strong>.</li>
+  <li>Back at a → no more neighbors → <strong>a finished</strong>.</li>
+  <li>Back at s → recurse into b → visit b, d, e in order → <strong>b finished</strong> → <strong>s finished</strong>.</li>
+</ol>
+
+<p><strong>Cost:</strong> \(O(V + E)\) — each node visited once, each edge examined once.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>BFS</th>
+      <th>DFS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Data structure</td>
+      <td>Queue</td>
+      <td>Recursion / stack</td>
+    </tr>
+    <tr>
+      <td>Order</td>
+      <td>Level by level (wavefront)</td>
+      <td>Deep first (corridor)</td>
+    </tr>
+    <tr>
+      <td>Shortest path (unweighted)</td>
+      <td>✓</td>
+      <td>✗</td>
+    </tr>
+    <tr>
+      <td>Topo sort / cycle detection</td>
+      <td>✗</td>
+      <td>✓</td>
+    </tr>
+    <tr>
+      <td>Connected components</td>
+      <td>✓</td>
+      <td>✓</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Note:</strong> Floyd’s cycle detection (fast/slow pointer) is a related technique for detecting
+cycles in linked structures (not a graph traversal algorithm) — see <a href="https://www.tobiasstenzel.com/blog/2026/dsa-techniques/">Array &amp; String Techniques</a>.</p>
+
+<hr>
+
+<h2 id="c-topological-sort">C. Topological sort</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · produce a linear ordering of nodes such that for every edge A → B, A appears before B — so no dependency is ever processed before the thing it depends on.
+<strong>Where</strong> · task scheduling, dependency resolution, build systems, DAG DP.</p>
+</blockquote>
+
+<p>A <strong>topological order</strong> of a directed acyclic graph (DAG) is a sequence of nodes where every
+directed edge \(u \to v\) has \(u\) before \(v\). It exists if and only if the graph is a DAG (no cycles).</p>
+
+<p>Intuition — built up step by step:</p>
+
+<ul>
+  <li>
+<strong>Finish time encodes dependency depth:</strong> DFS fully explores a node’s dependencies before
+marking it finished. Leaf nodes (no outgoing edges) finish first; a source node with many
+downstream dependencies finishes last, because its entire subtree must complete first.</li>
+  <li>
+<strong>Reverse finish order = topo order:</strong> if there is an edge \(u \to v\), DFS finishes \(v\)
+before \(u\) (it recurses into \(v\) first). Reversing puts \(u\) before \(v\) — exactly the
+topological requirement.</li>
+</ul>
+
+<p><strong>Invariant:</strong> <em>a node appears in the output only after all nodes it depends on have been output.</em></p>
+
+<p><strong>Figure 3 · Course prerequisite DAG: DFS finish times and one valid topo order.</strong></p>
+<center><img src="/assets/img/dsa-series/topo_sort.png" style="width:80%"></center>
+<p><em>Diamond shape: A must precede B and C; both B and C must precede D. Two valid orders exist
+(A→B→C→D or A→C→B→D) — topo sort finds one. Finish times (\(f=\)) annotate each node;
+reversing them gives the order.</em></p>
+
+<p><strong>Algorithm:</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">topo_sort</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+    <span class="n">visited</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+        <span class="n">visited</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                <span class="nf">dfs</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>          <span class="c1"># finish: all dependencies done
+</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+            <span class="nf">dfs</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>             <span class="c1"># reverse = topo order
+</span></code></pre></div></div>
+
+<p><strong>Mechanism trace</strong> on Figure 3 (A=Intro CS, B=Algorithms, C=Data Structs, D=Systems Design):</p>
+<ol>
+  <li>DFS from A → recurse into B → recurse into D.</li>
+  <li>D has no neighbors → <strong>D finishes</strong> (f=1). Append D.</li>
+  <li>Back at B → no more neighbors → <strong>B finishes</strong> (f=2). Append B.</li>
+  <li>Back at A → recurse into C → D already visited → <strong>C finishes</strong> (f=3). Append C.</li>
+  <li>Back at A → no more neighbors → <strong>A finishes</strong> (f=4). Append A.</li>
+  <li>Reverse: <code class="language-plaintext highlighter-rouge">[A, B, C, D]</code> — A before B and C, both before D. ✓</li>
+</ol>
+
+<p>B finishes before C only because B appears first in A’s adjacency list — there is no dependency between B and C, so both orderings are equally valid. The algorithm picks one arbitrarily based on iteration order.</p>
+
+<p><strong>Cost:</strong> \(O(V + E)\) — one full DFS pass.</p>
+
+<blockquote>
+  <p><strong>[DP expansion — ~2 lines]</strong> Topological order enables DAG DP: process nodes in topo order
+so each node’s subproblem is solved after all its dependencies. Shortest/longest paths in a DAG,
+counting paths, and many scheduling problems reduce to this. <em>Add memoization here → that’s
+Dynamic Programming, deliberately deferred from this atlas.</em></p>
+</blockquote>
+
+<hr>
+
+<h2 id="d-shortest-paths">D. Shortest paths</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · find the minimum-cost path from a source to all other nodes.
+<strong>Where</strong> · routing, navigation, network cost optimization, any “minimum cost to reach” problem.</p>
+</blockquote>
+
+<p><strong>Problem:</strong> given a weighted graph \(G = (V, E, w)\) and source node \(s\), find the shortest-path
+distance \(\delta(s, v)\) from \(s\) to every node \(v \in V\), where \(\delta(s, v)\) is the minimum
+total weight over all paths from \(s\) to \(v\) (\(\infty\) if \(v\) is unreachable).</p>
+
+<p><strong>Relaxation</strong> is the shared core operation across all SSSP algorithms. Every node starts with
+distance estimate \(d[v] = \infty\) — “I don’t know how to reach you yet” — except the source
+\(d[s] = 0\). Relaxing edge \((u, v, w)\) asks: “is the path through \(u\) — costing \(d[u] + w\) —
+cheaper than my current best \(d[v]\)?” If yes, update. Estimates only ever decrease, never
+overshoot. Repeat until no more updates are possible and every \(d[v]\) converges to
+\(\delta(s, v)\). The algorithms below differ only in the <em>order</em> they choose to relax edges,
+which determines their cost and which graphs they handle correctly.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">relax</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dist</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">+</span> <span class="n">w</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>   <span class="c1"># cheaper path to v found via u?
+</span>        <span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">+</span> <span class="n">w</span>   <span class="c1"># tighten the estimate
+</span></code></pre></div></div>
+
+<p><strong>Figure 4 · Relaxation on a 3-node graph: the cheaper path via u beats the direct s→v edge.</strong></p>
+<center><img src="/assets/img/dsa-series/relaxation_step.png" style="width:80%"></center>
+<p><em>d[u]=2 was already set via s→u. Relaxing u→v asks: is 2+3=5 cheaper than the current d[v]=8
+(set via s→v direct)? Yes → d[v] updates to 5 (orange). The condition and update are identical
+in every SSSP algorithm — only the order of relaxations differs.</em></p>
+
+<p><strong>Which algorithm?</strong> — depends on the graph type:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Graph type</th>
+      <th>Edge weights</th>
+      <th>Algorithm</th>
+      <th>Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Unweighted</td>
+      <td>all = 1</td>
+      <td>BFS (Section B)</td>
+      <td>\(O(V + E)\)</td>
+    </tr>
+    <tr>
+      <td>DAG</td>
+      <td>any</td>
+      <td>DAG relaxation</td>
+      <td>\(O(V + E)\)</td>
+    </tr>
+    <tr>
+      <td>General</td>
+      <td>non-negative</td>
+      <td>Dijkstra</td>
+      <td>\(O((V + E) \log V)\)</td>
+    </tr>
+    <tr>
+      <td>General</td>
+      <td>any (negative ok)</td>
+      <td>Bellman-Ford</td>
+      <td>\(O(V \cdot E)\)</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<p><strong>Dijkstra’s algorithm</strong> — general graphs with non-negative weights.</p>
+
+<p>Intuition — built up step by step:</p>
+
+<ul>
+  <li>
+<strong>The heap</strong> is a min-heap of <code class="language-plaintext highlighter-rouge">(distance, node)</code> pairs. It starts with just the source at
+distance 0. The minimum is always at the root, so the next candidate costs \(O(1)\) to read
+and \(O(\log V)\) to remove (one swap per level as the heap sifts down to restore order).</li>
+  <li>
+<strong>Settling a node</strong> means: pop it from the heap, declare its distance final, then relax all
+its outgoing edges — for each neighbor, check if going through this node beats the current
+best known distance, and if so push the improved estimate onto the heap.</li>
+  <li>
+<strong>Why the distance is final when settled:</strong> the heap always gives the smallest current
+estimate next. Any future path to this node would go through an unsettled node, which has
+distance at least as large — so it can only be equal or worse. Negative weights break this:
+a negative edge discovered later could shorten a distance already declared final.</li>
+  <li>
+<strong>The sphere:</strong> settling always expands to the nearest unsettled node, so the settled set
+grows outward by distance — like a wavefront.</li>
+</ul>
+
+<p><strong>Invariant:</strong> <em>once a node is settled, its distance is the true shortest-path distance.</em></p>
+
+<p><strong>Figure 5 · Dijkstra sphere growing: settled nodes (green), frontier (blue), unseen (grey).</strong></p>
+<center><img src="/assets/img/dsa-series/dijkstra_sphere.png" style="width:80%"></center>
+<p><em>Each panel settles one node (orange border). Distances below each node update as relaxations
+tighten estimates. The sphere grows outward from s.</em></p>
+
+<p><strong>Algorithm:</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">heapq</span>
+
+<span class="k">def</span> <span class="nf">dijkstra</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="nf">float</span><span class="p">(</span><span class="sh">"</span><span class="s">inf</span><span class="sh">"</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">}</span>
+    <span class="n">dist</span><span class="p">[</span><span class="n">source</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="n">source</span><span class="p">)]</span>               <span class="c1"># (distance, node)
+</span>
+    <span class="k">while</span> <span class="n">heap</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">,</span> <span class="n">node</span> <span class="o">=</span> <span class="n">heapq</span><span class="p">.</span><span class="nf">heappop</span><span class="p">(</span><span class="n">heap</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
+            <span class="k">continue</span>                   <span class="c1"># stale entry — already settled
+</span>        <span class="k">for</span> <span class="n">neighbor</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
+            <span class="n">new_dist</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">+</span> <span class="n">weight</span>
+            <span class="k">if</span> <span class="n">new_dist</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]:</span>
+                <span class="n">dist</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_dist</span>
+                <span class="n">heapq</span><span class="p">.</span><span class="nf">heappush</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="p">(</span><span class="n">new_dist</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">dist</span>
+</code></pre></div></div>
+
+<p><strong>Mechanism trace</strong> on Figure 5, edges as shown:</p>
+<ol>
+  <li>Pop (0,s) → settle s (dist=0): relax a→2, b→6. Heap: <code class="language-plaintext highlighter-rouge">[(2,a),(6,b)]</code>.</li>
+  <li>Pop (2,a) → settle a (dist=2): relax b→5 (improves 6→5), c→10. Heap: <code class="language-plaintext highlighter-rouge">[(5,b),(6,b),(10,c)]</code>.</li>
+  <li>Pop (5,b) → settle b (dist=5): relax t→12. Heap: <code class="language-plaintext highlighter-rouge">[(6,b),(10,c),(12,t)]</code>.</li>
+  <li>Pop (10,c) → settle c (dist=10): relax t→11 (improves 12→11). Heap: <code class="language-plaintext highlighter-rouge">[(11,t),(12,t)]</code>.</li>
+  <li>Pop (11,t) → settle t (dist=11). <strong>Done.</strong> Result: <code class="language-plaintext highlighter-rouge">{s:0, a:2, b:5, c:10, t:11}</code>.</li>
+</ol>
+
+<p>(Steps 4–5 skip stale entries (6,b) and (12,t) along the way — nodes already settled get
+popped and discarded by the <code class="language-plaintext highlighter-rouge">if d &gt; dist[node]: continue</code> guard.)</p>
+
+<p><strong>Cost:</strong> \(O((V + E) \log V)\) — each node popped once (\(V\) pops), each edge relaxed once
+(\(E\) pushes), each heap operation costs \(O(\log V)\).</p>
+
+<hr>
+
+<p><strong>Bellman-Ford</strong> — handles negative edge weights; detects negative cycles.</p>
+
+<p>Intuition — built up step by step:</p>
+
+<ul>
+  <li>
+<strong>No ordering assumption:</strong> unlike Dijkstra, Bellman-Ford does not pick the closest node
+next. It relaxes every edge in the graph, in any order, once per round.</li>
+  <li>
+<strong>Why \(V - 1\) rounds:</strong> after round \(k\), every node whose shortest path uses at most \(k\)
+edges has the correct distance. A simple path (no repeated nodes) uses at most \(V - 1\)
+edges, so \(V - 1\) rounds guarantee all estimates have converged.</li>
+  <li>
+<strong>Negative cycles:</strong> if a \(V\)-th round still relaxes some edge, then there exists a path
+that keeps getting cheaper by going around a cycle with negative total weight. No finite
+shortest distance exists in that case.</li>
+</ul>
+
+<p><strong>Invariant:</strong> <em>after round \(k\), \(d[v]\) holds the true shortest distance from \(s\) to \(v\)
+using at most \(k\) edges.</em></p>
+
+<p><strong>Figure 6 · Bellman-Ford: distance estimates converging over three rounds.</strong></p>
+<center><img src="/assets/img/dsa-series/bellman_ford_rounds.png" style="width:80%"></center>
+<p><em>Left: the graph (orange = negative edge). Right: each row is one round; orange cells show
+updated values. After V−1 rounds all estimates have converged. A further round that still
+updates signals a negative cycle.</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">bellman_ford</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="nf">float</span><span class="p">(</span><span class="sh">"</span><span class="s">inf</span><span class="sh">"</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
+    <span class="n">dist</span><span class="p">[</span><span class="n">source</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>    <span class="c1"># V-1 rounds
+</span>        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>          <span class="c1"># relax every edge
+</span>            <span class="k">if</span> <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">+</span> <span class="n">w</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+                <span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">+</span> <span class="n">w</span>
+
+    <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>              <span class="c1"># check for negative cycle
+</span>        <span class="k">if</span> <span class="n">dist</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">+</span> <span class="n">w</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">negative cycle detected</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dist</span>
+</code></pre></div></div>
+
+<p><strong>Mechanism trace:</strong> see Figure 6 — the table shows each round’s updates more clearly than
+prose steps.</p>
+
+<p><strong>Cost:</strong> \(O(V \cdot E)\) — \(V - 1\) rounds each examining all \(E\) edges.</p>
+
+<p><strong>Johnson’s algorithm — all-pairs shortest paths (pointer, not covered in full).</strong></p>
+
+<p><strong>Problem:</strong> find \(\delta(u, v)\) for every pair \((u, v) \in V \times V\) — not just from one source.</p>
+
+<p><strong>Why not just run Dijkstra from every node?</strong> Dijkstra requires non-negative weights. On graphs
+with negative edges, running it from every node is incorrect.</p>
+
+<p><strong>Why not run Bellman-Ford from every node?</strong> That works but costs \(O(V^2 \cdot E)\) — too slow.</p>
+
+<p><strong>Johnson’s trick — built up step by step:</strong></p>
+
+<ul>
+  <li>Add a dummy source \(q\) with zero-weight edges to every node. Run Bellman-Ford once from \(q\)
+to get \(h(v) = \delta(q, v)\) for every node — the <strong>potential</strong> of \(v\), i.e. its shortest
+distance from the dummy source.</li>
+  <li>Reweight every edge: \(\hat{w}(u,v) = w(u,v) + h(u) - h(v)\). This shifts the original
+weight by the difference in shortest-path distances from the dummy source to the two
+endpoints. The triangle inequality guarantees \(h(v) \leq h(u) + w(u,v)\), so
+\(\hat{w}(u,v) \geq 0\). Along any path, the \(h\) terms telescope — every intermediate
+node’s \(h\) cancels between consecutive edges — so all paths between the same pair
+\((s, t)\) shift by the same constant \(h(s) - h(t)\), preserving which path is shortest.</li>
+  <li>Run Dijkstra from every node on the reweighted graph. Recover original distances:
+\(\delta(u,v) = \hat{\delta}(u,v) - h(u) + h(v)\).</li>
+</ul>
+
+<p><strong>Cost:</strong> \(O(VE)\) for Bellman-Ford + \(O(V \cdot (V+E) \log V)\) for \(V\) Dijkstra runs
+\(= O(V^2 \log V + VE)\). Running Bellman-Ford from every node would cost \(O(V^2 E)\), so
+Johnson’s is faster by a factor of \(E / (V \log V + E)\) — most significant on dense graphs
+where \(E \approx V^2\), giving a factor of \(\approx V\).</p>
+
+<hr>
+
+<h2 id="e-minimum-spanning-tree">E. Minimum spanning tree</h2>
+
+<blockquote>
+  <p><strong>Why</strong> · connect all nodes with the minimum total edge weight and no cycles — the cheapest
+network that keeps everything reachable.
+<strong>Where</strong> · network design, clustering, Kruskal’s is also the canonical Union-Find application.</p>
+</blockquote>
+
+<p>A <strong>spanning tree</strong> of a connected graph is a subset of edges that connects all nodes with no
+cycles — exactly \(V - 1\) edges for \(V\) nodes. Many spanning trees exist; the <strong>minimum</strong> one has
+the smallest total edge weight.</p>
+
+<p><strong>Problem:</strong> given a connected undirected weighted graph \(G = (V, E, w)\), find a spanning tree
+\(T \subseteq E\) that minimises \(\sum_{e \in T} w(e)\).</p>
+
+<p><strong>Figure 7 · A weighted graph (left) and its minimum spanning tree (right).</strong></p>
+<center><img src="/assets/img/dsa-series/mst_intro.png" style="width:80%"></center>
+<p><em>Left: all edges with weights. Right: the MST (green) connects all 5 nodes with 4 edges at
+minimum total weight. Dropped edges (grey) would create cycles or aren’t needed.</em></p>
+
+<p>Two <strong>greedy</strong> algorithms solve this — each makes one irrevocable choice per step and never
+backtracks. Greedy works for MST because of the <strong>cut property:</strong> partition the nodes into any
+two groups; the cheapest edge crossing that partition must be in the MST. Why? If the MST used a
+more expensive crossing edge instead, you could swap it for the cheaper one, reduce total weight,
+and still have a spanning tree — contradicting minimality. This means any algorithm that
+repeatedly picks the cheapest “safe” edge (one that doesn’t form a cycle) is guaranteed to
+produce the MST.</p>
+
+<p>Both algorithms below exploit the cut property with a different strategy and a different
+structure from <a href="https://www.tobiasstenzel.com/blog/2026/dsa-hierarchical/">Hierarchical Structures</a>: Kruskal processes edges globally by weight (Union-Find
+detects cycles), Prim grows a frontier locally (min-heap picks the cheapest crossing edge).</p>
+
+<hr>
+
+<p><strong>Kruskal’s algorithm</strong> — sort all edges by weight; add each if it doesn’t create a cycle.
+Uses Union-Find (see <a href="https://www.tobiasstenzel.com/blog/2026/dsa-hierarchical/">Hierarchical Structures</a> Section D) to detect cycles in near-\(O(1)\).</p>
+
+<p>Intuition — built up step by step:</p>
+
+<ul>
+  <li>
+<strong>Greedy by edge weight:</strong> the globally cheapest edge that doesn’t create a cycle is always
+safe to add to the MST. Processing all edges in sorted order applies this greedily.</li>
+  <li>
+<strong>Cycle detection via Union-Find:</strong> two nodes are in the same connected component if they
+share a root in the Union-Find structure. Adding an edge between two nodes in the same
+component would close a cycle — skip it.</li>
+  <li>
+<strong>Termination:</strong> stop when \(V - 1\) edges have been added. Exactly \(V - 1\) edges connect
+\(V\) nodes without cycles.</li>
+</ul>
+
+<p><strong>Invariant:</strong> <em>the edges added so far form a spanning forest (multiple disconnected trees
+that haven’t merged yet) of minimum weight — no cheaper set of edges connects the same
+components. At termination the forest becomes a single spanning tree.</em></p>
+
+<p><strong>Figure 8 · Kruskal adding edges in sorted order; red = rejected (would create cycle).</strong></p>
+<center><img src="/assets/img/dsa-series/kruskal_steps.png" style="width:80%"></center>
+<p><em>Panel 1: first add. Panel 2: (C,D,2) rejected — B, C, D already connected. Panel 3: (A,C,3)
+connects the isolated node A to the tree. Panel 4: (D,E,5) completes the MST.</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">kruskal</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="nf">find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>   <span class="c1"># path compression
+</span>        <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="n">parent</span><span class="p">[</span><span class="nf">find</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">=</span> <span class="nf">find</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="n">mst</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nf">sorted</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="nf">find</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">!=</span> <span class="nf">find</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>            <span class="c1"># no cycle
+</span>            <span class="nf">union</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+            <span class="n">mst</span><span class="p">.</span><span class="nf">append</span><span class="p">((</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">mst</span>
+</code></pre></div></div>
+
+<p><strong>Mechanism trace</strong> (nodes A–E, same graph as Figure 7):</p>
+<ol>
+  <li>Sort edges: (B,C,1), (B,D,2), (C,D,2), (A,C,3), (D,E,5), (A,B,4), (C,E,6).</li>
+  <li>Add (B,C,1) — no cycle. MST: <code class="language-plaintext highlighter-rouge">[(B,C,1)]</code>.</li>
+  <li>Add (B,D,2) — no cycle. MST: <code class="language-plaintext highlighter-rouge">[(B,C,1),(B,D,2)]</code>.</li>
+  <li>Add (C,D,2) — B,C,D already connected → <strong>skip cycle</strong>.</li>
+  <li>Add (A,C,3) — no cycle. MST: <code class="language-plaintext highlighter-rouge">[..,(A,C,3)]</code>.</li>
+  <li>Add (D,E,5) — no cycle. MST complete (4 edges for 5 nodes). ✓</li>
+</ol>
+
+<p><strong>Cost:</strong> \(O(E \log E)\) — sorting all \(E\) edges costs \(O(E \log E)\); each of the \(E\)
+Union-Find operations (find + union) costs near-\(O(1)\) amortized with path compression,
+so sorting dominates.</p>
+
+<hr>
+
+<p><strong>Prim’s algorithm</strong> — grow from one node; always add the cheapest edge crossing the frontier.
+Uses a min-heap (see <a href="https://www.tobiasstenzel.com/blog/2026/dsa-hierarchical/">Hierarchical Structures</a> Section B).</p>
+
+<p>Intuition — built up step by step:</p>
+
+<ul>
+  <li>
+<strong>The frontier</strong> is the set of edges that cross from the already-settled MST nodes to
+unsettled nodes. At each step, the cheapest such edge is the safe greedy choice.</li>
+  <li>
+<strong>The heap</strong> stores <code class="language-plaintext highlighter-rouge">(weight, neighbor, parent)</code> triples for all frontier edges. The root
+is always the cheapest crossing edge, giving \(O(1)\) access and \(O(\log V)\) removal.</li>
+  <li>
+<strong>Adding a node:</strong> pop the cheapest frontier edge, add its target to the MST, then push
+all edges leaving that newly added node onto the heap as new frontier candidates.</li>
+  <li>
+<strong>Stale entries:</strong> a node may appear in the heap multiple times with different weights as
+better paths are discovered. The <code class="language-plaintext highlighter-rouge">if node in in_mst: continue</code> guard skips the stale ones.</li>
+</ul>
+
+<p><strong>Invariant:</strong> <em>the settled nodes and their connecting edges always form a minimum spanning
+tree of the subgraph induced by those nodes.</em></p>
+
+<p><strong>Figure 9 · Prim growing the MST step by step from node A.</strong></p>
+<center><img src="/assets/img/dsa-series/prim_steps.png" style="width:80%"></center>
+<p><em>Green = in MST, orange = current frontier edges, blue = not yet reached. Each step the heap
+picks the cheapest frontier edge and the reached node joins the MST.</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">prim</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+    <span class="n">in_mst</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+    <span class="n">mst</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">start</span><span class="p">)]</span>         <span class="c1"># (weight, node, parent)
+</span>
+    <span class="k">while</span> <span class="n">heap</span><span class="p">:</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">heapq</span><span class="p">.</span><span class="nf">heappop</span><span class="p">(</span><span class="n">heap</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">in_mst</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">in_mst</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="o">!=</span> <span class="n">start</span><span class="p">:</span>
+            <span class="n">mst</span><span class="p">.</span><span class="nf">append</span><span class="p">((</span><span class="n">parent</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">neighbor</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">in_mst</span><span class="p">:</span>
+                <span class="n">heapq</span><span class="p">.</span><span class="nf">heappush</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">,</span> <span class="n">node</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">mst</span>
+</code></pre></div></div>
+
+<p><strong>Mechanism trace</strong> on Figure 9, start = A:</p>
+<ol>
+  <li>Settle A. Frontier: edges to B(4), C(3).</li>
+  <li>Cheapest crossing edge: (A,C,3). Settle C. Frontier adds B(1 via C), D(2 via C), E(6).</li>
+  <li>Cheapest: (C,B,1). Settle B. Frontier adds D(2 via B).</li>
+  <li>Cheapest: (B,D,2) or (C,D,2) — tie, take (B,D,2). Settle D. Frontier adds E(5 via D).</li>
+  <li>Cheapest: (D,E,5). Settle E. MST complete. ✓</li>
+</ol>
+
+<p><strong>Cost:</strong> \(O((V + E) \log V)\) — \(V\) nodes are popped from the heap (one settle per node),
+and up to \(E\) edges are pushed as frontier candidates. Each push and pop costs \(O(\log V)\),
+so total: \((V + E) \times O(\log V)\).</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Algorithm</th>
+      <th>Approach</th>
+      <th>Key structure</th>
+      <th>Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Kruskal</td>
+      <td>Sort edges, add if no cycle</td>
+      <td>Union-Find</td>
+      <td>\(O(E \log E)\)</td>
+    </tr>
+    <tr>
+      <td>Prim</td>
+      <td>Grow from one node via frontier</td>
+      <td>Min-heap</td>
+      <td>\(O((V+E) \log V)\)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Use Kruskal</strong> when \(E\) is small (sparse graphs) — sorting is cheap and you can enumerate all
+edges. <strong>Use Prim</strong> when the graph is dense or already stored as an adjacency list — it settles
+one node at a time without needing all edges upfront.</p>
+
+<hr>
+
+<h2 id="-connections">🔗 Connections</h2>
+
+<ul>
+  <li>BFS uses deque from <a href="https://www.tobiasstenzel.com/blog/2026/dsa-linear/">Linear Structures</a>; DFS uses recursion stack from <a href="https://www.tobiasstenzel.com/blog/2026/dsa-recursion-backtracking/">Recursion &amp; Backtracking</a>.</li>
+  <li>Dijkstra and Prim use the min-heap from <a href="https://www.tobiasstenzel.com/blog/2026/dsa-hierarchical/">Hierarchical Structures</a>.</li>
+  <li>Kruskal uses Union-Find from <a href="https://www.tobiasstenzel.com/blog/2026/dsa-hierarchical/">Hierarchical Structures</a>.</li>
+  <li>Topo sort enables DAG DP — DP deliberately deferred from this atlas.</li>
+  <li>Shortest-path decision table and graph recognition triggers: the upcoming pattern-triggers post.</li>
+  <li>Floyd’s cycle detection (fast/slow pointer variant of traversal): <a href="https://www.tobiasstenzel.com/blog/2026/dsa-techniques/">Array &amp; String Techniques</a>.</li>
+  <li>Kruskal used in MST; merge sort used in edge sorting: <a href="https://www.tobiasstenzel.com/blog/2026/dsa-sorting-searching/">Sorting &amp; Searching</a>.</li>
+</ul>
+
+      <div class="PageNavigation">
+        
+          <a class="prev" href="/blog/2026/dsa-sorting-searching/">	⏮ 7. Sorting &amp; Searching</a>
+        
+        
+      </div>
+      </d-article>
+
+      <d-appendix>
+        <d-footnote-list></d-footnote-list>
+        <d-citation-list></d-citation-list>
+      </d-appendix>
+
+      <d-bibliography src="/assets/bibliography/"></d-bibliography><div id="giscus_thread" style="max-width: 800px; margin: 0 auto;">
+  <script>
+    let giscusTheme = localStorage.getItem("theme");
+    let giscusAttributes = {
+        "src": "https://giscus.app/client.js",
+        "data-repo": "tostenzel/tostenzel.github.io",
+        "data-repo-id": "MDEwOlJlcG9zaXRvcnk2MDAyNDM2NQ==",
+        "data-category": "Comments",
+        "data-category-id": "DIC_kwDOA5PmLc4CTBt6",
+        "data-mapping": "title",
+        "data-strict": "1",
+        "data-reactions-enabled": "1",
+        "data-emit-metadata": "0",
+        "data-input-position": "bottom",
+        "data-theme": giscusTheme,
+        "data-lang": "en",
+        "crossorigin": "anonymous",
+        "async": "",
+    };
+
+
+    let giscusScript = document.createElement("script");
+    Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value));
+    document.getElementById("giscus_thread").appendChild(giscusScript);
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://giscus.app/?ref_noscript" rel="external nofollow noopener" target="_blank">comments powered by giscus.</a>
+</noscript>
+</div>
+</div>
+
+    <!-- Footer -->
+
+    <!-- Bootsrap & MDB scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fgLAgv7fyCGopR/gBNq2iW3ZKIdqIcyshnUULC4vex8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script>
+
+    
+    
+
+<!-- Scrolling Progress Bar -->
+<script type="text/javascript">
+  /*
+   * This JavaScript code has been adapted from the article 
+   * https://css-tricks.com/reading-position-indicator/ authored by Pankaj Parashar, 
+   * published on the website https://css-tricks.com on the 7th of May, 2014.
+   * Couple of changes were made to the original code to make it compatible 
+   * with the `al-foio` theme.
+   */
+  const progressBar = $("#progress");
+  /*
+   * We set up the bar after all elements are done loading.
+   * In some cases, if the images in the page are larger than the intended
+   * size they'll have on the page, they'll be resized via CSS to accomodate
+   * the desired size. This mistake, however, breaks the computations as the
+   * scroll size is computed as soon as the elements finish loading.
+   * To account for this, a minimal delay was introduced before computing the
+   * values.
+   */
+  window.onload = function () {
+    setTimeout(progressBarSetup, 50);
+  };
+  /*
+   * We set up the bar according to the browser.
+   * If the browser supports the progress element we use that.
+   * Otherwise, we resize the bar thru CSS styling
+   */
+  function progressBarSetup() {
+    if ("max" in document.createElement("progress")) {
+      initializeProgressElement();
+      $(document).on("scroll", function() {
+        progressBar.attr({ value: getCurrentScrollPosition() });
+      });
+      $(window).on("resize", initializeProgressElement);
+    } else {
+      resizeProgressBar();
+      $(document).on("scroll", resizeProgressBar);
+      $(window).on("resize", resizeProgressBar);
+    }
+  }
+  /*
+   * The vertical scroll position is the same as the number of pixels that
+   * are hidden from view above the scrollable area. Thus, a value > 0 is
+   * how much the user has scrolled from the top
+   */
+  function getCurrentScrollPosition() {
+    return $(window).scrollTop();
+  }
+
+  function initializeProgressElement() {
+    let navbarHeight = $("#navbar").outerHeight(true);
+    $("body").css({ "padding-top": navbarHeight });
+    $("progress-container").css({ "padding-top": navbarHeight });
+    progressBar.css({ top: navbarHeight });
+    progressBar.attr({
+      max: getDistanceToScroll(),
+      value: getCurrentScrollPosition(),
+    });
+  }
+  /*
+   * The offset between the html document height and the browser viewport
+   * height will be greater than zero if vertical scroll is possible.
+   * This is the distance the user can scroll
+   */
+  function getDistanceToScroll() {
+    return $(document).height() - $(window).height();
+  }
+
+  function resizeProgressBar() {
+    progressBar.css({ width: getWidthPercentage() + "%" });
+  }
+  // The scroll ratio equals the percentage to resize the bar
+  function getWidthPercentage() {
+    return (getCurrentScrollPosition() / getDistanceToScroll()) * 100;
+  }
+</script>
+
+  
+</body>
+</html>
