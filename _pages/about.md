@@ -16,8 +16,8 @@ news: true  # includes a list of news items
 social: true  # includes social icons at the bottom of the page
 ---
 
-Hi, my name is Tobias! I have completed my Data Science degree and my Master's thesis in Computer Vision about transformers and video data at Mannheim University.
+Hi, my name is Tobias! I design Deep Learning models, especially in computer vision and NLP, and build production services in the cloud.
 
-I admire accessible explanations of complex things at the right level of abstraction.
+I care about a strong technical foundation, and about explaining complex things accessibly, at the right level of abstraction.
 
-Perhaps I can give something back. I set up this site to share a few learnings on my <a href='https://www.tobiasstenzel.com/blog/'>ML Engineering Blog</a>. 👻
+I write about that on my [ML Engineering Blog](https://www.tobiasstenzel.com/blog/).
